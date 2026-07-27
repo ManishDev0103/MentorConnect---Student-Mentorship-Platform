@@ -1,0 +1,20 @@
+.earnings-chart-wrapper {
+  position: relative;
+}
+
+.earnings-chart-container {
+  height: 280px;
+  padding: 10px 0;
+}
+
+.chart-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #0d9488;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 20px;
+}

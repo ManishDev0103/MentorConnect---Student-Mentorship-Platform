@@ -1,0 +1,47 @@
+.card-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.card-header-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.badge-type {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-type-mentor {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.badge-type-student {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge-pending {
+  padding: 4px 10px;
+  background: #fef3c7;
+  color: #92400e;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+@media (max-width: 576px) {
+  .card-box {
+    padding: 14px;
+  }
+
+  .card-box table th,
+  .card-box table td {
+    font-size: 13px;
+  }
+}

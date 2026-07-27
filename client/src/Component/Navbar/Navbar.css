@@ -1,0 +1,99 @@
+.mp-logo {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+}
+
+.mp-logo-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.mp-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2563eb;
+}
+
+
+
+
+
+.mp-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 16px 0;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+}
+
+.mp-navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.mp-logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  color: #0f172a;
+}
+
+.mp-logo-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #0f4ecd, #2563eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #ffffff;
+}
+
+.mp-brand {
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+}
+
+.mp-nav-links {
+  list-style: none;
+  display: flex;
+  gap: 26px;
+  margin: 0;
+  padding: 0;
+}
+
+.mp-nav-links li a {
+  font-size: 0.95rem;
+  color: #475569;
+  transition: color 180ms ease;
+}
+
+.mp-nav-links li a:hover {
+  color: #0f172a;
+}
+
+.mp-signin-btn {
+  background: linear-gradient(135deg, #0f4ecd, #2563eb);
+  color: #ffffff;
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.12);
+}
+
+.mp-signin-btn:hover {
+  background: linear-gradient(135deg, #0b3ab2, #1d4ed8);
+}
+
+@media (max-width: 767px) {
+  .mp-nav-links {
+    display: none;
+  }
+}

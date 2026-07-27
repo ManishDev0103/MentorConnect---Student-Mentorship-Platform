@@ -1,0 +1,17 @@
+package com.mentorship.dtos;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import lombok.Data;
+
+@Data
+public class StudentSessionDTO {
+
+    private Long sessionId;
+    private Long mentorId;
+    private LocalDate sessionDate;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private String topic;
+    private String description;
+}

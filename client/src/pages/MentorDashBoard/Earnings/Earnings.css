@@ -1,0 +1,137 @@
+.earnings-page {
+  padding-bottom: 40px;
+}
+
+.earnings-page .page-header {
+  margin-bottom: 24px;
+}
+
+.earnings-page .page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.earnings-page .page-subtitle {
+  font-size: 15px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.earnings-summary-cards {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.earnings-stat-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid #e8eaed;
+}
+
+.earnings-stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.earnings-stat-icon.bg-green {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.earnings-stat-icon.bg-blue {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.earnings-stat-icon.bg-purple {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+.earnings-stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.earnings-stat-label {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.earnings-stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.earnings-chart-card {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid #e8eaed;
+  margin-bottom: 24px;
+}
+
+.earnings-page .section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 16px;
+}
+
+.transactions-section {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid #e8eaed;
+}
+
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e8eaed;
+}
+
+.transaction-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.transaction-name {
+  font-weight: 600;
+  font-size: 15px;
+  color: #1f2937;
+}
+
+.transaction-details {
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.transaction-amount {
+  font-weight: 700;
+  font-size: 16px;
+  color: #0d9488;
+}

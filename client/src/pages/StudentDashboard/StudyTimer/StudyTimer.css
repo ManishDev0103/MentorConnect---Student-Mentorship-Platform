@@ -1,0 +1,167 @@
+.study-timer-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.timer-card,
+.history-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.timer-card {
+    text-align: center;
+    border-top: 5px solid #2563eb;
+}
+
+.timer-subtitle {
+    color: #64748b;
+    margin-bottom: 20px;
+}
+
+.timer-display {
+    font-size: 4rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    color: #1e293b;
+    margin: 20px 0;
+    letter-spacing: 2px;
+}
+
+.timer-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.task-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.task-input:focus {
+    border-color: #2563eb;
+}
+
+.btn-start,
+.btn-stop {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.btn-start {
+    background-color: #10b981;
+    color: white;
+}
+
+.btn-start:hover {
+    background-color: #059669;
+}
+
+.btn-stop {
+    background-color: #ef4444;
+    color: white;
+}
+
+.btn-stop:hover {
+    background-color: #dc2626;
+}
+
+.history-list {
+    margin-top: 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.history-header,
+.history-row {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr 1fr 0.5fr;
+    padding: 12px 15px;
+    align-items: center;
+}
+
+.history-header {
+    background-color: #f8fafc;
+    font-weight: 600;
+    color: #475569;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.history-row {
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.history-row:last-child {
+    border-bottom: none;
+}
+
+.history-task {
+    font-weight: 500;
+}
+
+.history-date {
+    color: #64748b;
+    font-size: 14px;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.status-badge.ongoing {
+    background-color: #dbeafe;
+    color: #2563eb;
+}
+
+.status-badge.completed {
+    background-color: #d1fae5;
+    color: #059669;
+}
+
+.btn-delete-session {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #ef4444;
+    transition: transform 0.2s, color 0.2s;
+    justify-self: center;
+    padding: 5px;
+    border-radius: 50%;
+}
+
+.btn-delete-session:hover {
+    color: #dc2626;
+    background-color: #fee2e2;
+    transform: scale(1.1);
+}
+
+.no-history {
+    text-align: center;
+    color: #94a3b8;
+    margin-top: 20px;
+}

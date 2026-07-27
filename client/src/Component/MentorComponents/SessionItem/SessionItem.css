@@ -1,0 +1,33 @@
+.session-item {
+  background: #f8fafc;
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #e8eaed;
+}
+
+.session-time-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  color: #6b7280;
+}
+
+.session-time {
+  font-weight: 600;
+  font-size: 14px;
+  color: #374151;
+}
+
+.session-student {
+  font-weight: 600;
+  font-size: 16px;
+  color: #1f2937;
+  margin-bottom: 2px;
+}
+
+.session-topic {
+  color: #9ca3af;
+  font-size: 14px;
+}

@@ -1,0 +1,171 @@
+.my-sessions-page {
+  padding: 32px 40px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.my-sessions-page h2 {
+  font-size: 2rem;
+  margin-bottom: 0.2em;
+}
+
+.my-sessions-page>p {
+  color: #64748b;
+  margin-bottom: 24px;
+}
+
+.sessions-main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.sessions-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  padding: 20px 24px 12px 24px;
+  margin-bottom: 0;
+}
+
+.sessions-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  margin-bottom: 18px;
+  font-size: 1.1rem;
+}
+
+.schedule-btn {
+  background: #1e40af;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 7px 18px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.session-row {
+  display: flex;
+  flex-direction: column;
+  /* Stack children vertically */
+  gap: 12px;
+  border-radius: 8px;
+  background: #f8fafc;
+  margin-bottom: 12px;
+  padding: 14px 18px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.01);
+}
+
+.session-row-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.session-title {
+  font-weight: 600;
+  font-size: 1.08rem;
+}
+
+.session-info {
+  color: #64748b;
+  font-size: 0.98rem;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.session-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-confirmed {
+  background: #1e40af;
+  color: #fff;
+  border-radius: 6px;
+  padding: 2px 12px;
+  font-size: 0.98em;
+  font-weight: 500;
+}
+
+.status-pending {
+  background: #14b8a6;
+  color: #fff;
+  border-radius: 6px;
+  padding: 2px 12px;
+  font-size: 0.98em;
+  font-weight: 500;
+}
+
+.session-chat-btn {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 1.1em;
+  color: #1e40af;
+  display: flex;
+  align-items: center;
+}
+
+.session-rating {
+  color: #fbbf24;
+  font-size: 1.1em;
+  display: flex;
+  gap: 2px;
+}
+
+.session-fee {
+  color: #059669;
+  font-weight: 600;
+}
+
+.star.inactive {
+  color: #e2e8f0;
+}
+
+.session-cancel-btn {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 1.1em;
+  color: #dc2626;
+  display: flex;
+  align-items: center;
+}
+
+.session-cancel-btn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+.status-completed {
+  background: #059669;
+  color: #fff;
+  border-radius: 6px;
+  padding: 2px 12px;
+  font-size: 0.98em;
+  font-weight: 500;
+}
+
+.status-cancelled {
+  background: #dc2626;
+  color: #fff;
+  border-radius: 6px;
+  padding: 2px 12px;
+  font-size: 0.98em;
+  font-weight: 500;
+}

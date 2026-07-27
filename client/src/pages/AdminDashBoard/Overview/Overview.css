@@ -1,0 +1,12 @@
+.admin-dashboard {
+  background: transparent;
+}
+
+.admin-dashboard-row {
+  min-height: 100vh;
+}
+
+.main-content {
+  background: transparent;
+  padding: 36px;
+}

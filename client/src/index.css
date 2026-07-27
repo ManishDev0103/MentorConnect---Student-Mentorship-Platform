@@ -1,0 +1,651 @@
+:root {
+  --bg: #eff6ff;
+  --surface: #ffffff;
+  --surface-soft: rgba(255, 255, 255, 0.92);
+  --text: #111827;
+  --muted: #475569;
+  --primary: #0f4ecd;
+  --primary-dark: #0b3ab2;
+  --accent: #f59e0b;
+  --border: rgba(15, 23, 42, 0.08);
+  --shadow: 0 28px 90px rgba(15, 23, 42, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  color: var(--text);
+  background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.15), transparent 20%),
+    linear-gradient(180deg, var(--bg) 0%, #f8fafc 100%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.container {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 14px;
+  }
+}
+
+/* Global page wrapper theming */
+.app-shell,
+.home-root,
+.mentor-page-root,
+.register-page,
+.reset-password-page,
+.admin-dashboard,
+.student-dashboard,
+.dashboard-home,
+.earnings-page,
+.feedback-page,
+.mcq-practice-page,
+.my-students-page,
+.availability-page,
+.my-mentor-page,
+.my-sessions-page,
+.subs-page,
+.dashboard-layout,
+.browse-mentors-container,
+.mentor-main-content,
+.mentor-listing-section,
+.pl-root,
+.rc-root,
+.study-timer-container {
+  background: transparent !important;
+}
+
+/* Shared surfaced components */
+.login-card,
+.register-card,
+.reset-password-card,
+.section-card,
+.card-surface,
+.glass-card,
+.mentor-card,
+.feedback-card,
+.mcq-card,
+.availability-card,
+.revenue-card,
+.summary-card,
+.card-box,
+.earnings-stat-card,
+.transactions-section,
+.subs-plan-card,
+.timer-card,
+.history-card,
+.sessions-card,
+.search-box,
+.filters-section,
+.pl-card,
+.rc-card,
+.mentor-profile-card,
+.mentor-session-stats,
+.mentor-plan-card,
+.metric-card,
+.custom-card,
+.activity-item,
+.mentor-card-header,
+.mentor-card-body,
+.mentor-card-footer,
+.mentor-profile-card,
+.mentor-session-stats,
+.mentor-plan-card {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-radius: 24px !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 28px 90px rgba(15, 23, 42, 0.08) !important;
+}
+
+.page-title,
+.hero-title,
+.section-heading,
+.section-title,
+.page-header h1,
+.page-header h2,
+.page-header h3,
+.mentor-heading,
+.mentor-name,
+.register-title,
+.login-title,
+.subs-title,
+.mcq-title,
+.summary-value,
+.metric-value {
+  color: #0f172a !important;
+}
+
+.page-subtitle,
+.section-subtitle,
+.login-subtitle,
+.register-subtitle,
+.caption-text,
+.text-muted,
+.feedback-date,
+.transaction-details,
+.mentor-subject,
+.mentor-about,
+.info-label,
+.subs-subtitle,
+.no-feedback {
+  color: #475569 !important;
+}
+
+.form-control,
+.login-input,
+.register-input,
+.reset-password-input,
+.search-input,
+.filter-group select,
+.task-input,
+.create-form input,
+.create-form textarea,
+.create-form select,
+.option,
+.time-slot-item,
+.transaction-item,
+.session-row,
+.history-row,
+.question-card {
+  border-radius: 18px !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  padding: 14px 16px !important;
+  background: #ffffff !important;
+}
+
+.form-control:focus,
+.login-input:focus,
+.register-input:focus,
+.reset-password-input:focus,
+.search-input:focus,
+.filter-group select:focus,
+.task-input:focus,
+.create-form input:focus,
+.create-form textarea:focus,
+.create-form select:focus {
+  outline: none !important;
+  border-color: rgba(59, 130, 246, 0.45) !important;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12) !important;
+}
+
+.btn,
+.login-primary-btn,
+.register-primary-btn,
+.mentor-book-btn,
+.edit-profile-btn,
+.reset-password-btn,
+.btn-primary,
+.btn-outline-primary,
+.btn-outline-dark,
+.view-profile-btn,
+.schedule-btn,
+.subs-plan-btn,
+.mcq-start-btn,
+.btn-start,
+.btn-stop,
+.btn-action,
+.browse-toggle-btn,
+.browse-mentors-btn,
+.status-badge,
+.feedback-option-btn {
+  border-radius: 999px !important;
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease !important;
+}
+
+.btn:hover,
+.login-primary-btn:hover,
+.register-primary-btn:hover,
+.mentor-book-btn:hover,
+.edit-profile-btn:hover,
+.reset-password-btn:hover,
+.btn-primary:hover,
+.btn-outline-primary:hover,
+.btn-outline-dark:hover,
+.view-profile-btn:hover,
+.schedule-btn:hover,
+.subs-plan-btn:hover,
+.mcq-start-btn:hover,
+.btn-start:hover,
+.btn-stop:hover,
+.btn-action:hover,
+.browse-toggle-btn:hover,
+.browse-mentors-btn:hover {
+  transform: translateY(-1px) !important;
+}
+
+.btn-primary,
+.login-primary-btn,
+.register-primary-btn,
+.mentor-book-btn,
+.edit-profile-btn,
+.reset-password-btn,
+.mcq-start-btn,
+.subs-plan-btn.primary,
+.browse-toggle-btn,
+.browse-mentors-btn,
+.btn-start,
+.btn-stop {
+  background: linear-gradient(135deg, #0f4ecd, #2563eb) !important;
+  color: #ffffff !important;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.14) !important;
+}
+
+.btn-outline-primary,
+.btn-outline-dark,
+.view-profile-btn,
+.btn-action,
+.schedule-btn,
+.subs-plan-btn {
+  background: rgba(15, 23, 42, 0.04) !important;
+  color: #0f172a !important;
+}
+
+@media (max-width: 768px) {
+  .home-root,
+  .mentor-page-root,
+  .register-page,
+  .reset-password-page,
+  .admin-dashboard,
+  .dashboard-home,
+  .student-dashboard,
+  .earnings-page,
+  .feedback-page,
+  .mcq-practice-page,
+  .my-students-page,
+  .availability-page,
+  .my-mentor-page,
+  .my-sessions-page,
+  .subs-page {
+    padding: 20px !important;
+  }
+}
+
+.app-shell {
+  min-height: 100vh;
+  background: radial-gradient(circle at top left, rgba(96, 165, 250, 0.18), transparent 18%),
+    linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+}
+
+.home-root,
+.mentor-page-root,
+.register-page,
+.reset-password-page,
+.admin-dashboard,
+.student-dashboard,
+.dashboard-home,
+.earnings-page,
+.feedback-page,
+.mcq-practice-page,
+.my-students-page,
+.availability-page,
+.my-mentor-page,
+.my-sessions-page,
+.subs-page,
+.mentor-listing-section,
+.browse-mentors-container,
+.pl-root,
+.rc-root {
+  background: transparent !important;
+}
+
+.login-card,
+.register-card,
+.reset-password-card,
+.section-card,
+.card-surface,
+.glass-card,
+.mentor-card,
+.feedback-card,
+.mcq-card,
+.availability-card,
+.revenue-card,
+.summary-card,
+.card-box,
+.earnings-stat-card,
+.transactions-section,
+.subs-plan-card,
+.timer-card,
+.history-card,
+.sessions-card,
+.search-box,
+.filters-section,
+.drop-card,
+.task-row,
+.feedback-item,
+.modal-content,
+.pl-card,
+.rc-card,
+.mentor-profile-card,
+.mentor-session-stats,
+.mentor-plan-card {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-radius: 24px !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 28px 90px rgba(15, 23, 42, 0.08) !important;
+}
+
+.page-title,
+.hero-title,
+.section-heading,
+.section-title,
+.page-header h1,
+.page-header h2,
+.page-header h3,
+.mentor-heading,
+.mentor-name,
+.register-title,
+.login-title,
+.subs-title,
+.feedback-page h2,
+.mcq-title,
+.stats-value,
+.metric-value,
+.summary-value {
+  color: #0f172a !important;
+}
+
+.page-subtitle,
+.section-subtitle,
+.login-subtitle,
+.register-subtitle,
+.caption-text,
+.text-muted,
+.feedback-date,
+.transaction-details,
+.mentor-subject,
+.mentor-about,
+.info-label,
+.subs-subtitle,
+.no-feedback {
+  color: #475569 !important;
+}
+
+.form-control,
+.login-input,
+.register-input,
+.reset-password-input,
+.search-input,
+.filter-group select,
+.task-input,
+.create-form input,
+.create-form textarea,
+.create-form select,
+.option,
+.time-slot-item,
+.transaction-item,
+.session-row {
+  border-radius: 18px !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  padding: 14px 16px !important;
+  background: #ffffff !important;
+}
+
+.form-control:focus,
+.login-input:focus,
+.register-input:focus,
+.reset-password-input:focus,
+.search-input:focus,
+.filter-group select:focus,
+.task-input:focus,
+.create-form input:focus,
+.create-form textarea:focus,
+.create-form select:focus {
+  outline: none !important;
+  border-color: rgba(59, 130, 246, 0.45) !important;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12) !important;
+}
+
+.btn,
+.login-primary-btn,
+.register-primary-btn,
+.mentor-book-btn,
+.edit-profile-btn,
+.reset-password-btn,
+.btn-primary,
+.btn-outline-primary,
+.btn-outline-dark,
+.view-profile-btn,
+.schedule-btn,
+.subs-plan-btn,
+.mcq-start-btn,
+.btn-start,
+.btn-stop,
+.btn-action,
+.browse-toggle-btn,
+.browse-mentors-btn {
+  border-radius: 999px !important;
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease !important;
+}
+
+.btn:hover,
+.login-primary-btn:hover,
+.register-primary-btn:hover,
+.mentor-book-btn:hover,
+.edit-profile-btn:hover,
+.reset-password-btn:hover,
+.btn-primary:hover,
+.btn-outline-primary:hover,
+.btn-outline-dark:hover,
+.view-profile-btn:hover,
+.schedule-btn:hover,
+.subs-plan-btn:hover,
+.mcq-start-btn:hover,
+.btn-start:hover,
+.btn-stop:hover,
+.btn-action:hover,
+.browse-toggle-btn:hover,
+.browse-mentors-btn:hover {
+  transform: translateY(-1px) !important;
+}
+
+.btn-primary,
+.login-primary-btn,
+.register-primary-btn,
+.mentor-book-btn,
+.edit-profile-btn,
+.reset-password-btn,
+.mcq-start-btn,
+.subs-plan-btn.primary,
+.browse-toggle-btn,
+.browse-mentors-btn {
+  background: linear-gradient(135deg, #0f4ecd, #2563eb) !important;
+  color: #ffffff !important;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.14) !important;
+}
+
+.btn-outline-primary,
+.btn-outline-dark,
+.view-profile-btn,
+.btn-action,
+.schedule-btn,
+.subs-plan-btn {
+  background: rgba(15, 23, 42, 0.04) !important;
+  color: #0f172a !important;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.12) !important;
+}
+
+@media (max-width: 768px) {
+  .home-root,
+  .mentor-page-root,
+  .register-page,
+  .reset-password-page,
+  .admin-dashboard,
+  .dashboard-home,
+  .student-dashboard,
+  .earnings-page,
+  .feedback-page,
+  .mcq-practice-page,
+  .my-students-page,
+  .availability-page,
+  .my-mentor-page,
+  .my-sessions-page,
+  .subs-page {
+    padding: 20px !important;
+  }
+}
+
+/* Global page wrapper theme */
+.home-root,
+.mentor-page-root,
+.register-page,
+.reset-password-page,
+.admin-dashboard,
+.dashboard-home,
+.student-dashboard,
+.earnings-page,
+.feedback-page,
+.mcq-practice-page,
+.my-students-page,
+.availability-page,
+.my-mentor-page,
+.my-sessions-page,
+.subs-page,
+.mentor-listing-section,
+.browse-mentors-container,
+.pl-root,
+.rc-root {
+  background: transparent !important;
+}
+
+/* Shared surfaced components */
+.section-card,
+.stat-box,
+.mentor-card,
+.dashboard-content,
+.search-box,
+.login-card,
+.register-card,
+.reset-password-card,
+.card-surface,
+.glass-card,
+.sidebar,
+.section-card,
+.mentor-footer,
+.modal-content {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-radius: 24px !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 28px 90px rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Button theme */
+.btn,
+.login-primary-btn,
+.register-primary-btn,
+.mentor-book-btn,
+.edit-profile-btn,
+.reset-password-btn,
+.btn-primary,
+.btn-outline-primary,
+.btn-outline-dark {
+  border-radius: 999px !important;
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease !important;
+}
+
+.btn:hover,
+.login-primary-btn:hover,
+.register-primary-btn:hover,
+.mentor-book-btn:hover,
+.edit-profile-btn:hover,
+.reset-password-btn:hover,
+.btn-primary:hover,
+.btn-outline-primary:hover,
+.btn-outline-dark:hover {
+  transform: translateY(-1px) !important;
+}
+
+/* Form field polish */
+.form-control,
+.login-input,
+.register-input,
+.reset-password-input,
+.search-input {
+  border-radius: 18px !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  padding: 14px 16px !important;
+  background: #ffffff !important;
+}
+
+.form-control:focus,
+.login-input:focus,
+.register-input:focus,
+.reset-password-input:focus,
+.search-input:focus {
+  outline: none !important;
+  border-color: rgba(59, 130, 246, 0.45) !important;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12) !important;
+}
+
+/* Headline color consistency */
+.page-title,
+.hero-title,
+.section-heading,
+.section-title,
+.page-header h1,
+.page-header h2,
+.page-header h3 {
+  color: #0f172a !important;
+}
+
+.page-subtitle,
+.section-subtitle,
+.login-subtitle,
+.register-subtitle,
+.caption-text,
+.text-muted {
+  color: #475569 !important;
+}
+
+@media (max-width: 768px) {
+  .home-root,
+  .mentor-page-root,
+  .register-page,
+  .reset-password-page,
+  .admin-dashboard,
+  .dashboard-home,
+  .student-dashboard,
+  .earnings-page,
+  .feedback-page,
+  .mcq-practice-page,
+  .my-students-page,
+  .availability-page,
+  .my-mentor-page,
+  .my-sessions-page,
+  .subs-page {
+    padding: 20px !important;
+  }
+}

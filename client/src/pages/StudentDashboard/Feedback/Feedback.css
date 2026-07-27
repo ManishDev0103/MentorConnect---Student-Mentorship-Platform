@@ -1,0 +1,251 @@
+.feedback-page {
+  padding: 32px 40px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+.feedback-page h2 {
+  font-size: 2rem;
+  margin-bottom: 0.2em;
+}
+.feedback-page > p {
+  color: #64748b;
+  margin-bottom: 24px;
+}
+.feedback-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 28px 28px 18px 28px;
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.feedback-section-title {
+  font-weight: 600;
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+}
+.feedback-label {
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #22223b;
+}
+.feedback-rating-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.feedback-stars {
+  display: flex;
+  gap: 8px;
+  font-size: 1.7rem;
+}
+.star {
+  color: #e2e8f0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.star.filled {
+  color: #fbbf24;
+}
+.feedback-textarea {
+  width: 100%;
+  min-height: 60px;
+  border-radius: 8px;
+  border: 1.5px solid #e2e8f0;
+  padding: 10px 14px;
+  font-size: 1.05rem;
+  margin-bottom: 10px;
+  resize: vertical;
+}
+.feedback-options-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  margin-bottom: 10px;
+}
+.feedback-option-btn {
+  flex: 1 1 220px;
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 0;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.2s, border 0.2s, color 0.2s;
+}
+.feedback-option-btn.selected, .feedback-option-btn:active {
+  background: #f1f5ff;
+  border: 1.5px solid #1e40af;
+  color: #1e40af;
+}
+.feedback-submit-btn {
+  width: 100%;
+  background: #1e40af;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 0;
+  font-size: 1.08rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.feedback-submit-btn:hover {
+  background: #1e3a8a;
+  opacity: 0.9;
+}
+
+.feedback-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.send-icon {
+  font-size: 1.1em;
+}
+
+.feedback-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.feedback-session-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.session-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.session-option {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px 16px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.session-option:hover {
+  border-color: #1e40af;
+  background: #f0f5ff;
+}
+
+.session-option.selected {
+  background: #dbeafe;
+  border-color: #1e40af;
+}
+
+.session-option-title {
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+
+.session-option-meta {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.rating-text {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.char-count {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  text-align: right;
+}
+
+.feedback-history {
+  margin-top: 32px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.feedback-history h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 1.2rem;
+}
+
+.feedback-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.feedback-item {
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 8px;
+  border-left: 4px solid #1e40af;
+}
+
+.feedback-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.feedback-item-rating {
+  display: flex;
+  gap: 2px;
+}
+
+.star-small {
+  color: #fbbf24;
+  font-size: 0.9rem;
+}
+
+.star-small.inactive {
+  color: #e2e8f0;
+}
+
+.feedback-item-date {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.feedback-item-message {
+  color: #1e293b;
+  line-height: 1.5;
+}
+
+.no-feedback {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+}
+
+.no-feedback p {
+  margin: 0.5rem 0;
+}
+

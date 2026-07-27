@@ -1,0 +1,59 @@
+.revenue-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.revenue-stat-title {
+  font-size: 14px;
+  color: #6c757d;
+  margin-bottom: 6px;
+}
+
+.revenue-stat-value {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.revenue-growth {
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: #d1fae5;
+  color: #065f46;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.revenue-table-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.card-header-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.text-teal {
+  color: #14b8a6;
+}
+
+@media (max-width: 576px) {
+  .revenue-card,
+  .revenue-table-card {
+    padding: 14px;
+  }
+
+  .revenue-stat-value {
+    font-size: 22px;
+  }
+
+  .revenue-table-card table th,
+  .revenue-table-card table td {
+    font-size: 13px;
+  }
+}
