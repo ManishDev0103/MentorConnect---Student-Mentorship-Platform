@@ -2,9 +2,10 @@ package com.mentorship.dtos;
 
 import java.time.LocalDate;
 
+import com.mentorship.validation.ValidPassword;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,51 +14,51 @@ import lombok.Setter;
 @Setter
 public class MentorSignupRequest {
 
-	 @NotBlank
-	    @Size(max = 30)
-	    private String firstName;
+    @NotBlank
+    @Size(max = 30)
+    private String firstName;
 
-	    @Size(max = 30)
-	    private String lastName;
+    @Size(max = 30)
+    private String lastName;
 
-	    @Email
-	    @NotBlank
-	    private String email;
+    @Email
+    @NotBlank
+    private String email;
 
-	    @NotBlank
-	    @Size(min = 6, max = 20)
-	    private String password;
+    @NotBlank
+    @Size(min = 8, max = 20)
+    @ValidPassword
+    private String password;
 
-	    private LocalDate dob;
+    private LocalDate dob;
 
-	    private String address;
+    private String address;
 
-	    @Size(max = 14)
-	    private String phoneNo;
+    @Size(max = 14)
+    private String phoneNo;
 
-
-	    @NotBlank
-	    private String specialization;
+    @NotBlank
+    private String specialization;
 
     private String customSpecialization;
 
     @NotBlank
     private String experience;
-	    
-	    @NotBlank
-	    private String highestEducation;
 
-	    @NotBlank
-	    private String currentPosition;
+    @NotBlank
+    private String highestEducation;
 
-	    @NotBlank
-	    private String organization;
+    @NotBlank
+    private String currentPosition;
 
-	    @NotBlank
-	    @Size(min = 50)
-	    private String professionalBio;
-	    
-	    private String linkedinUrl;
+    @NotBlank
+    private String organization;
 
-	    private String portfolioUrl;
+    @NotBlank
+    @Size(min = 50)
+    private String professionalBio;
+
+    private String linkedinUrl;
+
+    private String portfolioUrl;
 }

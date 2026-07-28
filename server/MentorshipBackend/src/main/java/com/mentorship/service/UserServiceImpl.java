@@ -7,9 +7,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-import org.apache.commons.io.IOUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -55,11 +55,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository
                 .findById(userId).orElseThrow(() -> new ApiException("User Not Found..!"));
 
-        if (imageFile.isEmpty()) {
-            throw new ApiException("Image file is Empty..!");
-        }
-        if (!imageFile.getContentType().startsWith("image/")) {
-            throw new ApiException("Only image files are allowed");
+        if (imageFile == null || imageFile.isEmpty()) {
+            throw new ApiException("Image file is required");
         }
         if (imageFile.getSize() > 2 * 1024 * 1024) {
             throw new ApiException("Image size must be less than 2MB");
@@ -148,13 +145,22 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public void validateResetToken(String token) {
+		PasswordResetToken resetToken = resetTokenRepository.findByToken(token)
+				.orElseThrow(() -> new ApiException("Invalid or expired token"));
+
+		if (resetToken.isUsed() || resetToken.getExpiryTime().isBefore(LocalDateTime.now())) {
+			throw new ApiException("Invalid or expired token");
+		}
+	}
+
+	@Override
 	public void resetPassword(ResetPasswordRequest dto) {
 
 		PasswordResetToken resetToken = resetTokenRepository.findByToken(dto.getToken())
 				.orElseThrow(() -> new ApiException("Invalid or expired token"));
 
-		if (resetToken.isUsed()
-				|| resetToken.getExpiryTime().isBefore(LocalDateTime.now())) {
+		if (resetToken.isUsed() || resetToken.getExpiryTime().isBefore(LocalDateTime.now())) {
 			throw new ApiException("Token expired or already used");
 		}
 
@@ -164,8 +170,19 @@ public class UserServiceImpl implements UserService {
 
 		User user = resetToken.getUser();
 		user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+		userRepository.save(user);
 
 		resetToken.setUsed(true);
+		resetTokenRepository.save(resetToken);
+	}
+
+	@Override
+	public void updateEmailPreferences(Long userId, Boolean enabled) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new ApiException("User not found"));
+
+		user.setEmailNotificationsEnabled(enabled != null ? enabled : false);
+		userRepository.save(user);
 	}
 
 }

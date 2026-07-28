@@ -2,6 +2,8 @@ package com.mentorship.dtos;
 
 import java.time.LocalDate;
 
+import com.mentorship.validation.ValidPassword;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -24,7 +26,8 @@ public class AdminSignupRequest {
     private String email;
 
     @NotBlank
-    @Size(min = 6, max = 20)
+    @Size(min = 8, max = 20)
+    @ValidPassword
     private String password;
 
     private LocalDate dob;

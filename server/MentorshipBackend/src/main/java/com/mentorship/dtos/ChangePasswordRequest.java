@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import com.mentorship.validation.ValidPassword;
 
 @Getter
 @Setter
@@ -14,6 +15,7 @@ public class ChangePasswordRequest {
 
 	    @NotBlank
 	    @Size(min = 8, max = 20)
+	    @ValidPassword
 	    private String newPassword;
 
 	    @NotBlank

@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { resetPassword } from "../../service/authApiService";
+import { resetPassword, validateResetToken } from "../../service/authApiService";
+import {
+  getPasswordStrength,
+  passwordMeetsPolicy,
+  getPasswordStrengthColor,
+  getPasswordRequirementItems,
+} from "../../utils/passwordUtils";
 import "./ResetPassword.css";
 
 const ResetPasswordPage = () => {
@@ -16,15 +22,31 @@ const ResetPasswordPage = () => {
   const [success, setSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [tokenValid, setTokenValid] = useState(false);
 
   useEffect(() => {
     const tokenFromUrl = searchParams.get("token");
     if (tokenFromUrl) {
       setToken(tokenFromUrl);
+      validateToken(tokenFromUrl);
     } else {
       setError("Invalid reset link. No token found.");
     }
   }, [searchParams]);
+
+  const validateToken = async (tokenToValidate) => {
+    try {
+      await validateResetToken(tokenToValidate);
+      setTokenValid(true);
+    } catch (err) {
+      const message =
+        err.response?.data ||
+        err.message ||
+        "Invalid or expired reset link.";
+      setError(message);
+      setTokenValid(false);
+    }
+  };
 
   const validate = () => {
     setError("");
@@ -34,13 +56,10 @@ const ResetPasswordPage = () => {
       return false;
     }
 
-    if (newPassword.length < 8) {
-      setError("Password must be at least 8 characters long");
-      return false;
-    }
-
-    if (newPassword.length > 20) {
-      setError("Password must not exceed 20 characters");
+    if (!passwordMeetsPolicy(newPassword)) {
+      setError(
+        "Password must be 8-20 characters and include uppercase, lowercase, number, and special character"
+      );
       return false;
     }
 
@@ -136,24 +155,43 @@ const ResetPasswordPage = () => {
               <input
                 type={showPassword ? "text" : "password"}
                 className="form-control reset-password-input"
-                placeholder="At least 8 characters"
+                placeholder="At least 8 characters, uppercase, lowercase, number, special char"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                disabled={loading}
+                disabled={loading || !tokenValid}
               />
               <button
                 type="button"
                 className="password-toggle"
                 onClick={() => setShowPassword(!showPassword)}
                 tabIndex="-1"
-                disabled={loading}
+                disabled={loading || !tokenValid}
               >
                 {showPassword ? "👁️" : "👁️‍🗨️"}
               </button>
             </div>
+            <div className="password-strength-bar mt-2">
+              <div
+                className="password-strength-fill"
+                style={{
+                  width: `${(getPasswordStrength(newPassword).score / 5) * 100}%`,
+                  background: getPasswordStrengthColor(
+                    getPasswordStrength(newPassword).score
+                  ),
+                }}
+              />
+            </div>
             <small className="form-text text-muted d-block mt-2">
-              Password must be 8-20 characters long
+              {getPasswordStrength(newPassword).label}
             </small>
+          </div>
+          <div className="password-requirements mb-3">
+            <p className="mb-1">Password requirements:</p>
+            <ul className="requirement-list">
+              {getPasswordRequirementItems().map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
           </div>
 
           {/* Confirm Password */}
@@ -184,7 +222,7 @@ const ResetPasswordPage = () => {
           <button
             type="submit"
             className="btn btn-primary w-100 reset-password-btn"
-            disabled={loading || !token}
+            disabled={loading || !tokenValid}
           >
             {loading ? "Resetting..." : "Reset Password"}
           </button>
@@ -192,14 +230,19 @@ const ResetPasswordPage = () => {
 
         <div className="reset-password-footer text-center mt-4">
           <p className="text-muted mb-0">
-            Remember your password?{" "}
-            <button
-              type="button"
-              className="reset-password-link"
-              onClick={() => navigate("/login")}
-            >
-              Sign in
-            </button>
+            {tokenValid ? (
+              <>Remember your password?{" "}
+                <button
+                  type="button"
+                  className="reset-password-link"
+                  onClick={() => navigate("/login")}
+                >
+                  Sign in
+                </button>
+              </>
+            ) : (
+              <>Unable to reset password because the link is invalid or expired.</>
+            )}
           </p>
         </div>
       </div>

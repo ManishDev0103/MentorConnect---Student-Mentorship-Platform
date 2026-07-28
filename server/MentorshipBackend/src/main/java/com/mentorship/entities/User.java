@@ -61,6 +61,9 @@ public class User extends BaseEntity{
 	@Column(name="is_deleted")
 	private Boolean deleted = false;
 
+	@Column(name = "email_notifications_enabled", nullable = false)
+	private Boolean emailNotificationsEnabled = true;
+
 	public User(String firstName, String lastName, String email, String password, LocalDate dob, String address,
 			String phoneNo) {
 		super();
@@ -71,6 +74,7 @@ public class User extends BaseEntity{
 		this.dob = dob;
 		this.address = address;
 		this.phoneNo = phoneNo;
+		this.emailNotificationsEnabled = true;
 	}
 	
 	

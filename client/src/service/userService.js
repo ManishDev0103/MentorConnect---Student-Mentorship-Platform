@@ -31,3 +31,13 @@ export const getProfileImageByUserId = (userId) => {
 export const getMyProfileDetails = () => {
   return api.get(`/api/users/me`);
 };
+
+export const updateEmailPreferences = (enabled) => {
+  return api.patch(`/api/users/email-preferences`, {
+    emailNotificationsEnabled: enabled,
+  });
+};
+
+export const deleteAccount = () => {
+  return api.delete(`/api/users/me`);
+};

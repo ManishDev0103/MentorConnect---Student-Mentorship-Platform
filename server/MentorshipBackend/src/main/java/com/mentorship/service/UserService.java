@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mentorship.dtos.ChangePasswordRequest;
+import com.mentorship.dtos.EmailPreferenceRequest;
 import com.mentorship.dtos.ResetPasswordRequest;
 import com.mentorship.dtos.UserResp;
 import com.mentorship.entities.User;
@@ -24,5 +25,9 @@ public interface UserService {
 
 	void processForgotPassword(String email);
 
+	void validateResetToken(String token);
+
 	void resetPassword(ResetPasswordRequest dto);
+
+	void updateEmailPreferences(Long userId, Boolean enabled);
 }

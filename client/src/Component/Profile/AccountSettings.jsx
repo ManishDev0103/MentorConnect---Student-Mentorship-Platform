@@ -1,10 +1,45 @@
-import React, { useState } from "react";
-import api from "../../API/api";
+import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import { getMyProfileDetails, updateEmailPreferences, deleteAccount } from "../../service/userService";
 import "./Profile.css";
 import ChangePasswordModal from "./ChangePasswordModal";
 
 const AccountSettings = () => {
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  const [emailNotificationsEnabled, setEmailNotificationsEnabled] = useState(true);
+  const [loadingPref, setLoadingPref] = useState(false);
+
+  useEffect(() => {
+    fetchPreferences();
+  }, []);
+
+  const fetchPreferences = async () => {
+    try {
+      const res = await getMyProfileDetails();
+      setEmailNotificationsEnabled(
+        res.data.emailNotificationsEnabled !== false
+      );
+    } catch (error) {
+      console.error("Failed to load notification preferences:", error);
+    }
+  };
+
+  const handleNotificationToggle = async () => {
+    setLoadingPref(true);
+    try {
+      const newValue = !emailNotificationsEnabled;
+      await updateEmailPreferences(newValue);
+      setEmailNotificationsEnabled(newValue);
+      toast.success(
+        `Email notifications ${newValue ? "enabled" : "disabled"}`
+      );
+    } catch (error) {
+      console.error("Failed to update preferences:", error);
+      toast.error("Unable to update email preferences. Please try again.");
+    } finally {
+      setLoadingPref(false);
+    }
+  };
 
   const handleDeleteAccount = async () => {
     const confirmed = window.confirm(
@@ -14,12 +49,12 @@ const AccountSettings = () => {
     if (!confirmed) return;
 
     try {
-      await api.delete("/api/users/me");
+      await deleteAccount();
       localStorage.removeItem("token");
       window.location.href = "/login";
     } catch (error) {
       console.error("Failed to delete account:", error);
-      alert(error.message || "Unable to delete account. Please try again.");
+      alert(error.response?.data?.message || error.message || "Unable to delete account. Please try again.");
     }
   };
 
@@ -41,14 +76,28 @@ const AccountSettings = () => {
           </button>
         </div>
 
-        <div className="settings-item">
+        <div className="settings-item notification-item">
           <div>
             <strong>Notifications</strong>
             <p className="muted-text">Manage your email preferences</p>
           </div>
-          <button className="btn btn-outline-secondary btn-sm">
-            Configure
-          </button>
+          <div className="form-check form-switch">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              role="switch"
+              id="emailNotificationsToggle"
+              checked={emailNotificationsEnabled}
+              onChange={handleNotificationToggle}
+              disabled={loadingPref}
+            />
+            <label
+              className="form-check-label"
+              htmlFor="emailNotificationsToggle"
+            >
+              {emailNotificationsEnabled ? "Enabled" : "Disabled"}
+            </label>
+          </div>
         </div>
 
         <div className="settings-item danger">

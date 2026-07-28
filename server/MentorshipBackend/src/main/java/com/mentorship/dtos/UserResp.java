@@ -19,4 +19,5 @@ public class UserResp {
 	private UserRole userRole;
 	private String phoneNo;
 	private String address;
+	private Boolean emailNotificationsEnabled;
 }

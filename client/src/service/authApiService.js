@@ -14,3 +14,7 @@ export const forgotPassword = (forgotPasswordData) => {
 export const resetPassword = (resetPasswordData) => {
   return api.patch("/api/users/reset-password", resetPasswordData);
 };
+
+export const validateResetToken = (token) => {
+  return api.get("/api/users/validate-reset-token", { params: { token } });
+};

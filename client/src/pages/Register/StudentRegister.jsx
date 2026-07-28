@@ -2,6 +2,12 @@ import React, { useState } from "react";
 import "./Registration.css";
 import { Link, useNavigate } from "react-router-dom";
 import { registerStudent } from "../../API/authService";
+import {
+  getPasswordStrength,
+  passwordMeetsPolicy,
+  getPasswordRequirementItems,
+  getPasswordStrengthColor,
+} from "../../utils/passwordUtils";
 
 const StudentRegister = () => {
   const [form, setForm] = useState({
@@ -36,8 +42,16 @@ const StudentRegister = () => {
 
     try {
       // Validate required fields
-      if (!form.firstName || !form.email || !form.password) {
+      if (!form.firstName || !form.email || !form.password || !form.confirmPassword || !form.targetDomain) {
         setError("Please fill in all required fields");
+        setLoading(false);
+        return;
+      }
+
+      if (!passwordMeetsPolicy(form.password)) {
+        setError(
+          "Password must be 8-20 characters and include uppercase, lowercase, number, and special character"
+        );
         setLoading(false);
         return;
       }
@@ -182,11 +196,25 @@ const StudentRegister = () => {
                 name="password"
                 type="password"
                 className="form-control register-input"
-                placeholder="At least 6 characters"
+                placeholder="At least 8 characters, uppercase, lowercase, number, special char"
                 value={form.password}
                 onChange={handleChange}
                 required
               />
+              <div className="password-strength-bar mt-2">
+                <div
+                  className="password-strength-fill"
+                  style={{
+                    width: `${(getPasswordStrength(form.password).score / 5) * 100}%`,
+                    background: getPasswordStrengthColor(
+                      getPasswordStrength(form.password).score
+                    ),
+                  }}
+                />
+              </div>
+              <small className="text-muted">
+                {getPasswordStrength(form.password).label}
+              </small>
             </div>
             <div className="col-md-6">
               <label className="form-label">Confirm Password *</label>
@@ -236,6 +264,15 @@ const StudentRegister = () => {
                 onChange={handleChange}
               />
             </div>
+          </div>
+
+          <div className="password-requirements mt-3">
+            <p className="mb-1">Password requirements:</p>
+            <ul className="requirement-list">
+              {getPasswordRequirementItems().map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
           </div>
 
           {/* Button */}
