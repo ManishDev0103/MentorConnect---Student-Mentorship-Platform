@@ -39,9 +39,9 @@ const MentorListing = () => {
             id: m.mentorId,
             name,
             subject: specialization,
-            rating: 0,
-            reviews: 0,
-            sessions: 0,
+            rating: m.rating ?? 0,
+            reviews: m.reviews ?? 0,
+            sessions: m.sessions ?? 0,
             price: m.ratePerSession ?? 0,
             desc: m.about || m.experience || m.expertise || "Experienced mentor.",
             tags,
@@ -50,78 +50,11 @@ const MentorListing = () => {
             verificationStatus: m.verificationStatus || "PENDING",
           };
         });
-        const finalMentors = mapped.length > 0 ? mapped : [
-          {
-            id: 1,
-            name: "Dr. Ananya Verma",
-            subject: "Full-Stack Web Development & React",
-            rating: 4.9,
-            reviews: 28,
-            sessions: 45,
-            price: 500,
-            desc: "10+ years experience in Software Engineering and Web Technologies. Specializes in MERN stack, Java Spring Boot, and System Design.",
-            tags: ["React", "Node.js", "Java", "System Design"],
-            avatar: "https://api.dicebear.com/7.x/initials/svg?seed=Ananya%20Verma",
-            verificationStatus: "VERIFIED",
-          },
-          {
-            id: 2,
-            name: "Prof. Rajesh Kumar",
-            subject: "Data Structures & Algorithms",
-            rating: 4.8,
-            reviews: 34,
-            sessions: 60,
-            price: 600,
-            desc: "Ex-Google Engineer helping CDAC students master Coding Interviews, LeetCode Problem Solving, and Core CS Fundamentals.",
-            tags: ["C++", "DSA", "Algorithms", "Interview Prep"],
-            avatar: "https://api.dicebear.com/7.x/initials/svg?seed=Rajesh%20Kumar",
-            verificationStatus: "VERIFIED",
-          },
-          {
-            id: 3,
-            name: "Priya Sharma",
-            subject: "Cloud Computing & DevOps",
-            rating: 4.9,
-            reviews: 19,
-            sessions: 30,
-            price: 550,
-            desc: "AWS Certified Solutions Architect with expertise in Docker, Kubernetes, CI/CD pipelines, and microservice deployments.",
-            tags: ["AWS", "Docker", "Kubernetes", "DevOps"],
-            avatar: "https://api.dicebear.com/7.x/initials/svg?seed=Priya%20Sharma",
-            verificationStatus: "VERIFIED",
-          }
-        ];
-        setMentors(finalMentors);
+        setMentors(mapped);
       } catch (err) {
-        console.warn("Using fallback mentors for demonstration:", err);
-        setMentors([
-          {
-            id: 1,
-            name: "Dr. Ananya Verma",
-            subject: "Full-Stack Web Development & React",
-            rating: 4.9,
-            reviews: 28,
-            sessions: 45,
-            price: 500,
-            desc: "10+ years experience in Software Engineering and Web Technologies. Specializes in MERN stack, Java Spring Boot, and System Design.",
-            tags: ["React", "Node.js", "Java", "System Design"],
-            avatar: "https://api.dicebear.com/7.x/initials/svg?seed=Ananya%20Verma",
-            verificationStatus: "VERIFIED",
-          },
-          {
-            id: 2,
-            name: "Prof. Rajesh Kumar",
-            subject: "Data Structures & Algorithms",
-            rating: 4.8,
-            reviews: 34,
-            sessions: 60,
-            price: 600,
-            desc: "Ex-Google Engineer helping CDAC students master Coding Interviews, LeetCode Problem Solving, and Core CS Fundamentals.",
-            tags: ["C++", "DSA", "Algorithms", "Interview Prep"],
-            avatar: "https://api.dicebear.com/7.x/initials/svg?seed=Rajesh%20Kumar",
-            verificationStatus: "VERIFIED",
-          }
-        ]);
+        console.warn("Unable to load mentors:", err);
+        setMentors([]);
+        setError("Unable to load mentors at this time. Please try again later.");
       } finally {
         setLoading(false);
       }

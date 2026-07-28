@@ -10,7 +10,9 @@ import com.mentorship.custom_exceptions.ApiException;
 import com.mentorship.dto.MentorDTO;
 import com.mentorship.dtos.UpdateMentorProfileRequest;
 import com.mentorship.entities.Mentor;
+import com.mentorship.repository.FeedbackRepository;
 import com.mentorship.repository.MentorRepository;
+import com.mentorship.repository.SessionRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -20,6 +22,8 @@ import lombok.AllArgsConstructor;
 public class MentorServiceImpl implements MentorService {
 
 	private final MentorRepository mentorRepository;
+	private final SessionRepository sessionRepository;
+	private final FeedbackRepository feedbackRepository;
 
 	@Override
 	public void uploadResume(Long userId, MultipartFile resume) {
@@ -31,10 +35,12 @@ public class MentorServiceImpl implements MentorService {
 			throw new ApiException("Resume File Empty..!");
 		}
 
-		if (!resume.getContentType().equals("application/pdf")
-				&& !resume.getContentType().equals(
-						"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-				&& !resume.getContentType().equals("application/msword")) {
+String contentType = resume.getContentType();
+        if (contentType == null ||
+                (!contentType.equals("application/pdf")
+                        && !contentType.equals(
+                                "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                        && !contentType.equals("application/msword"))) {
 
 			throw new ApiException("Only PDF or DOC/DOCX allowed");
 		}
@@ -51,12 +57,20 @@ public class MentorServiceImpl implements MentorService {
 
 	@Override
 	public void partialUpdateProfile(Long userId, UpdateMentorProfileRequest dto) {
-		// TODO Auto-generated method stub
 		Mentor mentor = mentorRepository.findByUserDetails_UserId(userId)
 				.orElseThrow(() -> new ApiException("Mentor not found"));
 
-		if (dto.getSpecialization() != null)
-			mentor.setSpecialization(dto.getSpecialization());
+		if (dto.getCustomSpecialization() != null && !dto.getCustomSpecialization().isBlank()) {
+			mentor.setCustomSpecialization(dto.getCustomSpecialization());
+		}
+
+		if (dto.getSpecialization() != null) {
+			String specialization = dto.getSpecialization();
+			if ("Other".equalsIgnoreCase(specialization) && dto.getCustomSpecialization() != null && !dto.getCustomSpecialization().isBlank()) {
+				specialization = dto.getCustomSpecialization();
+			}
+			mentor.setSpecialization(specialization);
+		}
 
 		if (dto.getExperience() != null)
 			mentor.setExperience(dto.getExperience());
@@ -96,7 +110,7 @@ public class MentorServiceImpl implements MentorService {
 		if (domain == null || domain.trim().isEmpty()) {
 			mentors = mentorRepository.findByVerificationStatus(com.mentorship.entities.VerificationStatus.VERIFIED);
 		} else {
-			mentors = mentorRepository.findByVerificationStatusAndSpecializationContainingIgnoreCase(
+			mentors = mentorRepository.findByVerificationStatusAndDomainContainingIgnoreCase(
 					com.mentorship.entities.VerificationStatus.VERIFIED, domain.trim());
 		}
 
@@ -114,11 +128,12 @@ public class MentorServiceImpl implements MentorService {
 		dto.setMentorId(mentor.getMentorId());
 		dto.setName(mentor.getUserDetails().getFirstName() + " " + mentor.getUserDetails().getLastName());
 		dto.setSpecialization(mentor.getSpecialization());
+		dto.setCustomSpecialization(mentor.getCustomSpecialization());
 		dto.setRatePerSession(mentor.getRatePerSession());
 		dto.setEmail(mentor.getUserDetails().getEmail());
 		dto.setExperience(mentor.getExperience());
-		dto.setAbout(mentor.getSpecialization());
-		dto.setExpertise(mentor.getSpecialization());
+		dto.setAbout(mentor.getCustomSpecialization() != null && !mentor.getCustomSpecialization().isBlank() ? mentor.getCustomSpecialization() : mentor.getSpecialization());
+		dto.setExpertise(mentor.getCustomSpecialization() != null && !mentor.getCustomSpecialization().isBlank() ? mentor.getCustomSpecialization() : mentor.getSpecialization());
 		dto.setHighestEducation(mentor.getHighestEducation());
 		dto.setCurrentPosition(mentor.getCurrentPosition());
 		dto.setOrganization(mentor.getOrganization());
@@ -130,8 +145,24 @@ public class MentorServiceImpl implements MentorService {
 		} else {
 			dto.setVerificationStatus("PENDING");
 		}
-
+		dto.setRating(getAverageRating(mentor.getMentorId()));
+		dto.setReviews(getFeedbackCount(mentor.getMentorId()));
+		dto.setSessions(getSessionCount(mentor.getMentorId()));
 		return dto;
+	}
+
+	private Double getAverageRating(Long mentorId) {
+		Double rating = feedbackRepository.calculateAverageRating(mentorId);
+		return rating != null ? Math.round(rating * 10.0) / 10.0 : 0.0;
+	}
+
+	private Integer getFeedbackCount(Long mentorId) {
+		Integer count = feedbackRepository.countFeedbackByMentor(mentorId);
+		return count != null ? count : 0;
+	}
+
+	private Integer getSessionCount(Long mentorId) {
+		return sessionRepository.findByMentor_MentorId(mentorId).size();
 	}
 
 	@Override

@@ -14,6 +14,7 @@ const MentorRegister = () => {
     address: "",
     phoneNo: "",
     specialization: "",
+    customSpecialization: "",
     experience: "",
     ratePerSession: "",
     discountPercent: "",
@@ -44,6 +45,12 @@ const MentorRegister = () => {
       // Validate required fields
       if (!form.firstName || !form.email || !form.password || !form.specialization || !form.experience || !form.ratePerSession || !form.highestEducation || !form.currentPosition || !form.organization || !form.professionalBio) {
         setError("Please fill in all required fields");
+        setLoading(false);
+        return;
+      }
+
+      if (form.specialization === "Other" && !form.customSpecialization.trim()) {
+        setError("Please provide a custom specialization when \'Other\' is selected");
         setLoading(false);
         return;
       }
@@ -79,6 +86,7 @@ const MentorRegister = () => {
         address: form.address || "",
         phoneNo: form.phoneNo || "",
         specialization: form.specialization,
+        customSpecialization: form.customSpecialization || "",
         experience: form.experience,
         ratePerSession: rate,
         discountPercent: form.discountPercent ? parseFloat(form.discountPercent) : 0,
@@ -268,6 +276,20 @@ const MentorRegister = () => {
                 ))}
               </select>
             </div>
+            {form.specialization === "Other" && (
+              <div className="col-md-6">
+                <label className="form-label">Custom Specialization *</label>
+                <input
+                  name="customSpecialization"
+                  type="text"
+                  className="form-control register-input"
+                  placeholder="Describe your specialization"
+                  value={form.customSpecialization}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            )}
 
             <div className="col-md-6">
               <label className="form-label">Years of Experience *</label>

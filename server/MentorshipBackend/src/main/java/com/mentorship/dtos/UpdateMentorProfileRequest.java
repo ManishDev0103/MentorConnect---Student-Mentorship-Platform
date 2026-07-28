@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 public class UpdateMentorProfileRequest {
 	private String specialization;
+    private String customSpecialization;
     private String experience;
     private String highestEducation;
     private String currentPosition;

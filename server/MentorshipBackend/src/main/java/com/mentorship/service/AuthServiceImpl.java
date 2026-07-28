@@ -97,13 +97,16 @@ public class AuthServiceImpl implements AuthService{
 	        // 4. Create Mentor entity
 	        Mentor mentor = new Mentor();
 	        mentor.setUserDetails(user);
-	        mentor.setSpecialization(dto.getSpecialization());
-	        mentor.setExperience(dto.getExperience());
-	        mentor.setRatePerSession(dto.getRatePerSession());
-	        mentor.setDiscountPercent(dto.getDiscountPercent());
-	        mentor.setVerificationStatus(VerificationStatus.PENDING);
-	        mentor.setHighestEducation(dto.getHighestEducation());
-	        mentor.setCurrentPosition(dto.getCurrentPosition());
+        String specialization = dto.getSpecialization();
+        if (specialization != null && specialization.equalsIgnoreCase("Other")
+                && dto.getCustomSpecialization() != null && !dto.getCustomSpecialization().isBlank()) {
+            specialization = dto.getCustomSpecialization();
+        }
+        mentor.setSpecialization(specialization);
+        mentor.setCustomSpecialization(dto.getCustomSpecialization());
+        mentor.setExperience(dto.getExperience());
+        mentor.setRatePerSession(dto.getRatePerSession() != null ? dto.getRatePerSession() : 0.0);
+        mentor.setDiscountPercent(dto.getDiscountPercent() != null ? dto.getDiscountPercent() : 0.0);
 	        mentor.setOrganization(dto.getOrganization());
 	        mentor.setProfessionalBio(dto.getProfessionalBio());
 	        mentor.setLinkedinUrl(dto.getLinkedinUrl());

@@ -1,12 +1,17 @@
 package com.mentorship.service;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +39,9 @@ public class UserServiceImpl implements UserService {
 	private final ResetTokenRepository resetTokenRepository;
 	private final EmailService emailService;
 
+	@Value("${app.upload.profile-images-dir:uploads/profile-images}")
+	private String profileImagesDir;
+
 	@Override
 	public List<UserResp> getAllUsers() {
 
@@ -44,29 +52,39 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void uploadProfileImage(Long userId, MultipartFile imageFile) {
-		// TODO Auto-generated method stub
-		User user = userRepository
-				.findById(userId).orElseThrow(() -> new ApiException("User Not Found..!"));
+        User user = userRepository
+                .findById(userId).orElseThrow(() -> new ApiException("User Not Found..!"));
 
-		if (imageFile.isEmpty()) {
-			throw new ApiException("Image file is Empty..!");
+        if (imageFile.isEmpty()) {
+            throw new ApiException("Image file is Empty..!");
+        }
+        if (!imageFile.getContentType().startsWith("image/")) {
+            throw new ApiException("Only image files are allowed");
+        }
+        if (imageFile.getSize() > 2 * 1024 * 1024) {
+            throw new ApiException("Image size must be less than 2MB");
+        }
 
-		}
-		if (!imageFile.getContentType().startsWith("image/")) {
-			throw new ApiException("Only image files are allowed");
-		}
-		if (imageFile.getSize() > 2 * 1024 * 1024) {
-			throw new ApiException("Image size must be less than 2MB");
-		}
+        try {
+            Path uploadDir = Paths.get(profileImagesDir).toAbsolutePath().normalize();
+            Files.createDirectories(uploadDir);
 
-		try {
-			byte[] imageBytes = IOUtils.toByteArray(imageFile.getInputStream());
-			user.setImage(imageBytes);
-			userRepository.save(user);
-		} catch (IOException e) {
-			throw new ApiException("Failed to upload image");
-		}
-	}
+            String extension = "";
+            String originalFileName = imageFile.getOriginalFilename();
+            if (originalFileName != null && originalFileName.contains(".")) {
+                extension = originalFileName.substring(originalFileName.lastIndexOf('.'));
+            }
+
+            String fileName = userId + "_profile" + UUID.randomUUID() + extension;
+            Path destination = uploadDir.resolve(fileName).normalize();
+            Files.copy(imageFile.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+
+            user.setProfileImagePath(destination.toString());
+            userRepository.save(user);
+        } catch (IOException e) {
+            throw new ApiException("Failed to upload image", e);
+        }
+    }
 
 	@Override
 	public User getUserById(Long userId) {

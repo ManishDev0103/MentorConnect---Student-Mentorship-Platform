@@ -127,23 +127,13 @@ const MyMentor = ({ onNavigateToDashboard }) => {
         }
       }
 
-      const fallbackMentor = {
-        mentorId: 1,
-        name: "Dr. Ananya Verma",
-        specialization: "Full-Stack Web Development & React",
-        experience: "10+ years",
-        ratePerSession: 500,
-        rating: 4.9,
-        about: "Senior Mentor in Web Technologies, System Architecture & Java Frameworks.",
-        expertise: ["React", "Spring Boot", "System Design"],
-        email: "ananya.verma@cdac.in",
-      };
-
-      const finalMentorsList = mentorsList.length > 0 ? mentorsList : [fallbackMentor];
-
+      const finalMentorsList = mentorsList;
       setMentors(finalMentorsList);
       if (finalMentorsList.length > 0) {
         setSelectedMentorId(finalMentorsList[0].mentorId);
+      } else {
+        setSelectedMentorId(null);
+        setError("No mentors assigned yet. Book a session to get started.");
       }
 
       // Calculate session statistics
@@ -164,27 +154,16 @@ const MyMentor = ({ onNavigateToDashboard }) => {
 
       setError(null);
     } catch (err) {
-      console.warn("Error fetching mentor data, using demo mentor fallback:", err);
-      const fallbackMentor = {
-        mentorId: 1,
-        name: "Dr. Ananya Verma",
-        specialization: "Full-Stack Web Development & React",
-        experience: "10+ years",
-        ratePerSession: 500,
-        rating: 4.9,
-        about: "Senior Mentor in Web Technologies, System Architecture & Java Frameworks.",
-        expertise: ["React", "Spring Boot", "System Design"],
-        email: "ananya.verma@cdac.in",
-      };
-      setMentors([fallbackMentor]);
-      setSelectedMentorId(1);
+      console.warn("Error fetching mentor data:", err);
+      setMentors([]);
+      setSelectedMentorId(null);
       setSessionStats({
-        total: 12,
-        completed: 10,
-        avgRating: 4.9,
-        nextSession: "Tomorrow at 4:00 PM",
+        total: 0,
+        completed: 0,
+        avgRating: 0,
+        nextSession: null,
       });
-      setError(null);
+      setError("Unable to fetch mentor information. Please try again later.");
     } finally {
       setLoading(false);
     }

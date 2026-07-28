@@ -48,6 +48,9 @@ public class User extends BaseEntity{
 	@Column(columnDefinition = "LONGBLOB")
 	private byte[] image;
 	
+	@Column(name = "profile_image_path", length = 255)
+	private String profileImagePath;
+	
 	@Column(name="phone_no",length=14, unique = true)
 	private String phoneNo;
 	

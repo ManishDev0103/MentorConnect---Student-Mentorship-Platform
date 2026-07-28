@@ -110,65 +110,14 @@ const MySessions = () => {
       upcoming.sort((a, b) => new Date(a.date) - new Date(b.date));
       past.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-      const finalUpcoming = upcoming.length > 0 ? upcoming : [
-        {
-          sessionId: 101,
-          mentorId: 1,
-          mentorName: "Dr. Ananya Verma",
-          mentorSpecialization: "React & Spring Boot Architecture",
-          date: new Date(Date.now() + 86400000).toISOString().split('T')[0],
-          startTime: "16:00:00",
-          endTime: "17:00:00",
-          status: "SCHEDULED",
-          zoomLink: "https://zoom.us/j/9876543210",
-        }
-      ];
-
-      const finalPast = past.length > 0 ? past : [
-        {
-          sessionId: 100,
-          mentorId: 2,
-          mentorName: "Prof. Rajesh Kumar",
-          mentorSpecialization: "DSA & Mock Interview",
-          date: "2026-07-20",
-          startTime: "11:00:00",
-          endTime: "12:00:00",
-          status: "COMPLETED",
-          zoomLink: "https://zoom.us/j/1234567890",
-        }
-      ];
-
-      setUpcomingSessions(finalUpcoming);
-      setPastSessions(finalPast);
+      setUpcomingSessions(upcoming);
+      setPastSessions(past);
       setError(null);
     } catch (err) {
-      console.warn("Using fallback session list for demonstration:", err);
-      setUpcomingSessions([
-        {
-          sessionId: 101,
-          mentorId: 1,
-          mentorName: "Dr. Ananya Verma",
-          mentorSpecialization: "React & Spring Boot Architecture",
-          date: new Date(Date.now() + 86400000).toISOString().split('T')[0],
-          startTime: "16:00:00",
-          endTime: "17:00:00",
-          status: "SCHEDULED",
-          zoomLink: "https://zoom.us/j/9876543210",
-        }
-      ]);
-      setPastSessions([
-        {
-          sessionId: 100,
-          mentorId: 2,
-          mentorName: "Prof. Rajesh Kumar",
-          mentorSpecialization: "DSA & Mock Interview",
-          date: "2026-07-20",
-          startTime: "11:00:00",
-          endTime: "12:00:00",
-          status: "COMPLETED",
-          zoomLink: "https://zoom.us/j/1234567890",
-        }
-      ]);
+      console.warn("Error fetching sessions:", err);
+      setUpcomingSessions([]);
+      setPastSessions([]);
+      setError("Unable to load sessions. Please try again later.");
     } finally {
       setLoading(false);
     }

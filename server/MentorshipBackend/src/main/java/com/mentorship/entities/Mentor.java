@@ -43,6 +43,9 @@ public class Mentor extends BaseEntity {
 	@Column(name = "specialization", length = 100)
 	private String specialization;
 
+	@Column(name = "custom_specialization", length = 100)
+	private String customSpecialization;
+
 	@Column(name = "experience", length = 80)
 	private String experience;
 

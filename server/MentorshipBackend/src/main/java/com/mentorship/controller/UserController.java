@@ -1,5 +1,9 @@
 package com.mentorship.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,31 +63,59 @@ public class UserController {
 	public ResponseEntity<byte[]> getProfileImage(@PathVariable Long userId) {
 		User user = userService.getUserById(userId);
 
-		if (user.getImage() == null) {
-			return ResponseEntity.notFound().build();
-		}
+        try {
+            if (user.getProfileImagePath() != null && !user.getProfileImagePath().isBlank()) {
+                Path imagePath = Paths.get(user.getProfileImagePath());
+                if (Files.exists(imagePath)) {
+                    String contentType = Files.probeContentType(imagePath);
+                    return ResponseEntity.ok()
+                            .contentType(MediaType.parseMediaType(contentType != null ? contentType : MediaType.APPLICATION_OCTET_STREAM_VALUE))
+                            .body(Files.readAllBytes(imagePath));
+                }
+            }
 
-		return ResponseEntity.ok()
-				.contentType(MediaType.IMAGE_JPEG)
-				.body(user.getImage());
-	}
+            if (user.getImage() != null && user.getImage().length > 0) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_JPEG)
+                        .body(user.getImage());
+            }
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
 
-	@GetMapping("/image/me")
-	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<byte[]> getMyProfileImage() {
-		Long userId = SecurityUtils.getLoggedInUserId();
-		User user = userService.getUserById(userId);
+        return ResponseEntity.notFound().build();
+    }
 
-		if (user.getImage() == null) {
-			return ResponseEntity.notFound().build();
-		}
+    @GetMapping("/image/me")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<byte[]> getMyProfileImage() {
+        Long userId = SecurityUtils.getLoggedInUserId();
+        User user = userService.getUserById(userId);
 
-		return ResponseEntity.ok()
-				.contentType(MediaType.IMAGE_JPEG)
-				.body(user.getImage());
-	}
+        try {
+            if (user.getProfileImagePath() != null && !user.getProfileImagePath().isBlank()) {
+                Path imagePath = Paths.get(user.getProfileImagePath());
+                if (Files.exists(imagePath)) {
+                    String contentType = Files.probeContentType(imagePath);
+                    return ResponseEntity.ok()
+                            .contentType(MediaType.parseMediaType(contentType != null ? contentType : MediaType.APPLICATION_OCTET_STREAM_VALUE))
+                            .body(Files.readAllBytes(imagePath));
+                }
+            }
 
-	@GetMapping("/me")
+            if (user.getImage() != null && user.getImage().length > 0) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_JPEG)
+                        .body(user.getImage());
+            }
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/me")
 	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<UserResp> getMyProfileDetails() {
 		Long userId = SecurityUtils.getLoggedInUserId();

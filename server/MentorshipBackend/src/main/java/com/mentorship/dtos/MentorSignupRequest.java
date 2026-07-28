@@ -39,13 +39,10 @@ public class MentorSignupRequest {
 	    @NotBlank
 	    private String specialization;
 
-	    @NotBlank
-	    private String experience;
+    private String customSpecialization;
 
-	    @NotNull
-	    private Double ratePerSession;
-
-	    private Double discountPercent;
+    @NotBlank
+    private String experience;
 	    
 	    @NotBlank
 	    private String highestEducation;

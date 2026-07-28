@@ -25,6 +25,12 @@ public interface MentorRepository extends JpaRepository<Mentor, Long> {
     
     List<Mentor> findByVerificationStatusAndSpecializationContainingIgnoreCase(
         VerificationStatus status, String specialization);
+
+    @Query("SELECT m FROM Mentor m WHERE m.verificationStatus = :status AND "
+            + "(LOWER(m.specialization) LIKE LOWER(CONCAT('%', :domain, '%')) "
+            + "OR LOWER(m.customSpecialization) LIKE LOWER(CONCAT('%', :domain, '%')))" )
+    List<Mentor> findByVerificationStatusAndDomainContainingIgnoreCase(@Param("status") VerificationStatus status,
+            @Param("domain") String domain);
     
     Optional<Mentor> findByUserDetails_UserId(Long userId);
 }
