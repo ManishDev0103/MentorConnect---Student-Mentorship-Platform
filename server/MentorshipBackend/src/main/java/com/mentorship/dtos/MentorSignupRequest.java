@@ -61,4 +61,6 @@ public class MentorSignupRequest {
     private String linkedinUrl;
 
     private String portfolioUrl;
+    private Double ratePerSession;
+    private Double discountPercent;
 }

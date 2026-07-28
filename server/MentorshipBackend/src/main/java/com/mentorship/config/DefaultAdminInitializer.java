@@ -20,23 +20,32 @@ public class DefaultAdminInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${default.admin.email:admin@mentorship.com}")
+    // Read admin details from environment / properties. No defaults are provided
+    // to avoid committing credentials in source control. Set these as env vars
+    // (e.g. DEFAULT_ADMIN_EMAIL, DEFAULT_ADMIN_PASSWORD) or Spring properties.
+    @Value("${default.admin.email:}")
     private String adminEmail;
 
-    @Value("${default.admin.password:Admin@123}")
+    @Value("${default.admin.password:}")
     private String adminPassword;
 
-    @Value("${default.admin.first-name:Default}")
+    @Value("${default.admin.first-name:}")
     private String adminFirstName;
 
-    @Value("${default.admin.last-name:Admin}")
+    @Value("${default.admin.last-name:}")
     private String adminLastName;
 
-    @Value("${default.admin.address:Default admin account}")
+    @Value("${default.admin.address:}")
     private String adminAddress;
 
     @Override
     public void run(String... args) {
+
+        // If email or password are not provided, skip auto-creation.
+        if (adminEmail == null || adminEmail.isBlank() || adminPassword == null || adminPassword.isBlank()) {
+            log.info("No default admin credentials provided; skipping auto-creation. Set 'default.admin.email' and 'default.admin.password' to create one at startup.");
+            return;
+        }
 
         if (userRepository.findByEmail(adminEmail).isPresent()) {
             log.info("Default admin user already exists: {}", adminEmail);
@@ -44,11 +53,11 @@ public class DefaultAdminInitializer implements CommandLineRunner {
         }
 
         User admin = new User();
-        admin.setFirstName(adminFirstName);
-        admin.setLastName(adminLastName);
+        admin.setFirstName(adminFirstName != null && !adminFirstName.isBlank() ? adminFirstName : "Admin");
+        admin.setLastName(adminLastName != null && !adminLastName.isBlank() ? adminLastName : "User");
         admin.setEmail(adminEmail);
         admin.setPassword(passwordEncoder.encode(adminPassword));
-        admin.setAddress(adminAddress);
+        admin.setAddress(adminAddress != null ? adminAddress : "");
         admin.setUserRole(UserRole.ADMIN);
 
         userRepository.save(admin);

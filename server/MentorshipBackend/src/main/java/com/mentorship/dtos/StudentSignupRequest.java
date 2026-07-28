@@ -41,3 +41,5 @@ public class StudentSignupRequest {
 
 	    private String qualification;
 
+	}
+
