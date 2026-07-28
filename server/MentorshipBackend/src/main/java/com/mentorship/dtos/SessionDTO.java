@@ -1,6 +1,7 @@
 package com.mentorship.dtos;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import lombok.AllArgsConstructor;
@@ -23,6 +24,9 @@ public class SessionDTO {
     private String topic;
     private String description;
     private String status;
+    private String cancelledBy;
+    private String cancellationReason;
+    private LocalDateTime cancelledAt;
     private Double sessionFee;
     private String notes;
 }

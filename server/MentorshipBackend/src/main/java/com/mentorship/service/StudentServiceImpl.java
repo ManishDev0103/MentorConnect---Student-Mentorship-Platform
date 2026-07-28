@@ -193,6 +193,10 @@ public class StudentServiceImpl implements StudentService {
                 .endTime(session.getEndTime())
                 .topic(session.getTopic())
                 .status(session.getStatus().toString())
+                .cancelledBy(session.getCancelledBy())
+                .cancellationReason(session.getCancellationReason())
+                .cancelledAt(session.getCancelledAt())
+                .sessionFee(session.getSessionFee())
                 .notes(session.getNotes())
                 .build();
     }
@@ -573,8 +577,10 @@ public class StudentServiceImpl implements StudentService {
         Session session = sessionRepository.findById(sessionId)
                 .orElseThrow(() -> new RuntimeException("Session not found"));
 
-        if (session.getStatus() == SessionStatus.COMPLETED) {
-            throw new RuntimeException("Completed session cannot be cancelled");
+        if (session.getStatus() == SessionStatus.COMPLETED
+                || session.getStatus() == SessionStatus.CANCELLED_BY_STUDENT
+                || session.getStatus() == SessionStatus.CANCELLED_BY_MENTOR) {
+            throw new RuntimeException("Session cannot be cancelled");
         }
 
         // Release the booked time slot back to available
@@ -591,16 +597,43 @@ public class StudentServiceImpl implements StudentService {
             availabilityRepository.save(availability);
         }
 
-        session.setStatus(SessionStatus.CANCELLED);
+        session.setStatus(SessionStatus.CANCELLED_BY_STUDENT);
+        session.setCancelledBy("STUDENT");
+        session.setCancellationReason("Cancelled by student");
+        session.setCancelledAt(LocalDateTime.now());
         sessionRepository.save(session);
+
+        List<SessionPayment> payments = sessionPaymentRepository.findBySession_SessionId(sessionId);
+        for (SessionPayment payment : payments) {
+            if ("SUCCESS".equalsIgnoreCase(payment.getStatus()) &&
+                    (payment.getRefundStatus() == null || !payment.getRefundStatus().equalsIgnoreCase("COMPLETED"))) {
+                payment.setRefundStatus("COMPLETED");
+                payment.setRefundAmount(payment.getAmount());
+                payment.setRefundDate(LocalDateTime.now());
+                payment.setRefundReason("Cancelled by student");
+                sessionPaymentRepository.save(payment);
+            }
+        }
+
+        List<Transaction> transactions = transactionRepository.findAllBySessionSessionId(sessionId);
+        for (Transaction transaction : transactions) {
+            if (transaction.getPaymentStatus() == PaymentStatus.COMPLETED) {
+                transaction.setPaymentStatus(PaymentStatus.REFUNDED);
+                transaction.setDescription("Session cancelled by student and refunded");
+                transactionRepository.save(transaction);
+            }
+        }
     }
 
     public void deleteSession(Long sessionId) {
         Session session = sessionRepository.findById(sessionId)
                 .orElseThrow(() -> new RuntimeException("Session not found"));
 
-        // Release the booked time slot back to available when deleting a pending
-        // session
+        if (session.getStatus() == SessionStatus.COMPLETED || session.getStatus() == SessionStatus.SCHEDULED) {
+            throw new RuntimeException("Only pending or cancelled sessions may be deleted. Cancel the session first if it is scheduled.");
+        }
+
+        // Release the booked time slot back to available when deleting a pending or cancelled session
         MentorAvailability availability = availabilityRepository
                 .findByMentor_MentorIdAndAvailableDateAndTimeSlot(
                         session.getMentor().getMentorId(),

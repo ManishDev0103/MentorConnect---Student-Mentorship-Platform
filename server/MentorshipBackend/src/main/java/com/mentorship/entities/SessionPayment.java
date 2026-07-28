@@ -52,4 +52,16 @@ public class SessionPayment {
 
     @Column(name = "status", nullable = false)
     private String status; // SUCCESS, FAILED
+
+    @Column(name = "refund_status", length = 50)
+    private String refundStatus;
+
+    @Column(name = "refund_amount")
+    private Double refundAmount;
+
+    @Column(name = "refund_date")
+    private LocalDateTime refundDate;
+
+    @Column(name = "refund_reason", length = 500)
+    private String refundReason;
 }

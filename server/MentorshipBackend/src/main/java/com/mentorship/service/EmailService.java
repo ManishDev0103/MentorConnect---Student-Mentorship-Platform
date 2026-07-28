@@ -92,17 +92,26 @@ public class EmailService {
 
     public void sendSessionPaymentStatusEmail(String toEmail, String studentName,
             String mentorName, String sessionDate, String startTime, Double amount, String status) {
-        String subject = "Session Payment " + ("SUCCESS".equalsIgnoreCase(status) ? "Confirmed" : "Failed");
+        String subject;
         StringBuilder body = new StringBuilder();
         body.append("Hello " + (studentName != null ? studentName : "Student") + ",\n\n");
 
         if ("SUCCESS".equalsIgnoreCase(status)) {
+            subject = "Session Payment Confirmed";
             body.append("Your payment for the session with " + mentorName + " has been successfully processed.\n");
             body.append("Session date: " + sessionDate + "\n");
             body.append("Start time: " + startTime + "\n");
             body.append("Amount: ₹" + amount + "\n\n");
             body.append("The session is now confirmed and scheduled.\n\n");
+        } else if ("REFUNDED".equalsIgnoreCase(status)) {
+            subject = "Session Payment Refunded";
+            body.append("Your payment for the session with " + mentorName + " has been refunded.\n");
+            body.append("Session date: " + sessionDate + "\n");
+            body.append("Start time: " + startTime + "\n");
+            body.append("Amount refunded: ₹" + amount + "\n\n");
+            body.append("The refund has been processed and your session has been cancelled.\n\n");
         } else {
+            subject = "Session Payment Failed";
             body.append("Your payment for the session with " + mentorName + " could not be completed.\n");
             body.append("Session date: " + sessionDate + "\n");
             body.append("Start time: " + startTime + "\n");

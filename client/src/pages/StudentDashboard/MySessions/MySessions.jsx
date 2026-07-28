@@ -37,6 +37,16 @@ const MySessions = () => {
       const upcoming = [];
       const past = [];
 
+      const isCancelledStatus = (status) =>
+        status === "CANCELLED" ||
+        status === "CANCELLED_BY_STUDENT" ||
+        status === "CANCELLED_BY_MENTOR";
+
+      const normalizeStatusLabel = (status) => {
+        if (isCancelledStatus(status)) return "CANCELLED";
+        return status;
+      };
+
       sessions.forEach((session) => {
         // Construct a precise Date object for the session
         // session.sessionDate is YYYY-MM-DD, session.startTime is HH:MM:SS
@@ -76,14 +86,15 @@ const MySessions = () => {
           }),
           time: session.startTime,
           duration: calculateDuration(session.startTime, session.endTime),
-          status: session.status,
+          status: normalizeStatusLabel(session.status),
+          originalStatus: session.status,
           fee: session.sessionFee,
           description: session.description,
           meetingUrl: generateZoomLink(), // Always generate on fly
         };
 
         // Categorize sessions
-        if (session.status === "CANCELLED") {
+        if (isCancelledStatus(session.status)) {
           // Cancelled sessions go to past sessions
           past.push(sessionObj);
         } else if (sessionDateTime > now && session.status !== "COMPLETED") {
@@ -286,7 +297,9 @@ const MySessions = () => {
                           ? "status-confirmed"
                           : session.status === "COMPLETED"
                             ? "status-completed"
-                            : "status-pending"
+                            : session.status === "CANCELLED"
+                              ? "status-cancelled"
+                              : "status-pending"
                       }
                     >
                       {session.status}

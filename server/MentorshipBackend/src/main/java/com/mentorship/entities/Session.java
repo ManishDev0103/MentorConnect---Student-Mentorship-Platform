@@ -1,6 +1,7 @@
 package com.mentorship.entities;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import com.mentorship.entities.BaseEntity;
@@ -64,6 +65,15 @@ public class Session extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 20)
     private SessionStatus status = SessionStatus.SCHEDULED;
+
+    @Column(name = "cancelled_by", length = 50)
+    private String cancelledBy;
+
+    @Column(name = "cancellation_reason", length = 500)
+    private String cancellationReason;
+
+    @Column(name = "cancelled_at")
+    private LocalDateTime cancelledAt;
 
     @Column(name = "session_fee")
     private Double sessionFee;

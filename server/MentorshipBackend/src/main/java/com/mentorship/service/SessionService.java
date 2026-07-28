@@ -34,6 +34,7 @@ public interface SessionService {
     
     // Cancel session
     void cancelSession(Long sessionId);
+    void cancelSession(Long sessionId, String cancellationReason);
     
     // Complete session
     void completeSession(Long sessionId, String notes);

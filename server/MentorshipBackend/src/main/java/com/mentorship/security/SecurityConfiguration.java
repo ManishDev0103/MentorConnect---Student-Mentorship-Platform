@@ -46,8 +46,9 @@ public class SecurityConfiguration {
 			.requestMatchers(HttpMethod.GET, "/students").permitAll()
 			.requestMatchers(HttpMethod.GET, "/users/image/**").permitAll()
 			.requestMatchers(HttpMethod.GET, "/mentors/public", "/mentors/public/**").permitAll()
-			.requestMatchers("/api/mentor/**").permitAll()  // TEMPORARY: Allow all mentor requests for testing
-			.requestMatchers("/api/student/**").permitAll()  // TEMPORARY: Allow all student requests for testing
+				.requestMatchers("/api/student/payment/session-notify", "/api/student/subscription/notify").permitAll()
+				.requestMatchers("/api/mentor/**").hasRole("MENTOR")
+				.requestMatchers("/api/student/**").hasRole("STUDENT")
 			.requestMatchers("/api/messages/**").permitAll()  // Allow all message/chat endpoints
 			.requestMatchers("/api/admin/migration/**").permitAll()  // Allow migration endpoints (one-time use)
 			.requestMatchers("/api/admin/**").hasRole("ADMIN")

@@ -15,12 +15,18 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mentorship.dtos.SessionCreateDTO;
 import com.mentorship.dtos.SessionDTO;
 import com.mentorship.entities.Mentor;
+import com.mentorship.entities.PaymentStatus;
 import com.mentorship.entities.Session;
+import com.mentorship.entities.SessionPayment;
 import com.mentorship.entities.SessionStatus;
 import com.mentorship.entities.Student;
+import com.mentorship.service.EmailService;
+import com.mentorship.repository.MentorAvailabilityRepository;
 import com.mentorship.repository.MentorRepository;
+import com.mentorship.repository.SessionPaymentRepository;
 import com.mentorship.repository.SessionRepository;
 import com.mentorship.repository.StudentRepository;
+import com.mentorship.repository.TransactionRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +40,10 @@ public class SessionServiceImpl implements SessionService {
     private final SessionRepository sessionRepository;
     private final MentorRepository mentorRepository;
     private final StudentRepository studentRepository;
+    private final MentorAvailabilityRepository availabilityRepository;
+    private final SessionPaymentRepository sessionPaymentRepository;
+    private final TransactionRepository transactionRepository;
+    private final EmailService emailService;
 
     @Override
     public List<SessionDTO> getAllSessions(Long mentorId) {
@@ -146,10 +156,74 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public void cancelSession(Long sessionId) {
+        cancelSession(sessionId, null);
+    }
+
+    @Override
+    public void cancelSession(Long sessionId, String cancellationReason) {
         Session session = sessionRepository.findById(sessionId)
                 .orElseThrow(() -> new RuntimeException("Session not found with id: " + sessionId));
-        session.setStatus(SessionStatus.CANCELLED);
+
+        if (session.getStatus() == SessionStatus.COMPLETED
+                || session.getStatus() == SessionStatus.CANCELLED_BY_STUDENT
+                || session.getStatus() == SessionStatus.CANCELLED_BY_MENTOR) {
+            throw new RuntimeException("Session cannot be cancelled");
+        }
+
+        // Release the booked time slot if the session was already reserved.
+        MentorAvailability availability = availabilityRepository
+                .findByMentor_MentorIdAndAvailableDateAndTimeSlot(
+                        session.getMentor().getMentorId(),
+                        session.getSessionDate(),
+                        session.getStartTime())
+                .orElse(null);
+
+        if (availability != null && availability.getIsBooked()) {
+            availability.setIsBooked(false);
+            availability.setIsAvailable(true);
+            availabilityRepository.save(availability);
+        }
+
+        session.setStatus(SessionStatus.CANCELLED_BY_MENTOR);
+        session.setCancelledBy("MENTOR");
+        session.setCancellationReason(cancellationReason);
+        session.setCancelledAt(LocalDateTime.now());
         sessionRepository.save(session);
+
+        // Refund payments if any were already completed for this session.
+        List<SessionPayment> payments = sessionPaymentRepository.findBySession_SessionId(sessionId);
+        for (SessionPayment payment : payments) {
+            if ("SUCCESS".equalsIgnoreCase(payment.getStatus()) &&
+                    (payment.getRefundStatus() == null || !payment.getRefundStatus().equalsIgnoreCase("COMPLETED"))) {
+                payment.setRefundStatus("COMPLETED");
+                payment.setRefundAmount(payment.getAmount());
+                payment.setRefundDate(LocalDateTime.now());
+                payment.setRefundReason(cancellationReason != null ? cancellationReason : "Cancelled by mentor");
+                sessionPaymentRepository.save(payment);
+            }
+        }
+
+        List<Transaction> transactions = transactionRepository.findAllBySessionSessionId(sessionId);
+        for (Transaction transaction : transactions) {
+            if (transaction.getPaymentStatus() == PaymentStatus.COMPLETED) {
+                transaction.setPaymentStatus(PaymentStatus.REFUNDED);
+                transaction.setDescription("Session cancelled by mentor and refunded");
+                transactionRepository.save(transaction);
+            }
+        }
+
+        try {
+            emailService.sendSessionPaymentStatusEmail(
+                    session.getStudent().getUserDetails().getEmail(),
+                    session.getStudent().getUserDetails().getFirstName() + " " + session.getStudent().getUserDetails().getLastName(),
+                    session.getMentor().getUserDetails().getFirstName() + " " + session.getMentor().getUserDetails().getLastName(),
+                    session.getSessionDate().toString(),
+                    session.getStartTime().toString(),
+                    session.getSessionFee(),
+                    "REFUNDED");
+        } catch (Exception e) {
+            LoggerFactory.getLogger(SessionServiceImpl.class).warn("Failed to send refund notification email: {}", e.getMessage());
+        }
     }
 
     @Override
@@ -243,6 +317,9 @@ public class SessionServiceImpl implements SessionService {
                 .topic(session.getTopic())
                 .description(session.getDescription())
                 .status(session.getStatus().name())
+                .cancelledBy(session.getCancelledBy())
+                .cancellationReason(session.getCancellationReason())
+                .cancelledAt(session.getCancelledAt())
                 .sessionFee(session.getSessionFee())
                 .notes(session.getNotes())
                 .build();

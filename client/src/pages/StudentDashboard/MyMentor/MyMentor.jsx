@@ -64,7 +64,11 @@ const MyMentor = ({ onNavigateToDashboard }) => {
 
       // Get UNIQUE mentors from ONLY ACTIVE (non-completed) sessions
       const activeSessions = sessions.filter(
-        (s) => s.status !== "COMPLETED" && s.status !== "CANCELLED",
+        (s) =>
+          s.status !== "COMPLETED" &&
+          s.status !== "CANCELLED" &&
+          s.status !== "CANCELLED_BY_STUDENT" &&
+          s.status !== "CANCELLED_BY_MENTOR",
       );
       const uniqueMentorIds = [
         ...new Set(activeSessions.map((s) => s.mentorId)),

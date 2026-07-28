@@ -1,0 +1,121 @@
+MentorConnect Session Cancellation + Refund API Test Plan
+
+1. Common setup
+----------------
+Base URL: http://localhost:8080
+Headers:
+  Authorization: Bearer <JWT>
+  Content-Type: application/json
+
+2. Student cancel flow
+----------------------
+2.1 Get student sessions
+  Method: GET
+  URL: http://localhost:8080/api/student/{studentId}/sessions
+  Example: http://localhost:8080/api/student/12/sessions
+
+2.2 Cancel session
+  Method: PATCH
+  URL: http://localhost:8080/api/student/sessions/{sessionId}/cancel
+  Example: http://localhost:8080/api/student/sessions/45/cancel
+
+2.3 Expected response
+  Status: 200 OK
+  Body: Session cancelled successfully
+
+3. Mentor cancel flow
+----------------------
+3.1 Get mentor sessions
+  Method: GET
+  URL: http://localhost:8080/api/mentor/{mentorId}/sessions
+  Example: http://localhost:8080/api/mentor/8/sessions
+
+3.2 Cancel session
+  Method: DELETE
+  URL: http://localhost:8080/api/mentor/session/{sessionId}
+  Example: http://localhost:8080/api/mentor/session/45
+
+3.3 Expected response
+  Status: 200 OK
+  Body:
+  {
+    "success": true,
+    "message": "Session cancelled successfully",
+    "data": null
+  }
+
+4. Verify updated session status
+---------------------------------
+4.1 Check student sessions list
+  Request: GET /api/student/{studentId}/sessions
+  Expected cancelled status: CANCELLED_BY_STUDENT
+
+4.2 Check mentor sessions list
+  Request: GET /api/mentor/{mentorId}/sessions
+  Expected cancelled status: CANCELLED_BY_MENTOR
+
+5. Database verification
+-------------------------
+5.1 Session cancel metadata
+  SELECT session_id, status, cancelled_by, cancellation_reason, cancelled_at
+  FROM sessions
+  WHERE session_id = 45;
+
+Expected:
+  status = CANCELLED_BY_STUDENT or CANCELLED_BY_MENTOR
+  cancelled_by = STUDENT or MENTOR
+  cancellation_reason populated
+  cancelled_at not null
+
+5.2 Session payment refund state
+  SELECT session_id, amount, refund_status, refund_amount, refund_date, refund_reason
+  FROM session_payments
+  WHERE session_id = 45;
+
+Expected:
+  refund_status = COMPLETED
+  refund_amount = amount
+  refund_date not null
+  refund_reason contains cancellation context
+
+5.3 Transaction refund state
+  SELECT session_id, payment_status, description
+  FROM transactions
+  WHERE session_id = 45;
+
+Expected:
+  payment_status = REFUNDED
+  description updated for refund
+
+6. Error case tests
+---------------------
+6.1 Cancel a completed session
+  Request: PATCH /api/student/sessions/{completedSessionId}/cancel
+  Expected: 400 Bad Request
+  Error message: Session cannot be cancelled
+
+6.2 Cancel an already cancelled session
+  Request: PATCH /api/student/sessions/{alreadyCancelledSessionId}/cancel
+  Expected: 400 Bad Request
+
+6.3 Delete a session before cancelling
+  Request: DELETE /api/student/sessions/{sessionId}
+  If session is scheduled/completed: should fail
+  If session has already been cancelled: should succeed
+
+7. Frontend validation
+-----------------------
+- Confirm cancelled student sessions move into the past session list
+- Confirm cancelled sessions display as cancelled
+- Confirm cancelled sessions do not appear as active mentor sessions
+
+8. Backend compile check
+-------------------------
+From server/MentorshipBackend:
+  .\mvnw.cmd -DskipTests compile
+
+9. Notes
+--------
+- Student cancel endpoint returns a plain text response, not JSON wrapper.
+- Mentor cancel endpoint returns ApiResponseDTO JSON.
+- Use the appropriate JWT role for student vs mentor endpoints.
