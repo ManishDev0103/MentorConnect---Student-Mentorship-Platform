@@ -60,6 +60,19 @@ public class DefaultAdminInitializer implements CommandLineRunner {
         admin.setAddress(adminAddress != null ? adminAddress : "");
         admin.setUserRole(UserRole.ADMIN);
 
+        // Try to assign a default admin image from classpath resources (static/images/default-admin.svg)
+        try {
+            var is = DefaultAdminInitializer.class.getResourceAsStream("/static/images/default-admin.svg");
+            if (is != null) {
+                byte[] img = is.readAllBytes();
+                admin.setImage(img);
+            } else {
+                log.warn("Default admin image resource not found: /static/images/default-admin.svg");
+            }
+        } catch (Exception e) {
+            log.warn("Failed to load default admin image", e);
+        }
+
         userRepository.save(admin);
 
         log.info("Created default admin account: {}", adminEmail);
