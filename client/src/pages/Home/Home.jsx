@@ -1,10 +1,29 @@
 // src/pages/Home/Home.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Home.css";
 import Navbar from "../../Component/Navbar/Navbar";
 import { Link } from "react-router-dom";
+import { getRecentPlatformFeedback } from "../../service/testimonialService";
 
 const Home = () => {
+  const [testimonials, setTestimonials] = useState([]);
+  const [loadingTestimonials, setLoadingTestimonials] = useState(true);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const response = await getRecentPlatformFeedback(3);
+        setTestimonials(response?.data?.data || []);
+      } catch (error) {
+        console.warn("Unable to load testimonials", error);
+      } finally {
+        setLoadingTestimonials(false);
+      }
+    };
+
+    fetchTestimonials();
+  }, []);
+
   return (
     <div className="home-root">
       <Navbar />
@@ -155,26 +174,55 @@ const Home = () => {
             Real stories from learners across India
           </p>
 
-          <div className="testimonial-card mx-auto">
-            <div className="d-flex align-items-center mb-3">
-              <div className="avatar-circle me-3">AS</div>
-              <div className="text-start">
-                <h6 className="mb-0">Manish Kadam</h6>
-                <small className="text-muted">Atlassian</small>
+          {loadingTestimonials ? (
+            <div className="testimonial-card mx-auto">
+              <p>Loading testimonials...</p>
+            </div>
+          ) : testimonials.length === 0 ? (
+            <div className="testimonial-card mx-auto">
+              <div className="d-flex align-items-center mb-3">
+                <div className="avatar-circle me-3">AS</div>
+                <div className="text-start">
+                  <h6 className="mb-0">Manish Kadam</h6>
+                  <small className="text-muted">Atlassian</small>
+                </div>
               </div>
+              <p className="testimonial-text">
+                “MentorConnect paired me with an excellent mentor who
+                helped me structure my coding skills. The daily
+                tracking and feedback keep me consistent even on tough days.”
+              </p>
             </div>
-            <p className="testimonial-text">
-              “MentorConnect paired me with an excellent mentor who
-              helped me structure my coding skills. The daily
-              tracking and feedback keep me consistent even on tough days.”
-            </p>
+          ) : (
+            <div className="row g-4 justify-content-center">
+              {testimonials.map((testimonial) => (
+                <div className="col-md-4" key={testimonial.feedbackId}>
+                  <div className="testimonial-card">
+                    <div className="d-flex align-items-center mb-3">
+                      <div className="avatar-circle me-3">
+                        {testimonial.initials || "ST"}
+                      </div>
+                      <div className="text-start">
+                        <h6 className="mb-0">{testimonial.studentName || "Student"}</h6>
+                        <small className="text-muted">
+                          {testimonial.rating ? `⭐ ${testimonial.rating} / 5` : "Student feedback"}
+                        </small>
+                      </div>
+                    </div>
+                    <p className="testimonial-text">{testimonial.message}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
-            <div className="testimonial-dots">
-              <span className="dot active"></span>
-              <span className="dot"></span>
-              <span className="dot"></span>
+          {!loadingTestimonials && testimonials.length > 0 && (
+            <div className="text-center mt-4">
+              <Link to="/testimonials" className="btn hero-cta-secondary">
+                View more testimonials
+              </Link>
             </div>
-          </div>
+          )}
         </div>
       </section>
 

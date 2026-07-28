@@ -7,6 +7,7 @@ import MentorRegister from "./pages/Register/MentorRegister";
 import StudentRegister from "./pages/Register/StudentRegister";
 import MentorListing from "./pages/MentorListing/MentorListing";
 import Home from "./pages/Home/Home";
+import Testimonials from "./pages/Testimonials/Testimonials";
 import { ToastContainer } from "react-toastify";
 import Dashboard from "./pages/MentorDashBoard/Dashboard/Dashboard";
 import StudentDashboard from "./pages/StudentDashboard/Main/StudentDashboard";
@@ -23,6 +24,7 @@ function App() {
         <Route path="/mentors" element={<MentorListing />} />
         <Route path="/register/mentor" element={<PublicRoute element={<MentorRegister />} />} />
         <Route path="/register/student" element={<PublicRoute element={<StudentRegister />} />} />
+        <Route path="/testimonials" element={<Testimonials />} />
 
         {/* Protected Routes - Student */}
         <Route

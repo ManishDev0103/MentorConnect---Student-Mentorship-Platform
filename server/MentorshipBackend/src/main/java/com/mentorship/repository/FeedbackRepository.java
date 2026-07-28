@@ -34,8 +34,12 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
     List<Feedback> findByMentor_MentorIdAndRating(Long mentorId, Integer rating);
 
     // Find recent feedback (limit)
-    @Query("SELECT f FROM Feedback f WHERE f.mentor.mentorId = :mentorId ORDER BY f.feedbackDate DESC LIMIT :limit")
+    @Query("SELECT f FROM Feedback f WHERE f.mentor.mentorId = :mentorId ORDER BY f.feedbackDate DESC")
     List<Feedback> findRecentFeedback(@Param("mentorId") Long mentorId, @Param("limit") Integer limit);
+
+    // Find recent platform-wide feedback
+    @Query(value = "SELECT * FROM feedbacks f ORDER BY f.feedback_date DESC LIMIT :limit", nativeQuery = true)
+    List<Feedback> findRecentPlatformFeedback(@Param("limit") Integer limit);
 
     // Get rating distribution
     @Query("SELECT f.rating, COUNT(f) FROM Feedback f WHERE f.mentor.mentorId = :mentorId GROUP BY f.rating ORDER BY f.rating DESC")
