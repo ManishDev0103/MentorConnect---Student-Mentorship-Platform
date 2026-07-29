@@ -15,6 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PendingVerificationDto {
     private Long userId;
+    private Long mentorId;
     private String name;
     private String email;
     private String type; // MENTOR or STUDENT

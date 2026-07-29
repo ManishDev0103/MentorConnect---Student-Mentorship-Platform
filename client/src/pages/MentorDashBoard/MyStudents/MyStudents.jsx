@@ -11,6 +11,7 @@ function MyStudents() {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatStudentId, setChatStudentId] = useState(null);
 
   // Get mentor ID from localStorage (set during login)
   const mentorId = getMentorId();
@@ -55,7 +56,10 @@ function MyStudents() {
             <StudentCard
               key={index}
               data={student}
-              onChatClick={() => setIsChatOpen(true)}
+              onChatClick={() => {
+                setChatStudentId(student.studentId);
+                setIsChatOpen(true);
+              }}
             />
           ))}
         </div>
@@ -63,9 +67,13 @@ function MyStudents() {
 
       <ChatModal
         isOpen={isChatOpen}
-        onClose={() => setIsChatOpen(false)}
+        onClose={() => {
+          setIsChatOpen(false);
+          setChatStudentId(null);
+        }}
         userId={mentorId}
         mentorId={mentorId}
+        initialStudentId={chatStudentId}
       />
     </div>
   );

@@ -198,27 +198,27 @@ export const updateSessionProgress = async (sessionId) => {
 
 // Chat APIs
 export const sendMessage = async (messageData) => {
-  const response = await api.post('/messages/send', messageData);
+  const response = await api.post('/api/messages/send', messageData);
   return response;
 };
 
 export const getConversation = async (mentorId, studentId) => {
-  const response = await api.get(`/messages/mentor/${mentorId}/student/${studentId}`);
+  const response = await api.get(`/api/messages/mentor/${mentorId}/student/${studentId}`);
   return response;
 };
 
 export const markMessagesAsRead = async (mentorId, studentId) => {
-  const response = await api.put(`/messages/mentor/${mentorId}/student/${studentId}/mark-read`);
+  const response = await api.put(`/api/messages/mentor/${mentorId}/student/${studentId}/mark-read`);
   return response;
 };
 
 export const getMentorConversations = async (mentorId) => {
-  const response = await api.get(`/messages/mentor/${mentorId}/conversations`);
+  const response = await api.get(`/api/messages/mentor/${mentorId}/conversations`);
   return response;
 };
 
 export const getUnreadCount = async (mentorId, studentId) => {
-  const response = await api.get(`/messages/unread-count/${mentorId}/${studentId}`);
+  const response = await api.get(`/api/messages/unread-count/${mentorId}/${studentId}`);
   return response;
 };
 
@@ -236,16 +236,30 @@ export const uploadResume = async (file) => {
 };
 
 // Demo video upload (mentor authenticated)
-export const uploadDemo = async (file, description = '') => {
+export const uploadDemo = async (file, description = '', onUploadProgress = null) => {
   const formData = new FormData();
   formData.append('demo', file);
   if (description) formData.append('description', description);
 
-  const response = await apiRoot.post(`/mentors/demo`, formData, {
+  const config = {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
-  });
+  };
+
+  if (onUploadProgress && typeof onUploadProgress === 'function') {
+    config.onUploadProgress = (progressEvent) => {
+      if (!progressEvent.lengthComputable && progressEvent.total) {
+        // Some browsers don't set lengthComputable; guard nonetheless
+      }
+      const percentCompleted = progressEvent.total
+        ? Math.round((progressEvent.loaded * 100) / progressEvent.total)
+        : 0;
+      onUploadProgress(percentCompleted);
+    };
+  }
+
+  const response = await apiRoot.post(`/mentors/demo`, formData, config);
   return response.data;
 };
 

@@ -131,17 +131,16 @@ public class AdminDashboardService {
         try {
             List<Mentor> allMentors = mentorRepository.findAll();
             return userRepository.findAll().stream()
-                    .filter(user -> user.getDeleted() == null || !user.getDeleted()) // Exclude soft-deleted users
+                    .filter(user -> !user.isDeleted()) // Exclude soft-deleted users
                     .filter(user -> {
                         if (user.getUserRole() == null) {
                             return false; // Skip users without a defined role
                         }
-                        // Filter out pending mentors - only show verified mentors
+                        // Include mentors regardless of verification status so newly registered mentors appear
                         if (user.getUserRole().equals(UserRole.MENTOR)) {
                             return allMentors.stream()
-                                    .filter(m -> m.getUserDetails() != null &&
-                                            m.getUserDetails().getUserId().equals(user.getUserId()))
-                                    .anyMatch(m -> m.getVerificationStatus() == VerificationStatus.VERIFIED);
+                                    .anyMatch(m -> m.getUserDetails() != null &&
+                                            m.getUserDetails().getUserId().equals(user.getUserId()));
                         }
                         // Show all students and admins
                         return true;
@@ -166,7 +165,7 @@ public class AdminDashboardService {
 
                 for (User user : allUsers) {
                     // Skip soft-deleted users
-                    if (user.getDeleted() != null && user.getDeleted()) {
+                    if (user.isDeleted()) {
                         continue;
                     }
 
@@ -174,9 +173,7 @@ public class AdminDashboardService {
                         for (Mentor mentor : allMentors) {
                             try {
                                 if (mentor.getUserDetails() != null &&
-                                        mentor.getUserDetails().getUserId().equals(user.getUserId()) &&
-                                        mentor.getVerificationStatus() != null &&
-                                        mentor.getVerificationStatus().equals(VerificationStatus.VERIFIED)) {
+                                        mentor.getUserDetails().getUserId().equals(user.getUserId())) {
                                     mentorUsers.add(mapToUserManagementDto(user));
                                     break;
                                 }
@@ -192,7 +189,7 @@ public class AdminDashboardService {
 
             // For other roles, simple filter excluding soft-deleted users
             return userRepository.findAll().stream()
-                    .filter(user -> user.getDeleted() == null || !user.getDeleted()) // Exclude soft-deleted users
+                    .filter(user -> !user.isDeleted()) // Exclude soft-deleted users
                     .filter(user -> user.getUserRole() != null && user.getUserRole().equals(userRole))
                     .map(this::mapToUserManagementDto)
                     .collect(Collectors.toList());
@@ -209,7 +206,7 @@ public class AdminDashboardService {
             return userRepository.findAll().stream()
                     .filter(user -> {
                         try {
-                            return user.getDeleted() == null || !user.getDeleted();
+                            return !user.isDeleted();
                         } catch (Exception e) {
                             return true;
                         }
@@ -226,7 +223,7 @@ public class AdminDashboardService {
             return userRepository.findAll().stream()
                     .filter(user -> {
                         try {
-                            return user.getDeleted() == null || !user.getDeleted();
+                            return !user.isDeleted();
                         } catch (Exception e) {
                             return false;
                         }
@@ -247,7 +244,7 @@ public class AdminDashboardService {
             return userRepository.findAll().stream()
                     .filter(user -> {
                         try {
-                            return user.getDeleted() == null || !user.getDeleted();
+                            return !user.isDeleted();
                         } catch (Exception e) {
                             return true;
                         }
@@ -378,6 +375,7 @@ public class AdminDashboardService {
 
                     PendingVerificationDto dto = new PendingVerificationDto();
                     dto.setUserId(mentor.getUserDetails().getUserId());
+                    dto.setMentorId(mentor.getMentorId());
                     dto.setName((mentor.getUserDetails().getFirstName() != null ? mentor.getUserDetails().getFirstName()
                             : "") + " " +
                             (mentor.getUserDetails().getLastName() != null ? mentor.getUserDetails().getLastName()
@@ -403,17 +401,7 @@ public class AdminDashboardService {
     @Transactional
     public void approveMentorVerification(Long mentorId) {
         try {
-            // mentorId here is actually userId, find mentor by userId
-            List<Mentor> mentors = mentorRepository.findAll().stream()
-                    .filter(m -> m.getUserDetails() != null &&
-                            m.getUserDetails().getUserId().equals(mentorId))
-                    .collect(Collectors.toList());
-
-            if (mentors.isEmpty()) {
-                throw new RuntimeException("Mentor not found for userId: " + mentorId);
-            }
-
-            Mentor mentor = mentors.get(0);
+            Mentor mentor = findMentorByIdentifier(mentorId);
             mentor.setVerificationStatus(VerificationStatus.VERIFIED);
 
             String adminName = "Admin Team";
@@ -447,17 +435,7 @@ public class AdminDashboardService {
     @Transactional
     public void rejectMentorVerification(Long mentorId) {
         try {
-            // mentorId here is actually userId, find mentor by userId
-            List<Mentor> mentors = mentorRepository.findAll().stream()
-                    .filter(m -> m.getUserDetails() != null &&
-                            m.getUserDetails().getUserId().equals(mentorId))
-                    .collect(Collectors.toList());
-
-            if (mentors.isEmpty()) {
-                throw new RuntimeException("Mentor not found for userId: " + mentorId);
-            }
-
-            Mentor mentor = mentors.get(0);
+            Mentor mentor = findMentorByIdentifier(mentorId);
             mentor.setVerificationStatus(VerificationStatus.REJECTED);
 
             String adminName = "Admin Team";
@@ -485,6 +463,27 @@ public class AdminDashboardService {
         } catch (Exception e) {
             throw new RuntimeException("Failed to reject mentor: " + e.getMessage(), e);
         }
+    }
+
+    private Mentor findMentorByIdentifier(Long identifier) {
+        if (identifier == null) {
+            throw new RuntimeException("Mentor identifier is required");
+        }
+
+        Mentor mentorById = mentorRepository.findById(identifier).orElse(null);
+        if (mentorById != null) {
+            return mentorById;
+        }
+
+        List<Mentor> mentors = mentorRepository.findAll().stream()
+                .filter(m -> m.getUserDetails() != null && m.getUserDetails().getUserId().equals(identifier))
+                .collect(Collectors.toList());
+
+        if (mentors.isEmpty()) {
+            throw new RuntimeException("Mentor not found for identifier: " + identifier);
+        }
+
+        return mentors.get(0);
     }
 
     // Helper method to get current admin user

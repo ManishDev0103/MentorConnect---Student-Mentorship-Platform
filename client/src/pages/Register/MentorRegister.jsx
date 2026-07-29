@@ -224,7 +224,7 @@ const MentorRegister = () => {
             </div>
 
             <div className="col-md-6">
-              <label className="form-label">Phone Number</label>
+              <label className="form-label">Phone Number (with country code)</label>
               <input
                 name="phoneNo"
                 type="tel"

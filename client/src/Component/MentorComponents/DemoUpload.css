@@ -1,0 +1,73 @@
+.demo-upload-form{
+  display:block;
+  max-width:720px;
+  padding:12px 0;
+}
+.form-group{
+  margin-bottom:12px;
+}
+.form-label{
+  display:block;
+  font-weight:600;
+  margin-bottom:6px;
+}
+.form-control-file{
+  display:block;
+  width:100%;
+  padding:6px 8px;
+  border:1px solid #dcdcdc;
+  border-radius:6px;
+  background:#fff;
+}
+.selected-file{
+  margin-top:6px;
+  font-size:0.95rem;
+  color:#333;
+}
+.form-control-textarea{
+  width:100%;
+  padding:8px 10px;
+  border:1px solid #e0e0e0;
+  border-radius:6px;
+  resize:vertical;
+}
+.form-actions{
+  margin-top:8px;
+}
+.btn-upload{
+  background:#0d6efd;
+  color:#fff;
+  border:none;
+  padding:8px 14px;
+  border-radius:6px;
+  cursor:pointer;
+}
+.btn-upload[disabled]{
+  opacity:0.6;
+  cursor:not-allowed;
+}
+
+.upload-progress{
+  margin-top:10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.progress-track{
+  flex:1;
+  height:10px;
+  background:#f1f1f1;
+  border-radius:6px;
+  overflow:hidden;
+}
+.progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,#0d6efd,#0a58ca);
+  width:0%;
+  transition:width 200ms linear;
+}
+.progress-label{
+  min-width:40px;
+  text-align:right;
+  font-weight:600;
+}

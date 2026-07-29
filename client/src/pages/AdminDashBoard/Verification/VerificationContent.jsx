@@ -35,7 +35,7 @@ const VerificationContent = ({ onDataRefresh }) => {
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
       console.error("Error approving mentor:", err);
-      setError("Failed to approve mentor");
+      setError(err?.message || "Failed to approve mentor");
     }
   };
 
@@ -48,7 +48,7 @@ const VerificationContent = ({ onDataRefresh }) => {
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
       console.error("Error rejecting mentor:", err);
-      setError("Failed to reject mentor");
+      setError(err?.message || "Failed to reject mentor");
     }
   };
 
@@ -119,7 +119,7 @@ const VerificationContent = ({ onDataRefresh }) => {
               </thead>
               <tbody>
                 {pendingVerifications.map((item) => (
-                  <tr key={item.userId}>
+                  <tr key={item.mentorId ?? item.userId ?? item.email}>
                     <td className="fw-semibold">{item.name}</td>
                     <td>
                       <span
@@ -176,13 +176,13 @@ const VerificationContent = ({ onDataRefresh }) => {
                     <td>
                       <button
                         className="btn btn-sm btn-success me-2"
-                        onClick={() => handleApprove(item.userId)}
+                        onClick={() => handleApprove(item.mentorId ?? item.userId)}
                       >
                         Approve
                       </button>
                       <button
                         className="btn btn-sm btn-danger"
-                        onClick={() => handleReject(item.userId)}
+                        onClick={() => handleReject(item.mentorId ?? item.userId)}
                       >
                         Reject
                       </button>

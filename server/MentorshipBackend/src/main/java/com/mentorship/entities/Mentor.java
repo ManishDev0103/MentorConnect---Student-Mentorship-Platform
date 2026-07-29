@@ -55,8 +55,8 @@ public class Mentor extends BaseEntity {
 	@Column(name = "discount_percent")
 	private double discountPercent;
 
-	@Column(name = "is_deleted")
-	private Boolean deleted = false;
+	@Column(name = "is_deleted", nullable = false)
+	private boolean deleted = false;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "verification_status", length = 20)

@@ -39,7 +39,8 @@ public class SecurityConfiguration {
 		
 		http.authorizeHttpRequests(request ->
 			request.requestMatchers("/swagger-ui/**", "/v**/api-docs/**",
-		        "/api/users/signin", "/api/users/signup/**").permitAll()
+	        "/api/users/signin", "/api/users/signup/**").permitAll()
+			.requestMatchers(HttpMethod.GET, "/api/mentor/availability/**").hasAnyRole("STUDENT", "MENTOR")
 			.requestMatchers("/error").permitAll()
 			.requestMatchers("/api/test/**").permitAll()  // Allow test endpoints
 			.requestMatchers(HttpMethod.OPTIONS).permitAll()

@@ -118,6 +118,18 @@ String contentType = resume.getContentType();
 		if (dto.getPortfolioUrl() != null)
 			mentor.setPortfolioUrl(dto.getPortfolioUrl());
 
+		if (dto.getRatePerSession() != null) {
+			double rate = dto.getRatePerSession();
+			if (rate <= 0) throw new ApiException("Rate per session must be greater than 0");
+			mentor.setRatePerSession(rate);
+		}
+
+		if (dto.getDiscountPercent() != null) {
+			double disc = dto.getDiscountPercent();
+			if (disc < 0 || disc > 100) throw new ApiException("Discount must be between 0 and 100");
+			mentor.setDiscountPercent(disc);
+		}
+
 		mentorRepository.save(mentor);
 	}
 
@@ -131,13 +143,12 @@ String contentType = resume.getContentType();
 
 	@Override
 	public List<MentorDTO> getPublicMentors(String domain) {
-		List<Mentor> mentors;
-		if (domain == null || domain.trim().isEmpty()) {
-			mentors = mentorRepository.findByVerificationStatus(com.mentorship.entities.VerificationStatus.VERIFIED);
-		} else {
-			mentors = mentorRepository.findByVerificationStatusAndDomainContainingIgnoreCase(
-					com.mentorship.entities.VerificationStatus.VERIFIED, domain.trim());
-		}
+		List<Mentor> mentors = mentorRepository.findAll().stream()
+				.filter(mentor -> mentor != null && !mentor.isDeleted())
+				.filter(mentor -> domain == null || domain.trim().isEmpty()
+						|| (mentor.getSpecialization() != null && mentor.getSpecialization().toLowerCase().contains(domain.trim().toLowerCase()))
+						|| (mentor.getCustomSpecialization() != null && mentor.getCustomSpecialization().toLowerCase().contains(domain.trim().toLowerCase())))
+				.toList();
 
 		return mentors.stream()
 				.map(this::mapToDTO)
@@ -166,6 +177,11 @@ String contentType = resume.getContentType();
 		dto.setLinkedinUrl(mentor.getLinkedinUrl());
 		dto.setPortfolioUrl(mentor.getPortfolioUrl());
 		dto.setHasDemo(mentor.getDemoVideo() != null && mentor.getDemoVideo().length > 0);
+		dto.setDiscountPercent(mentor.getDiscountPercent());
+		double rate = mentor.getRatePerSession();
+		double discount = mentor.getDiscountPercent();
+		double finalPrice = rate - (rate * discount / 100.0);
+		dto.setFinalPrice(Math.round(finalPrice));
 		if (mentor.getVerificationStatus() != null) {
 			dto.setVerificationStatus(mentor.getVerificationStatus().name());
 		} else {

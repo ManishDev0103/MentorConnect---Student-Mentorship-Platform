@@ -109,19 +109,19 @@ export const deleteStudySession = (sessionId) => {
 
 // Chat functions for students
 export const sendMessageToMentor = (messageData) => {
-  return api.post('/messages/send', messageData);
+  return api.post('/api/messages/send', messageData);
 };
 
 export const getConversationWithMentor = (studentId, mentorId) => {
-  return api.get(`/messages/student/${studentId}/mentor/${mentorId}`);
+  return api.get(`/api/messages/student/${studentId}/mentor/${mentorId}`);
 };
 
 export const markMessagesAsReadByStudent = (studentId, mentorId) => {
-  return api.put(`/messages/student/${studentId}/mentor/${mentorId}/mark-read`);
+  return api.put(`/api/messages/student/${studentId}/mentor/${mentorId}/mark-read`);
 };
 
 export const getStudentConversations = (studentId) => {
-  return api.get(`/messages/student/${studentId}/conversations`);
+  return api.get(`/api/messages/student/${studentId}/conversations`);
 };
 
 // Subscription function

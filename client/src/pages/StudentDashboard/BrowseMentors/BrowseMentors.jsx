@@ -209,9 +209,17 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
                 </div>
               </div>
 
-              <div className="mentor-card-footer">
+                <div className="mentor-card-footer">
                 <div className="mentor-price">
-                  ₹{mentor.ratePerSession || 500} <span>/ session</span>
+                  {mentor.discountPercent > 0 ? (
+                    <>
+                      <span style={{ textDecoration: 'line-through', color: '#888', marginRight: 8 }}>₹{mentor.ratePerSession}</span>
+                      <span style={{ fontWeight: 700 }}>₹{mentor.finalPrice}</span>
+                      <span style={{ color: '#10b981', marginLeft: 8 }}>{mentor.discountPercent}% OFF</span>
+                    </>
+                  ) : (
+                    <>₹{mentor.ratePerSession || 500} <span>/ session</span></>
+                  )}
                 </div>
                 <button
                   className="view-profile-btn"
@@ -272,7 +280,7 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
                 </div>
                 <div className="stat-item">
                   <div className="stat-value">
-                    ₹{selectedMentor.ratePerSession || 500}
+                    ₹{selectedMentor.finalPrice || selectedMentor.ratePerSession || 500}
                   </div>
                   <div className="stat-label">Per Session</div>
                 </div>

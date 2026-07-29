@@ -10,6 +10,8 @@ public class MentorDTO {
     private String specialization;
     private String customSpecialization;
     private Double ratePerSession;
+    private Double discountPercent;
+    private Double finalPrice;
     private String experience;
     private String about;
     private String expertise;

@@ -40,18 +40,12 @@ const StudentDashboard = () => {
     let studentIdFromStorage = getStudentId();
 
     if (!studentIdFromStorage) {
-      // Fallback demo student ID for presentation if logged in via context/token
-      const token = localStorage.getItem("token");
-      if (token) {
-        studentIdFromStorage = 1;
-      } else {
-        setLoading(false);
-        setError("Student ID not found. Redirecting to login...");
-        setTimeout(() => {
-          navigate("/login");
-        }, 1500);
-        return;
-      }
+      setLoading(false);
+      setError("Student ID not found. Redirecting to login...");
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
+      return;
     }
 
     setStudentId(studentIdFromStorage);

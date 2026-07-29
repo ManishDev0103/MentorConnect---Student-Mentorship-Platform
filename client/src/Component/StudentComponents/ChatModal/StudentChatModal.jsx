@@ -6,6 +6,7 @@ import {
   markMessagesAsReadByStudent,
   getStudentConversations,
   getVerifiedMentors,
+  getStudentSessions,
 } from "../../../service/studentservice";
 
 const StudentChatModal = ({ isOpen, onClose, studentId }) => {
@@ -82,39 +83,71 @@ const StudentChatModal = ({ isOpen, onClose, studentId }) => {
         return;
       }
 
-      // Load all verified mentors and existing conversations in parallel
-      const [mentorsResponse, conversationsResponse] = await Promise.all([
+      // Load verified mentors, existing conversations, and sessions in parallel
+      const [mentorsResponse, conversationsResponse, sessionsResponse] = await Promise.all([
         getVerifiedMentors(studentId),
         getStudentConversations(studentId),
+        getStudentSessions(studentId),
       ]);
 
       console.log("Mentors response:", mentorsResponse);
       console.log("Conversations response:", conversationsResponse);
+      console.log("Sessions response:", sessionsResponse);
 
-      // Get all mentors
-      const mentors = mentorsResponse.data || [];
-      setAllMentors(mentors);
+      // Get verified mentors (may be empty)
+      const mentors = mentorsResponse?.data || [];
+
+      // Get mentors from student's sessions (booked mentors)
+      const sessions = sessionsResponse?.data || [];
+      const mentorsFromSessions = sessions
+        .map((s) => ({ mentorId: s.mentorId, mentorName: s.mentorName, booked: true }))
+        .filter((m) => m && m.mentorId);
+
+      // Merge mentors lists and dedupe by mentorId
+      const mentorMap = new Map();
+      mentors.forEach((m) => mentorMap.set(m.mentorId, { mentorId: m.mentorId, mentorName: m.name, booked: false }));
+      mentorsFromSessions.forEach((m) => {
+        if (mentorMap.has(m.mentorId)) {
+          mentorMap.set(m.mentorId, { ...mentorMap.get(m.mentorId), booked: true });
+        } else {
+          mentorMap.set(m.mentorId, { mentorId: m.mentorId, mentorName: m.mentorName || "Mentor", booked: true });
+        }
+      });
+
+      const mergedMentors = Array.from(mentorMap.values());
+      setAllMentors(mergedMentors);
 
       // Get existing conversations
       const existingConversations = conversationsResponse?.data?.data || [];
 
-      // Create a map of mentors with conversation data
-      const conversationMap = new Map();
-      existingConversations.forEach((conv) => {
-        conversationMap.set(conv.mentorId, conv);
+      const mergedMap = new Map();
+
+      mergedMentors.forEach((mentor) => {
+        mergedMap.set(mentor.mentorId, {
+          mentorId: mentor.mentorId,
+          mentorName: mentor.mentorName || mentor.name || "Mentor",
+          lastMessage: "No messages yet",
+          lastMessageTime: "",
+          unreadCount: 0,
+          booked: mentor.booked || false,
+        });
       });
 
-      // Merge all mentors with conversation data
-      const mergedConversations = mentors.map((mentor) => {
-        const existingConv = conversationMap.get(mentor.mentorId);
-        return {
-          mentorId: mentor.mentorId,
-          mentorName: mentor.name,
-          lastMessage: existingConv?.lastMessage || "No messages yet",
-          lastMessageTime: existingConv?.lastMessageTime || "",
-          unreadCount: existingConv?.unreadCount || 0,
-        };
+      existingConversations.forEach((conv) => {
+        mergedMap.set(conv.mentorId, {
+          mentorId: conv.mentorId,
+          mentorName:
+            conv.mentorName ||
+            mergedMap.get(conv.mentorId)?.mentorName ||
+            "Mentor",
+          lastMessage: conv.lastMessage || "No messages yet",
+          lastMessageTime: conv.lastMessageTime || "",
+          unreadCount: conv.unreadCount || 0,
+          booked: mergedMap.get(conv.mentorId)?.booked || false,
+        });
       });
+
+      const mergedConversations = Array.from(mergedMap.values());
 
       console.log("Merged conversations:", mergedConversations);
       setConversations(mergedConversations);
@@ -266,6 +299,9 @@ const StudentChatModal = ({ isOpen, onClose, studentId }) => {
                           className={`conversation-name ${conv.unreadCount > 0 ? "unread-name" : ""}`}
                         >
                           {conv.mentorName}
+                          {conv.booked && (
+                            <span className="conversation-booked-label">Booked</span>
+                          )}
                         </div>
                         <div
                           className={`conversation-last-message ${conv.unreadCount > 0 ? "unread-message" : ""}`}
@@ -315,9 +351,9 @@ const StudentChatModal = ({ isOpen, onClose, studentId }) => {
                     <p>No messages yet. Start the conversation!</p>
                   </div>
                 ) : (
-                  messages.map((message, index) => (
+                  messages.map((message) => (
                     <div
-                      key={index}
+                      key={message.messageId}
                       className={`message ${
                         message.senderType === "STUDENT" ? "sent" : "received"
                       } ${message.senderType !== "STUDENT" && !message.isRead ? "unread" : ""}`}
@@ -330,7 +366,7 @@ const StudentChatModal = ({ isOpen, onClose, studentId }) => {
                           )}
                       </div>
                       <div className="message-time">
-                        {new Date(message.timestamp).toLocaleTimeString([], {
+                        {new Date(message.sentAt || message.timestamp).toLocaleTimeString([], {
                           hour: "2-digit",
                           minute: "2-digit",
                         })}

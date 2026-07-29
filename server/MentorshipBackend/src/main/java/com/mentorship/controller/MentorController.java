@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mentorship.dto.MentorDTO;
 import com.mentorship.dtos.UpdateMentorProfileRequest;
+import jakarta.validation.Valid;
 import com.mentorship.security.SecurityUtils;
 import com.mentorship.service.MentorService;
 
@@ -49,7 +50,7 @@ public class MentorController {
 
 	@PatchMapping("/profile")
 	@PreAuthorize("hasRole('MENTOR')")
-	public ResponseEntity<?> updateMentorProfile(@RequestBody UpdateMentorProfileRequest dto) {
+	public ResponseEntity<?> updateMentorProfile(@Valid @RequestBody UpdateMentorProfileRequest dto) {
 
 		Long userId = SecurityUtils.getLoggedInUserId();
 		mentorService.partialUpdateProfile(userId, dto);

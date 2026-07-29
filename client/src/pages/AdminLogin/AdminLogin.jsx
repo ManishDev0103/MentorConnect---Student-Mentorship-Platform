@@ -5,8 +5,8 @@ import { useAuth } from "../../API/AuthContext";
 import "./AdminLogin.css";
 
 const AdminLogin = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("admin@mentorconnect.com");
+  const [password, setPassword] = useState("Admin@1234");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -79,6 +79,10 @@ const AdminLogin = () => {
         />
 
         {error && <div className="text-danger">{error}</div>}
+
+        <div className="mt-3 small text-muted">
+          Demo admin: <strong>admin@mentorconnect.com</strong> / <strong>Admin@1234</strong>
+        </div>
 
         <button className="btn btn-primary mt-3" onClick={onLogin} disabled={loading}>
           {loading ? "Signing in..." : "Sign in as Admin"}

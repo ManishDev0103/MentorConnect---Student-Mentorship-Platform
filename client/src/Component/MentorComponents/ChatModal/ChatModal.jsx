@@ -6,9 +6,9 @@ import {
   markMessagesAsRead,
   getMentorConversations,
   getMyStudents,
-} from "../../../service/mentorService";
+} from "../../../service/mentorservice";
 
-const ChatModal = ({ isOpen, onClose, userId, mentorId }) => {
+const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedded = false }) => {
   const [conversations, setConversations] = useState([]);
   const [allStudents, setAllStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
@@ -25,6 +25,24 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId }) => {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
+  // Reset when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      setSelectedStudent(null);
+      setMessages([]);
+    }
+  }, [isOpen]);
+
+  // Auto-select student when opened from a student card
+  useEffect(() => {
+    if (isOpen && initialStudentId && conversations.length > 0) {
+      const student = conversations.find((c) => c.studentId === initialStudentId);
+      if (student) {
+        setSelectedStudent(student);
+      }
+    }
+  }, [isOpen, initialStudentId, conversations]);
 
   // Load conversations on mount
   useEffect(() => {
@@ -80,10 +98,10 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId }) => {
         return;
       }
 
-      // Load all students and existing conversations in parallel
-      // Use userId for getMyStudents (API expects userId), mentorId for conversations
+      // Load assigned students and existing conversations in parallel
+      // getMyStudents expects the mentor entity ID, not the generic user ID
       const [studentsResponse, conversationsResponse] = await Promise.all([
-        getMyStudents(userId || mentorId),
+        getMyStudents(mentorId),
         getMentorConversations(mentorId),
       ]);
 
@@ -104,34 +122,43 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId }) => {
         existingConversations,
       );
 
-      // Create a map of students with conversation data
-      const conversationMap = new Map();
+      const studentMap = new Map();
+      students.forEach((student) => {
+        studentMap.set(student.studentId, student);
+      });
+
+      const mergedMap = new Map();
+
+      // Include ALL students who have sent messages (even if not formally assigned)
       existingConversations.forEach((conv) => {
-        console.log(
-          `📧 Student ${conv.studentName}: unreadCount = ${conv.unreadCount}`,
-        );
-        conversationMap.set(conv.studentId, conv);
+        mergedMap.set(conv.studentId, {
+          studentId: conv.studentId,
+          studentName:
+            conv.studentName ||
+            studentMap.get(conv.studentId)?.name ||
+            "Student",
+          lastMessage: conv.lastMessage || "No messages yet",
+          lastMessageTime: conv.lastMessageTime || "",
+          unreadCount: conv.unreadCount || 0,
+        });
       });
 
-      // Merge all students with conversation data
-      const mergedConversations = students.map((student) => {
-        const existingConv = conversationMap.get(student.studentId);
-        const conversation = {
-          studentId: student.studentId,
-          studentName: student.name,
-          lastMessage: existingConv?.lastMessage || "No messages yet",
-          lastMessageTime: existingConv?.lastMessageTime || "",
-          unreadCount: existingConv?.unreadCount || 0,
-        };
-
-        if (conversation.unreadCount > 0) {
-          console.log(
-            `🔵 UNREAD: ${conversation.studentName} has ${conversation.unreadCount} unread messages`,
-          );
+      // Also include assigned students who haven't chatted yet
+      students.forEach((student) => {
+        if (!mergedMap.has(student.studentId)) {
+          mergedMap.set(student.studentId, {
+            studentId: student.studentId,
+            studentName: student.name,
+            lastMessage: "No messages yet",
+            lastMessageTime: "",
+            unreadCount: 0,
+          });
         }
-
-        return conversation;
       });
+
+      const mergedConversations = Array.from(mergedMap.values()).sort(
+        (a, b) => (b.unreadCount || 0) - (a.unreadCount || 0),
+      );
 
       console.log("Merged conversations:", mergedConversations);
       setConversations(mergedConversations);
@@ -225,16 +252,17 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId }) => {
     });
   };
 
-  if (!isOpen) return null;
+  if (!isOpen && !embedded) return null;
 
-  return (
-    <div className="chat-modal-overlay" onClick={onClose}>
-      <div className="chat-modal" onClick={(e) => e.stopPropagation()}>
+  const chatContent = (
+    <div className={`chat-modal ${embedded ? "chat-modal-embedded" : ""}`} onClick={(e) => e.stopPropagation()}>
         <div className="chat-header">
           <h3>Messages</h3>
-          <button className="close-btn" onClick={onClose}>
-            &times;
-          </button>
+          {!embedded && (
+            <button className="close-btn" onClick={onClose}>
+              &times;
+            </button>
+          )}
         </div>
 
         {!selectedStudent ? (
@@ -340,6 +368,15 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId }) => {
           </div>
         )}
       </div>
+  );
+
+  if (embedded) {
+    return chatContent;
+  }
+
+  return (
+    <div className="chat-modal-overlay" onClick={onClose}>
+      {chatContent}
     </div>
   );
 };

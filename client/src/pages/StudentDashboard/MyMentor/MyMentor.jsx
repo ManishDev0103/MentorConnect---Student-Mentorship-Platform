@@ -91,6 +91,8 @@ const MyMentor = ({ onNavigateToDashboard }) => {
             experience: mentorDetailsData?.experience || "N/A",
             ratePerSession:
               mentorDetailsData?.ratePerSession || mentorSession?.sessionFee,
+            discountPercent: mentorDetailsData?.discountPercent || 0,
+            finalPrice: mentorDetailsData?.finalPrice || mentorDetailsData?.ratePerSession || mentorSession?.sessionFee,
             rating: mentorDetailsData?.rating || 4.9,
             about:
               mentorDetailsData?.about ||

@@ -15,6 +15,8 @@ public class MentorDTO {
     private Integer reviews;
     private Integer sessions;
     private double ratePerSession;
+    private double discountPercent;
+    private double finalPrice;
     private String email;
     private String experience;
     private String about;

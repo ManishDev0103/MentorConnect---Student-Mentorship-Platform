@@ -3,6 +3,13 @@ import api from "../API/api";
 
 const ADMIN_DASHBOARD_API = "/api/admin/dashboard";
 
+const normalizeMentorId = (mentorId) => {
+  if (mentorId === null || mentorId === undefined || mentorId === "" || mentorId === "null" || mentorId === "undefined") {
+    return null;
+  }
+  return mentorId;
+};
+
 export const adminDashboardService = {
   // Overview
   getOverviewStats: async () => {
@@ -96,9 +103,14 @@ export const adminDashboardService = {
   },
 
   approveMentor: async (mentorId) => {
+    const normalizedMentorId = normalizeMentorId(mentorId);
+    if (!normalizedMentorId) {
+      throw new Error("Invalid mentor id");
+    }
+
     try {
       const response = await api.post(
-        `${ADMIN_DASHBOARD_API}/verifications/${mentorId}/approve`,
+        `${ADMIN_DASHBOARD_API}/verifications/${normalizedMentorId}/approve`,
       );
       return response.data;
     } catch (error) {
@@ -108,9 +120,14 @@ export const adminDashboardService = {
   },
 
   rejectMentor: async (mentorId) => {
+    const normalizedMentorId = normalizeMentorId(mentorId);
+    if (!normalizedMentorId) {
+      throw new Error("Invalid mentor id");
+    }
+
     try {
       const response = await api.post(
-        `${ADMIN_DASHBOARD_API}/verifications/${mentorId}/reject`,
+        `${ADMIN_DASHBOARD_API}/verifications/${normalizedMentorId}/reject`,
       );
       return response.data;
     } catch (error) {

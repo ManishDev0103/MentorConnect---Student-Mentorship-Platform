@@ -139,9 +139,10 @@ const Login = () => {
   };
 
   const handleDemoLogin = (role) => {
-    let email = "student.demo@cdac.in";
-    let name = "Rahul Sharma";
-    let id = 1;
+    // Student demo login is disabled to avoid pre-included student accounts
+    let email;
+    let name;
+    let id;
 
     if (role === "ROLE_MENTOR") {
       email = "mentor.demo@cdac.in";
@@ -151,11 +152,12 @@ const Login = () => {
       email = "admin.demo@cdac.in";
       name = "Admin System";
       id = 99;
+    } else {
+      return; // do not create demo tokens for students
     }
 
     const demoToken = createDemoToken(role, email, name, id);
     localStorage.setItem("token", demoToken);
-    if (role === "ROLE_STUDENT") localStorage.setItem("studentId", id.toString());
     if (role === "ROLE_MENTOR") localStorage.setItem("mentorId", id.toString());
 
     setAuthToken(demoToken);
@@ -238,13 +240,7 @@ const Login = () => {
         <div className="demo-login-box mt-3 p-3 text-center border rounded bg-light">
           <p className="mb-2 text-muted fw-bold small">⚡ 1-Click Faculty Demo Login</p>
           <div className="d-flex gap-2 justify-content-center flex-wrap">
-            <button
-              type="button"
-              className="btn btn-outline-primary btn-sm"
-              onClick={() => handleDemoLogin("ROLE_STUDENT")}
-            >
-              👨‍🎓 Student Demo
-            </button>
+            {/* Student demo removed to avoid pre-included demo student accounts */}
             <button
               type="button"
               className="btn btn-outline-success btn-sm"

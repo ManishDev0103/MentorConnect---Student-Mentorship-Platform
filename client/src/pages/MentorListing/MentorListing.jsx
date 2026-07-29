@@ -39,12 +39,15 @@ const MentorListing = () => {
 
           return {
             id: m.mentorId,
+            userId: m.userId,
             name,
             subject: specialization,
             rating: m.rating ?? 0,
             reviews: m.reviews ?? 0,
             sessions: m.sessions ?? 0,
             price: m.ratePerSession ?? 0,
+            discountPercent: m.discountPercent ?? 0,
+            finalPrice: m.finalPrice ?? (m.ratePerSession ?? 0),
             desc: m.about || m.experience || m.expertise || "Experienced mentor.",
             tags,
             avatar: avatarUrl,
@@ -185,7 +188,17 @@ const MentorListing = () => {
 
                   {/* Price + button */}
                   <div className="mentor-footer">
-                    <div className="mentor-price">₹{m.price}/hr</div>
+                    <div className="mentor-price">
+                      {m.discountPercent > 0 ? (
+                        <>
+                          <span style={{ textDecoration: 'line-through', color: '#888', marginRight: 8 }}>₹{m.price}</span>
+                          <span style={{ color: '#b91c1c', fontWeight: 700 }}>₹{m.finalPrice}</span>
+                          <div style={{ fontSize: 12, color: '#10b981', marginLeft: 8 }}>{m.discountPercent}% OFF</div>
+                        </>
+                      ) : (
+                        <>₹{m.price}/hr</>
+                      )}
+                    </div>
                     <div className="d-flex gap-2">
                       <button
                         className="btn btn-sm mentor-book-btn"
@@ -195,15 +208,22 @@ const MentorListing = () => {
                       </button>
                       <button
                         className="btn btn-sm btn-outline-primary"
-                        onClick={() => setOpenDemoUserId(m.userId)}
+                        onClick={() =>
+                          setOpenDemoUserId((current) =>
+                            current === m.userId ? null : m.userId,
+                          )
+                        }
                       >
-                        View Demo
+                        {openDemoUserId === m.userId ? 'Close Demo' : 'View Demo'}
                       </button>
                     </div>
                   </div>
                   {openDemoUserId === m.userId && (
                     <div className="mt-3">
-                      <DemoPlayer mentorUserId={m.userId} />
+                      <DemoPlayer
+                        mentorUserId={m.userId}
+                        onClose={() => setOpenDemoUserId(null)}
+                      />
                     </div>
                   )}
                 </div>

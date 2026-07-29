@@ -227,7 +227,7 @@ const ScheduleSessionModal = ({
       const selectedMentor = mentors.find(
         (m) => m.mentorId == formData.mentorId,
       );
-      const sessionFee = selectedMentor ? selectedMentor.ratePerSession : 0;
+      const sessionFee = selectedMentor ? (selectedMentor.finalPrice ?? selectedMentor.ratePerSession) : 0;
 
       const sessionData = {
         mentorId: parseInt(formData.mentorId),
@@ -237,6 +237,8 @@ const ScheduleSessionModal = ({
         topic: formData.topic,
         description: formData.description || "",
       };
+      // include computed session fee so backend and order creation match
+      sessionData.sessionFee = sessionFee;
 
       // 1. Create Session (Status: PAYMENT_PENDING)
       const bookingResponse = await bookSession(studentId, sessionData);
@@ -480,7 +482,10 @@ const ScheduleSessionModal = ({
                     const selectedMentor = mentors.find(
                       (m) => m.mentorId == formData.mentorId,
                     );
-                    const fee = selectedMentor?.ratePerSession || 0;
+                    const fee =
+                      selectedMentor?.finalPrice ??
+                      selectedMentor?.ratePerSession ??
+                      0;
                     return fee > 0
                       ? `Pay ₹${fee} & Schedule`
                       : "Schedule Session";

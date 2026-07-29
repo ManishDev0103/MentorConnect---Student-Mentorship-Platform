@@ -128,7 +128,18 @@ public class MessageController {
     public ResponseEntity<ApiResponseDTO<List<ConversationDTO>>> getUserConversations(
             @PathVariable Long userId) {
         try {
-            List<ConversationDTO> conversations = messageService.getMentorConversations(userId);
+            List<ConversationDTO> conversations;
+            var mentorOpt = mentorRepository.findByUserId(userId);
+            if (mentorOpt.isPresent()) {
+                conversations = messageService.getMentorConversations(mentorOpt.get().getMentorId());
+            } else {
+                var studentOpt = studentRepository.findByUserDetails_UserId(userId);
+                if (studentOpt.isPresent()) {
+                    conversations = messageService.getStudentConversations(studentOpt.get().getStudentId());
+                } else {
+                    throw new IllegalArgumentException("No mentor or student found for userId: " + userId);
+                }
+            }
             return ResponseEntity.ok(ApiResponseDTO.success("Conversations retrieved successfully", conversations));
         } catch (Exception e) {
             return ResponseEntity.badRequest()
@@ -163,6 +174,20 @@ public class MessageController {
     public ResponseEntity<ApiResponseDTO<List<MessageDTO>>> getConversationByEntityIds(
             @PathVariable Long mentorId,
             @PathVariable Long studentId) {
+        try {
+            List<MessageDTO> messages = messageService.getConversation(mentorId, studentId);
+            return ResponseEntity.ok(ApiResponseDTO.success("Conversation retrieved successfully", messages));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(ApiResponseDTO.error("Failed to retrieve conversation: " + e.getMessage()));
+        }
+    }
+
+    // Get conversation from student perspective (student entity ID first)
+    @GetMapping("/student/{studentId}/mentor/{mentorId}")
+    public ResponseEntity<ApiResponseDTO<List<MessageDTO>>> getConversationForStudent(
+            @PathVariable Long studentId,
+            @PathVariable Long mentorId) {
         try {
             List<MessageDTO> messages = messageService.getConversation(mentorId, studentId);
             return ResponseEntity.ok(ApiResponseDTO.success("Conversation retrieved successfully", messages));

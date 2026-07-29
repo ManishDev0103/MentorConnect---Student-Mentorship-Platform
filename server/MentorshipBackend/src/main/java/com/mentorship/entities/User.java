@@ -58,8 +58,8 @@ public class User extends BaseEntity{
 	@Column(name="user_role")
 	private UserRole userRole;
 
-	@Column(name="is_deleted")
-	private Boolean deleted = false;
+	@Column(name="is_deleted", nullable = false)
+	private boolean deleted = false;
 
 	@Column(name = "email_notifications_enabled", nullable = false)
 	private Boolean emailNotificationsEnabled = true;

@@ -122,8 +122,15 @@ public class AdminDashboardController {
     
     @PostMapping("/verifications/{mentorId}/approve")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Map<String, String>> approveMentor(@PathVariable Long mentorId) {
-        adminDashboardService.approveMentorVerification(mentorId);
+    public ResponseEntity<Map<String, String>> approveMentor(@PathVariable String mentorId) {
+        Long resolvedMentorId = resolveMentorId(mentorId);
+        if (resolvedMentorId == null) {
+            Map<String, String> response = new HashMap<>();
+            response.put("error", "Invalid mentor id");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        adminDashboardService.approveMentorVerification(resolvedMentorId);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Mentor verified successfully");
         return ResponseEntity.ok(response);
@@ -131,11 +138,30 @@ public class AdminDashboardController {
     
     @PostMapping("/verifications/{mentorId}/reject")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Map<String, String>> rejectMentor(@PathVariable Long mentorId) {
-        adminDashboardService.rejectMentorVerification(mentorId);
+    public ResponseEntity<Map<String, String>> rejectMentor(@PathVariable String mentorId) {
+        Long resolvedMentorId = resolveMentorId(mentorId);
+        if (resolvedMentorId == null) {
+            Map<String, String> response = new HashMap<>();
+            response.put("error", "Invalid mentor id");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        adminDashboardService.rejectMentorVerification(resolvedMentorId);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Mentor rejected successfully");
         return ResponseEntity.ok(response);
+    }
+
+    private Long resolveMentorId(String mentorId) {
+        if (mentorId == null || mentorId.isBlank() || "null".equalsIgnoreCase(mentorId) || "undefined".equalsIgnoreCase(mentorId)) {
+            return null;
+        }
+
+        try {
+            return Long.parseLong(mentorId);
+        } catch (NumberFormatException ex) {
+            return null;
+        }
     }
     
     // ==================== REVENUE ====================

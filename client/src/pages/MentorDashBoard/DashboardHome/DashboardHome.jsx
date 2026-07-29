@@ -5,6 +5,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import StatCard from "../../../Component/MentorComponents/StatCard/StatCard";
 import DemoUpload from "../../../Component/MentorComponents/DemoUpload";
+import PriceSettings from "../../../Component/MentorComponents/PriceSettings";
 import SessionItem from "../../../Component/MentorComponents/SessionItem/SessionItem";
 import StudentCard from "../../../Component/MentorComponents/StudentCard/StudentCard";
 import EarningsChart from "../../../Component/MentorComponents/EarningsChart/EarningsChart";
@@ -21,6 +22,7 @@ function DashboardHome() {
   const [date, setDate] = useState(new Date());
   const [loading, setLoading] = useState(true);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatStudentId, setChatStudentId] = useState(null);
   const [stats, setStats] = useState({
     activeStudents: 0,
     totalSessions: 0,
@@ -80,30 +82,13 @@ function DashboardHome() {
         });
       }
 
+      // If no sessions or students data, leave lists empty instead of pre-filled demo entries
       if (!todaySessionsData?.success || !todaySessionsData?.data?.length) {
-        setSessions([
-          {
-            id: 1,
-            studentName: "Rahul Sharma",
-            time: "04:00 PM - 05:00 PM",
-            topic: "Spring Boot REST APIs & Microservices",
-            status: "Upcoming",
-          },
-          {
-            id: 2,
-            studentName: "Sneha Patel",
-            time: "06:00 PM - 07:00 PM",
-            topic: "React Hooks & State Management",
-            status: "Upcoming",
-          }
-        ]);
+        setSessions([]);
       }
 
       if (!studentsData?.success || !studentsData?.data?.length) {
-        setStudents([
-          { id: 1, name: "Rahul Sharma", domain: "Web Dev", progress: 85 },
-          { id: 2, name: "Sneha Patel", domain: "React FrontEnd", progress: 90 },
-        ]);
+        setStudents([]);
       }
     } catch (error) {
       console.warn("Using mentor dashboard demo fallback state:", error);
@@ -114,26 +99,9 @@ function DashboardHome() {
         monthlyEarnings: 8500,
         averageRating: 4.9,
       });
-      setSessions([
-        {
-          id: 1,
-          studentName: "Rahul Sharma",
-          time: "04:00 PM - 05:00 PM",
-          topic: "Spring Boot REST APIs & Microservices",
-          status: "Upcoming",
-        },
-        {
-          id: 2,
-          studentName: "Sneha Patel",
-          time: "06:00 PM - 07:00 PM",
-          topic: "React Hooks & State Management",
-          status: "Upcoming",
-        }
-      ]);
-      setStudents([
-        { id: 1, name: "Rahul Sharma", domain: "Web Dev", progress: 85 },
-        { id: 2, name: "Sneha Patel", domain: "React FrontEnd", progress: 90 },
-      ]);
+      // Do not pre-populate sessions or students with demo entries
+      setSessions([]);
+      setStudents([]);
     } finally {
       setLoading(false);
     }
@@ -264,6 +232,12 @@ function DashboardHome() {
           </div>
 
           <div className="row mt-4">
+            <div className="col-12">
+              <PriceSettings />
+            </div>
+          </div>
+
+          <div className="row mt-4">
             <div className="col-lg-5 mb-4">
               <div className="section-card">
                 <h5 className="section-title">Availability Calendar</h5>
@@ -339,7 +313,10 @@ function DashboardHome() {
                   <StudentCard
                     key={index}
                     data={student}
-                    onChatClick={() => setIsChatOpen(true)}
+                    onChatClick={() => {
+                      setChatStudentId(student.studentId);
+                      setIsChatOpen(true);
+                    }}
                   />
                 ))}
               </div>
@@ -350,9 +327,13 @@ function DashboardHome() {
 
       <ChatModal
         isOpen={isChatOpen}
-        onClose={() => setIsChatOpen(false)}
+        onClose={() => {
+          setIsChatOpen(false);
+          setChatStudentId(null);
+        }}
         userId={mentorId}
         mentorId={mentorId}
+        initialStudentId={chatStudentId}
       />
     </div>
   );

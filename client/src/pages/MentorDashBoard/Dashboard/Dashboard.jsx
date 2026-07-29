@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom'
 import DashboardHome from '../DashboardHome/DashboardHome';
 import Availability from '../Availability/Availability';
 import MyStudents from '../MyStudents/MyStudents';
+import MentorMessages from '../Messages/MentorMessages';
 import Feedback from '../Feedback/Feedback';
 import Earnings from '../Earnings/Earnings';
 import MentorProfile from '../MentorProfile';
@@ -20,6 +21,7 @@ function Dashboard() {
           <Route path='dashboard' element={<DashboardHome />} />
           <Route path='availability' element={<Availability />} />
           <Route path='students' element={<MyStudents />} />
+          <Route path='messages' element={<MentorMessages />} />
           <Route path='mcq-practice/:studentId' element={<MCQPractice />} />
           <Route path='feedback' element={<Feedback />} />
           <Route path='earnings' element={<Earnings />} />

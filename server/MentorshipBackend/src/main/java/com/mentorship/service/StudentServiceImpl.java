@@ -338,7 +338,10 @@ public class StudentServiceImpl implements StudentService {
                 dto.setMentorId(m.getMentorId());
                 dto.setName(m.getUserDetails().getFirstName() + " " + m.getUserDetails().getLastName());
                 dto.setSpecialization(m.getSpecialization());
-                dto.setRatePerSession(m.getRatePerSession());
+                    dto.setRatePerSession(m.getRatePerSession());
+                    dto.setDiscountPercent(m.getDiscountPercent());
+                    double finalPriceList = m.getRatePerSession() - (m.getRatePerSession() * m.getDiscountPercent() / 100.0);
+                    dto.setFinalPrice((double) Math.round(finalPriceList));
                 dto.setEmail(m.getUserDetails().getEmail());
                 dto.setExperience(m.getExperience());
                 dto.setAbout(m.getSpecialization());
@@ -372,6 +375,9 @@ public class StudentServiceImpl implements StudentService {
         dto.setName(mentor.getUserDetails().getFirstName() + " " + mentor.getUserDetails().getLastName());
         dto.setSpecialization(mentor.getSpecialization());
         dto.setRatePerSession(mentor.getRatePerSession());
+        dto.setDiscountPercent(mentor.getDiscountPercent());
+        double finalPrice = mentor.getRatePerSession() - (mentor.getRatePerSession() * mentor.getDiscountPercent() / 100.0);
+        dto.setFinalPrice((double) Math.round(finalPrice));
         dto.setEmail(mentor.getUserDetails().getEmail());
         dto.setExperience(mentor.getExperience());
         dto.setAbout(mentor.getSpecialization());
@@ -434,7 +440,10 @@ public class StudentServiceImpl implements StudentService {
         session.setTopic(dto.getTopic());
         session.setDescription(dto.getDescription());
         session.setStatus(SessionStatus.PAYMENT_PENDING);
-        session.setSessionFee(mentor.getRatePerSession());
+        double mentorRate = mentor.getRatePerSession();
+        double mentorDisc = mentor.getDiscountPercent();
+        double feeToCharge = mentorRate - (mentorRate * mentorDisc / 100.0);
+        session.setSessionFee(feeToCharge);
         sessionRepository.save(session);
 
         // Mark the availability slot as booked

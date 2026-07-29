@@ -20,13 +20,13 @@ public class DefaultAdminInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // Read admin details from environment / properties. No defaults are provided
-    // to avoid committing credentials in source control. Set these as env vars
-    // (e.g. DEFAULT_ADMIN_EMAIL, DEFAULT_ADMIN_PASSWORD) or Spring properties.
-    @Value("${default.admin.email:}")
+    // Read admin details from environment / properties. If no values are supplied,
+    // fall back to a hardcoded admin account so mentor verification can still be
+    // performed in local/dev environments without extra setup.
+    @Value("${default.admin.email:admin@mentorconnect.com}")
     private String adminEmail;
 
-    @Value("${default.admin.password:}")
+    @Value("${default.admin.password:Admin@1234}")
     private String adminPassword;
 
     @Value("${default.admin.first-name:}")
@@ -41,22 +41,24 @@ public class DefaultAdminInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        // If email or password are not provided, skip auto-creation.
-        if (adminEmail == null || adminEmail.isBlank() || adminPassword == null || adminPassword.isBlank()) {
+        String resolvedEmail = (adminEmail == null || adminEmail.isBlank()) ? "admin@mentorconnect.com" : adminEmail;
+        String resolvedPassword = (adminPassword == null || adminPassword.isBlank()) ? "Admin@1234" : adminPassword;
+
+        if (resolvedEmail == null || resolvedEmail.isBlank() || resolvedPassword == null || resolvedPassword.isBlank()) {
             log.info("No default admin credentials provided; skipping auto-creation. Set 'default.admin.email' and 'default.admin.password' to create one at startup.");
             return;
         }
 
-        if (userRepository.findByEmail(adminEmail).isPresent()) {
-            log.info("Default admin user already exists: {}", adminEmail);
+        if (userRepository.findByEmail(resolvedEmail).isPresent()) {
+            log.info("Default admin user already exists: {}", resolvedEmail);
             return;
         }
 
         User admin = new User();
         admin.setFirstName(adminFirstName != null && !adminFirstName.isBlank() ? adminFirstName : "Admin");
         admin.setLastName(adminLastName != null && !adminLastName.isBlank() ? adminLastName : "User");
-        admin.setEmail(adminEmail);
-        admin.setPassword(passwordEncoder.encode(adminPassword));
+        admin.setEmail(resolvedEmail);
+        admin.setPassword(passwordEncoder.encode(resolvedPassword));
         admin.setAddress(adminAddress != null ? adminAddress : "");
         admin.setUserRole(UserRole.ADMIN);
 
@@ -75,6 +77,6 @@ public class DefaultAdminInitializer implements CommandLineRunner {
 
         userRepository.save(admin);
 
-        log.info("Created default admin account: {}", adminEmail);
+        log.info("Created default admin account: {}", resolvedEmail);
     }
 }
