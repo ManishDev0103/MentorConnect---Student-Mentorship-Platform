@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import StatCard from "../../../Component/MentorComponents/StatCard/StatCard";
+import DemoUpload from "../../../Component/MentorComponents/DemoUpload";
 import SessionItem from "../../../Component/MentorComponents/SessionItem/SessionItem";
 import StudentCard from "../../../Component/MentorComponents/StudentCard/StudentCard";
 import EarningsChart from "../../../Component/MentorComponents/EarningsChart/EarningsChart";
@@ -251,6 +252,15 @@ function DashboardHome() {
               icon={<StarIcon />}
               iconBg="bg-orange"
             />
+          </div>
+
+          <div className="row mt-4">
+            <div className="col-12">
+              <div className="section-card">
+                <h5 className="section-title">Upload Demo Video</h5>
+                <DemoUpload />
+              </div>
+            </div>
           </div>
 
           <div className="row mt-4">

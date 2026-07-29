@@ -10,6 +10,8 @@ import com.mentorship.dtos.UpdateMentorProfileRequest;
 public interface MentorService {
 	void uploadResume(Long userId, MultipartFile resume);
 
+	void uploadDemoVideo(Long userId, MultipartFile demo, String description);
+
 	void partialUpdateProfile(Long userId, UpdateMentorProfileRequest dto);
 
 	MentorDTO getMentorById(Long userId);
@@ -17,4 +19,6 @@ public interface MentorService {
 	List<MentorDTO> getPublicMentors(String domain);
 
 	org.springframework.http.ResponseEntity<byte[]> downloadResume(Long userId);
+
+	org.springframework.http.ResponseEntity<byte[]> downloadDemoVideo(Long userId);
 }

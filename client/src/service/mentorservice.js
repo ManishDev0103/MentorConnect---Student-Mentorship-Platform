@@ -235,6 +235,26 @@ export const uploadResume = async (file) => {
   return response.data;
 };
 
+// Demo video upload (mentor authenticated)
+export const uploadDemo = async (file, description = '') => {
+  const formData = new FormData();
+  formData.append('demo', file);
+  if (description) formData.append('description', description);
+
+  const response = await apiRoot.post(`/mentors/demo`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};
+
+// Public demo download: returns blob response
+export const getDemoBlob = async (mentorUserId) => {
+  const response = await apiPublic.get(`/mentors/${mentorUserId}/demo`, { responseType: 'blob' });
+  return response.data;
+};
+
 // Mentor Profile APIs
 export const getMyMentorProfile = async () => {
   const response = await apiRoot.get(`/mentors/me`);

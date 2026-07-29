@@ -26,4 +26,5 @@ public class MentorDTO {
     private String professionalBio;
     private String linkedinUrl;
     private String portfolioUrl;
+    private boolean hasDemo;
 }

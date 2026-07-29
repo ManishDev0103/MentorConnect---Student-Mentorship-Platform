@@ -105,5 +105,19 @@ public class Mentor extends BaseEntity {
 
 	@Column(name = "resume_content_type")
 	private String resumeContentType;
+    
+	// demo video handling
+	@Lob
+	@Column(name = "demo_video", columnDefinition = "LONGBLOB")
+	private byte[] demoVideo;
+
+	@Column(name = "demo_video_file_name")
+	private String demoVideoFileName;
+
+	@Column(name = "demo_video_content_type")
+	private String demoVideoContentType;
+
+	@Column(name = "demo_video_description", length = 500)
+	private String demoVideoDescription;
 
 }

@@ -56,6 +56,31 @@ String contentType = resume.getContentType();
 	}
 
 	@Override
+	public void uploadDemoVideo(Long userId, MultipartFile demo, String description) {
+		Mentor mentor = mentorRepository.findByUserDetails_UserId(userId)
+				.orElseThrow(() -> new ApiException("Mentor Profile NOT Found.!"));
+
+		if (demo.isEmpty()) {
+			throw new ApiException("Demo video file is empty");
+		}
+
+		String contentType = demo.getContentType();
+		if (contentType == null || !contentType.startsWith("video/")) {
+			throw new ApiException("Only video files are allowed");
+		}
+
+		try {
+			mentor.setDemoVideo(demo.getBytes());
+			mentor.setDemoVideoFileName(demo.getOriginalFilename());
+			mentor.setDemoVideoContentType(demo.getContentType());
+			mentor.setDemoVideoDescription(description != null ? description : null);
+			mentorRepository.save(mentor);
+		} catch (Exception e) {
+			throw new ApiException("Failed to upload demo video");
+		}
+	}
+
+	@Override
 	public void partialUpdateProfile(Long userId, UpdateMentorProfileRequest dto) {
 		Mentor mentor = mentorRepository.findByUserDetails_UserId(userId)
 				.orElseThrow(() -> new ApiException("Mentor not found"));
@@ -140,6 +165,7 @@ String contentType = resume.getContentType();
 		dto.setProfessionalBio(mentor.getProfessionalBio());
 		dto.setLinkedinUrl(mentor.getLinkedinUrl());
 		dto.setPortfolioUrl(mentor.getPortfolioUrl());
+		dto.setHasDemo(mentor.getDemoVideo() != null && mentor.getDemoVideo().length > 0);
 		if (mentor.getVerificationStatus() != null) {
 			dto.setVerificationStatus(mentor.getVerificationStatus().name());
 		} else {
@@ -183,5 +209,24 @@ String contentType = resume.getContentType();
 								+ "\"")
 				.body(mentor.getResume());
 	}
+
+		    @Override
+		    public org.springframework.http.ResponseEntity<byte[]> downloadDemoVideo(Long userId) {
+			Mentor mentor = mentorRepository.findByUserDetails_UserId(userId)
+				.orElseThrow(() -> new ApiException("Mentor not found"));
+
+			if (mentor.getDemoVideo() == null || mentor.getDemoVideo().length == 0) {
+			    throw new ApiException("Demo video not found for this mentor");
+			}
+
+			return org.springframework.http.ResponseEntity.ok()
+				.contentType(org.springframework.http.MediaType.parseMediaType(
+					mentor.getDemoVideoContentType() != null ? mentor.getDemoVideoContentType() : "video/mp4"))
+				.header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION,
+					"inline; filename=\""
+						+ (mentor.getDemoVideoFileName() != null ? mentor.getDemoVideoFileName() : "demo.mp4")
+						+ "\"")
+				.body(mentor.getDemoVideo());
+		    }
 
 }

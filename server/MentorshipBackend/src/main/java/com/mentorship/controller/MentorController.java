@@ -36,6 +36,17 @@ public class MentorController {
 		return ResponseEntity.ok("Resume uploaded successfully");
 	}
 
+	@PostMapping(value = "/demo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PreAuthorize("hasRole('MENTOR')")
+	public ResponseEntity<?> uploadDemo(@RequestParam("demo") MultipartFile demo,
+			@RequestParam(value = "description", required = false) String description) {
+
+		Long userId = SecurityUtils.getLoggedInUserId();
+		mentorService.uploadDemoVideo(userId, demo, description);
+
+		return ResponseEntity.ok("Demo video uploaded successfully");
+	}
+
 	@PatchMapping("/profile")
 	@PreAuthorize("hasRole('MENTOR')")
 	public ResponseEntity<?> updateMentorProfile(@RequestBody UpdateMentorProfileRequest dto) {
@@ -63,5 +74,10 @@ public class MentorController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<byte[]> downloadResume(@org.springframework.web.bind.annotation.PathVariable Long userId) {
 		return mentorService.downloadResume(userId);
+	}
+
+	@GetMapping("/{userId}/demo")
+	public ResponseEntity<byte[]> downloadDemo(@org.springframework.web.bind.annotation.PathVariable Long userId) {
+		return mentorService.downloadDemoVideo(userId);
 	}
 }

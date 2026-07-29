@@ -5,6 +5,7 @@ import Navbar from "../../Component/Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import { getPublicMentors } from "../../service/mentorservice";
 import ScheduleSessionModal from "../../Component/ScheduleSessionModal/ScheduleSessionModal";
+import DemoPlayer from "../../Component/MentorComponents/DemoPlayer";
 
 const MentorListing = () => {
   const [mentors, setMentors] = useState([]);
@@ -15,6 +16,7 @@ const MentorListing = () => {
   // Modal state
   const [selectedMentorId, setSelectedMentorId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [openDemoUserId, setOpenDemoUserId] = useState(null);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -184,13 +186,26 @@ const MentorListing = () => {
                   {/* Price + button */}
                   <div className="mentor-footer">
                     <div className="mentor-price">₹{m.price}/hr</div>
-                    <button
-                      className="btn btn-sm mentor-book-btn"
-                      onClick={() => handleBookSession(m.id)}
-                    >
-                      Book Session
-                    </button>
+                    <div className="d-flex gap-2">
+                      <button
+                        className="btn btn-sm mentor-book-btn"
+                        onClick={() => handleBookSession(m.id)}
+                      >
+                        Book Session
+                      </button>
+                      <button
+                        className="btn btn-sm btn-outline-primary"
+                        onClick={() => setOpenDemoUserId(m.userId)}
+                      >
+                        View Demo
+                      </button>
+                    </div>
                   </div>
+                  {openDemoUserId === m.userId && (
+                    <div className="mt-3">
+                      <DemoPlayer mentorUserId={m.userId} />
+                    </div>
+                  )}
                 </div>
               </div>
             ))}

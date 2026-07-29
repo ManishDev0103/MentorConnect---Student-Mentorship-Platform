@@ -44,6 +44,7 @@ public class SecurityConfiguration {
 			.requestMatchers("/api/test/**").permitAll()  // Allow test endpoints
 			.requestMatchers(HttpMethod.OPTIONS).permitAll()
 			.requestMatchers(HttpMethod.GET, "/students").permitAll()
+				.requestMatchers(HttpMethod.GET, "/mentors/*/demo").permitAll()
 			.requestMatchers(HttpMethod.GET, "/users/image/**").permitAll()
 			.requestMatchers(HttpMethod.GET, "/mentors/public", "/mentors/public/**").permitAll()
 				.requestMatchers("/api/student/payment/session-notify", "/api/student/subscription/notify").permitAll()
@@ -52,7 +53,7 @@ public class SecurityConfiguration {
 			.requestMatchers("/api/messages/**").permitAll()  // Allow all message/chat endpoints
 			.requestMatchers("/api/admin/migration/**").permitAll()  // Allow migration endpoints (one-time use)
 			.requestMatchers("/api/admin/**").hasRole("ADMIN")
-			.requestMatchers("/mentors/me", "/mentors/profile", "/mentors/resume").authenticated()
+				.requestMatchers("/mentors/me", "/mentors/profile", "/mentors/resume", "/mentors/demo").authenticated()
 			.requestMatchers("/students/**").authenticated()  // Require authentication for students endpoints
 			.anyRequest().authenticated());
 		http.sessionManagement(session ->
