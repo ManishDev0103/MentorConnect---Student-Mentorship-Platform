@@ -105,21 +105,21 @@ public class AuthServiceImpl implements AuthService{
         mentor.setSpecialization(specialization);
         mentor.setCustomSpecialization(dto.getCustomSpecialization());
         mentor.setExperience(dto.getExperience());
+        mentor.setHighestEducation(dto.getHighestEducation());
+        mentor.setCurrentPosition(dto.getCurrentPosition());
         mentor.setRatePerSession(dto.getRatePerSession() != null ? dto.getRatePerSession() : 0.0);
         mentor.setDiscountPercent(dto.getDiscountPercent() != null ? dto.getDiscountPercent() : 0.0);
-	        mentor.setOrganization(dto.getOrganization());
-	        mentor.setProfessionalBio(dto.getProfessionalBio());
-	        mentor.setLinkedinUrl(dto.getLinkedinUrl());
-	        mentor.setPortfolioUrl(dto.getPortfolioUrl());
-	        mentor.setVerifiedBy(null);
-	        
-	        log.info("Created mentor entity with specialization: {}, experience: {}, rate: {}", 
-	        	mentor.getSpecialization(), mentor.getExperience(), mentor.getRatePerSession());
-
-	        // 5. Save mentor (cascade saves User)
-	        Mentor savedMentor = mentorRepository.save(mentor);
-	        log.info("Mentor registered successfully with email: {}, mentorId: {}, userId: {}", 
-	        	dto.getEmail(), savedMentor.getMentorId(), savedMentor.getUserDetails().getUserId());
+        mentor.setOrganization(dto.getOrganization());
+        mentor.setProfessionalBio(dto.getProfessionalBio());
+        mentor.setLinkedinUrl(dto.getLinkedinUrl());
+        mentor.setPortfolioUrl(dto.getPortfolioUrl());
+        mentor.setVerifiedBy(null);
+        
+        Mentor savedMentor = mentorRepository.save(mentor);
+        log.info("Created mentor entity with specialization: {}, experience: {}, rate: {}, currentPosition: {}", 
+            mentor.getSpecialization(), mentor.getExperience(), mentor.getRatePerSession(), mentor.getCurrentPosition());
+        log.info("Mentor registered successfully with email: {}, mentorId: {}, userId: {}", 
+            dto.getEmail(), savedMentor.getMentorId(), savedMentor.getUserDetails().getUserId());
 
 	        return new ApiResponse("Mentor registered successfully. Awaiting verification.", null);
 		} catch (ApiException e) {
