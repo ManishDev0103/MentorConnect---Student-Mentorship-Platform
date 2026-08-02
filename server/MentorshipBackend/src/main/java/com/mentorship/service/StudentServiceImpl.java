@@ -312,6 +312,7 @@ public class StudentServiceImpl implements StudentService {
     public List<MentorDTO> getVerifiedMentors(Long studentId, String domain) {
         try {
             Student student = studentRepository.findById(studentId)
+                    .or(() -> studentRepository.findByUserDetails_UserId(studentId))
                     .orElseThrow(() -> new RuntimeException("Student not found"));
 
             /*
@@ -329,23 +330,43 @@ public class StudentServiceImpl implements StudentService {
             if (domain == null || domain.isEmpty()) {
                 mentors = mentorRepository.findByVerificationStatus(VerificationStatus.VERIFIED);
             } else {
-                mentors = mentorRepository.findByVerificationStatusAndSpecializationContainingIgnoreCase(
+                mentors = mentorRepository.findByVerificationStatusAndDomainContainingIgnoreCase(
                         VerificationStatus.VERIFIED, domain);
             }
 
             return mentors.stream().map(m -> {
                 MentorDTO dto = new MentorDTO();
+                if (m.getUserDetails() != null) {
+                    dto.setUserId(m.getUserDetails().getUserId());
+                }
                 dto.setMentorId(m.getMentorId());
                 dto.setName(m.getUserDetails().getFirstName() + " " + m.getUserDetails().getLastName());
                 dto.setSpecialization(m.getSpecialization());
+<<<<<<< HEAD
                     dto.setRatePerSession(m.getRatePerSession());
                     dto.setDiscountPercent(m.getDiscountPercent());
                     double finalPriceList = m.getRatePerSession() - (m.getRatePerSession() * m.getDiscountPercent() / 100.0);
                     dto.setFinalPrice((double) Math.round(finalPriceList));
+=======
+                dto.setCustomSpecialization(m.getCustomSpecialization());
+                dto.setRatePerSession(m.getRatePerSession());
+                dto.setDiscountPercent(m.getDiscountPercent());
+                double finalPriceList = m.getRatePerSession() - (m.getRatePerSession() * m.getDiscountPercent() / 100.0);
+                dto.setFinalPrice((double) Math.round(finalPriceList));
+>>>>>>> 61a8900 (ChatFeatureWorking)
                 dto.setEmail(m.getUserDetails().getEmail());
                 dto.setExperience(m.getExperience());
-                dto.setAbout(m.getSpecialization());
-                dto.setExpertise(m.getSpecialization());
+                dto.setAbout(m.getCustomSpecialization() != null && !m.getCustomSpecialization().isEmpty()
+                        ? m.getCustomSpecialization()
+                        : m.getSpecialization());
+                dto.setExpertise(m.getCustomSpecialization() != null && !m.getCustomSpecialization().isEmpty()
+                        ? m.getCustomSpecialization()
+                        : m.getSpecialization());
+                if (m.getVerificationStatus() != null) {
+                    dto.setVerificationStatus(m.getVerificationStatus().name());
+                } else {
+                    dto.setVerificationStatus("PENDING");
+                }
                 return dto;
             }).toList();
 
@@ -371,6 +392,9 @@ public class StudentServiceImpl implements StudentService {
                 .orElseThrow(() -> new RuntimeException("Mentor not found"));
 
         MentorDTO dto = new MentorDTO();
+        if (mentor.getUserDetails() != null) {
+            dto.setUserId(mentor.getUserDetails().getUserId());
+        }
         dto.setMentorId(mentor.getMentorId());
         dto.setName(mentor.getUserDetails().getFirstName() + " " + mentor.getUserDetails().getLastName());
         dto.setSpecialization(mentor.getSpecialization());

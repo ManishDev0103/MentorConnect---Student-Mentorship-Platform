@@ -79,9 +79,14 @@ const MentorListing = () => {
   };
 
   const visibleMentors = useMemo(() => {
-    if (!search) return mentors;
+    const verifiedMentors = mentors.filter(
+      (m) => (m.verificationStatus || "PENDING").toUpperCase() === "VERIFIED"
+    );
+
+    if (!search) return verifiedMentors;
+
     const term = search.toLowerCase();
-    return mentors.filter((m) =>
+    return verifiedMentors.filter((m) =>
       [m.name, m.subject, m.desc, ...(m.tags || [])]
         .filter(Boolean)
         .some((v) => v.toLowerCase().includes(term))

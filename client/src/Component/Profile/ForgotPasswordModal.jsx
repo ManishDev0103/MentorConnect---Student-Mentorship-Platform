@@ -4,19 +4,23 @@ import { forgotPassword } from "../../service/authApiService";
 import "./ForgotPasswordModal.css";
 
 const ForgotPasswordModal = ({ isOpen, onClose }) => {
-  const [email, setEmail] = useState("");
+  const [emailOrPhone, setEmailOrPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const validate = () => {
-    if (!email.trim()) {
-      toast.error("Please enter your email address");
+    if (!emailOrPhone.trim()) {
+      toast.error("Please enter your email address or phone number");
       return false;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      toast.error("Please enter a valid email address");
+    const phoneRegex = /^\+?[0-9]{10,15}$/;
+    const isEmail = emailRegex.test(emailOrPhone.trim());
+    const isPhone = phoneRegex.test(emailOrPhone.trim().replace(/\s+/g, ""));
+
+    if (!isEmail && !isPhone) {
+      toast.error("Please enter a valid email address or phone number");
       return false;
     }
 
@@ -30,13 +34,12 @@ const ForgotPasswordModal = ({ isOpen, onClose }) => {
 
     setLoading(true);
     try {
-      await forgotPassword({ email });
+      await forgotPassword({ emailOrPhone });
       setSubmitted(true);
-      toast.success("Password reset link sent to your email!");
+      toast.success("Password reset link sent to your registered email!");
       
-      // Reset form after 3 seconds
       setTimeout(() => {
-        setEmail("");
+        setEmailOrPhone("");
         setSubmitted(false);
         onClose();
       }, 3000);
@@ -49,7 +52,7 @@ const ForgotPasswordModal = ({ isOpen, onClose }) => {
   };
 
   const handleClose = () => {
-    setEmail("");
+    setEmailOrPhone("");
     setSubmitted(false);
     onClose();
   };
@@ -76,7 +79,7 @@ const ForgotPasswordModal = ({ isOpen, onClose }) => {
             <div className="success-icon">✓</div>
             <h6>Check Your Email</h6>
             <p className="text-muted">
-              We've sent a password reset link to <strong>{email}</strong>
+              We’ve sent a password reset link to the registered email for <strong>{emailOrPhone}</strong>
             </p>
             <p className="text-muted small">
               The link will expire in 15 minutes. Please check your spam folder if you don't see it.
@@ -86,18 +89,18 @@ const ForgotPasswordModal = ({ isOpen, onClose }) => {
           <>
             <div className="forgot-password-body">
               <p className="text-muted mb-4">
-                Enter your email address and we'll send you a link to reset your password.
+                Enter your email address or phone number and we’ll send the reset link to your registered email.
               </p>
 
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                  <label className="form-label">Email Address</label>
+                  <label className="form-label">Email or Phone Number</label>
                   <input
-                    type="email"
+                    type="text"
                     className="form-control forgot-password-input"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com or +91 98765 43210"
+                    value={emailOrPhone}
+                    onChange={(e) => setEmailOrPhone(e.target.value)}
                     disabled={loading}
                     autoFocus
                   />

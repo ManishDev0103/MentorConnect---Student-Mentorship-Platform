@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class MentorDTO {
+    private Long userId;
     private Long mentorId;
     private String name;
     private String email;
@@ -11,10 +12,24 @@ public class MentorDTO {
     private String customSpecialization;
     private Double ratePerSession;
     private Double discountPercent;
+<<<<<<< HEAD
     private Double finalPrice;
+=======
+    private double finalPrice;
+>>>>>>> 61a8900 (ChatFeatureWorking)
     private String experience;
     private String about;
     private String expertise;
     private Double rating;
     private Integer reviews;
+    private String verificationStatus;
+    // Additional fields expected by service mappings
+    private String highestEducation;
+    private String currentPosition;
+    private String organization;
+    private String professionalBio;
+    private String linkedinUrl;
+    private String portfolioUrl;
+    private boolean hasDemo;
+    private Integer sessions;
 }

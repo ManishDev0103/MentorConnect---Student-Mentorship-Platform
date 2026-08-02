@@ -16,9 +16,11 @@ public class StudyNoteDTO {
     private String title;
     private String description;
     private Long mentorId;
+    private Long sessionId;
     private String mentorName;
     private String subject;
     private String fileName;
+    private String uploadedBy;
     private String fileType;
     private Long fileSize;
     private String fileUrl;

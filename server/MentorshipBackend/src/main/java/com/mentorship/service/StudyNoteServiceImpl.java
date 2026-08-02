@@ -17,8 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.mentorship.custom_exceptions.ApiException;
 import com.mentorship.dtos.StudyNoteDTO;
 import com.mentorship.entities.Mentor;
+import com.mentorship.entities.Session;
 import com.mentorship.entities.StudyNote;
 import com.mentorship.repository.MentorRepository;
+import com.mentorship.repository.SessionRepository;
 import com.mentorship.repository.StudyNoteRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -35,9 +37,10 @@ public class StudyNoteServiceImpl implements StudyNoteService {
 
     private final StudyNoteRepository studyNoteRepository;
     private final MentorRepository mentorRepository;
+    private final SessionRepository sessionRepository;
 
     @Override
-    public StudyNoteDTO createNote(Long mentorId, String title, String description, String subject, MultipartFile file) {
+    public StudyNoteDTO createNote(Long mentorId, Long sessionId, String title, String description, String subject, MultipartFile file) {
         if (file == null || file.isEmpty()) {
             throw new ApiException("Please select a file to upload");
         }
@@ -48,12 +51,17 @@ public class StudyNoteServiceImpl implements StudyNoteService {
             throw new ApiException("File size must be less than 20 MB");
         }
         String contentType = file.getContentType();
-        if (contentType == null || !(contentType.equals("application/pdf") || contentType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document") || contentType.equals("application/vnd.ms-powerpoint") || contentType.equals("application/vnd.openxmlformats-officedocument.presentationml.presentation"))) {
-            throw new ApiException("Unsupported file type. Allowed: PDF, DOCX, PPT/PPTX");
+        if (contentType == null || !contentType.equals("application/pdf")) {
+            throw new ApiException("Unsupported file type. Only PDF files are allowed");
         }
 
         Mentor mentor = mentorRepository.findById(mentorId)
                 .orElseThrow(() -> new ApiException("Mentor not found"));
+        Session session = sessionRepository.findById(sessionId)
+                .orElseThrow(() -> new ApiException("Session not found"));
+        if (!session.getMentor().getMentorId().equals(mentorId)) {
+            throw new ApiException("Session does not belong to this mentor");
+        }
 
         try {
             Path uploadPath = Paths.get(notesDir);
@@ -66,6 +74,7 @@ public class StudyNoteServiceImpl implements StudyNoteService {
 
             StudyNote note = new StudyNote();
             note.setMentor(mentor);
+            note.setSession(session);
             note.setTitle(title.trim());
             note.setDescription(description != null ? description.trim() : null);
             note.setSubject(subject != null ? subject.trim() : null);
@@ -73,6 +82,7 @@ public class StudyNoteServiceImpl implements StudyNoteService {
             note.setFileType(contentType);
             note.setFileSize(file.getSize());
             note.setFileUrl("/api/notes/download/" + storedName);
+            note.setUploadedBy("MENTOR");
 
             return toDto(studyNoteRepository.save(note));
         } catch (IOException e) {
@@ -138,15 +148,32 @@ public class StudyNoteServiceImpl implements StudyNoteService {
         return studyNoteRepository.findByMentor_MentorIdOrderByCreatedAtDesc(mentorId).stream().map(this::toDto).collect(Collectors.toList());
     }
 
+    @Override
+    public List<StudyNoteDTO> getSessionNotes(Long sessionId) {
+        return studyNoteRepository.findBySession_SessionIdOrderByCreatedAtDesc(sessionId).stream().map(this::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StudyNoteDTO> getSessionNotesForStudent(Long studentId, Long sessionId) {
+        Session session = sessionRepository.findById(sessionId)
+                .orElseThrow(() -> new ApiException("Session not found"));
+        if (!session.getStudent().getStudentId().equals(studentId)) {
+            throw new ApiException("Unauthorized access to session notes");
+        }
+        return studyNoteRepository.findBySession_SessionIdOrderByCreatedAtDesc(sessionId).stream().map(this::toDto).collect(Collectors.toList());
+    }
+
     private StudyNoteDTO toDto(StudyNote note) {
         return StudyNoteDTO.builder()
                 .id(note.getId())
                 .title(note.getTitle())
                 .description(note.getDescription())
                 .mentorId(note.getMentor().getMentorId())
+                .sessionId(note.getSession() != null ? note.getSession().getSessionId() : null)
                 .mentorName(note.getMentor().getUserDetails().getFirstName() + " " + note.getMentor().getUserDetails().getLastName())
                 .subject(note.getSubject())
                 .fileName(note.getFileName())
+                .uploadedBy(note.getUploadedBy())
                 .fileType(note.getFileType())
                 .fileSize(note.getFileSize())
                 .fileUrl(note.getFileUrl())

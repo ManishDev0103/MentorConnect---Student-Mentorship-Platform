@@ -1,18 +1,20 @@
 .page-title {
   font-size: 32px;
-  font-weight: 600;
+  font-weight: 700;
+  color: #0f172a;
 }
 
 .page-subtitle {
-  color: #6c757d;
+  color: #475569;
   font-size: 16px;
 }
 
 .metric-card {
-  background: #fff;
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 24px;
   padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .metric-value {
@@ -60,10 +62,11 @@
 }
 
 .custom-card {
-  background: #fff;
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 24px;
   padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .svg-chart {

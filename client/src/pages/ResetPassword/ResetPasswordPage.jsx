@@ -181,7 +181,13 @@ const ResetPasswordPage = () => {
                 }}
               />
             </div>
-            <small className="form-text text-muted d-block mt-2">
+            <small
+              className="form-text d-block mt-2"
+              style={{
+                color: getPasswordStrengthColor(getPasswordStrength(newPassword).score),
+                fontWeight: 600,
+              }}
+            >
               {getPasswordStrength(newPassword).label}
             </small>
           </div>
@@ -205,6 +211,18 @@ const ResetPasswordPage = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 disabled={loading}
+                style={{
+                  borderColor:
+                    confirmPassword.length > 0
+                      ? newPassword === confirmPassword
+                        ? "#22c55e"
+                        : "#ef4444"
+                      : undefined,
+                  boxShadow:
+                    confirmPassword.length > 0
+                      ? `0 0 0 0.2rem ${newPassword === confirmPassword ? "#22c55e" : "#ef4444"}22`
+                      : undefined,
+                }}
               />
               <button
                 type="button"
@@ -216,6 +234,17 @@ const ResetPasswordPage = () => {
                 {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
               </button>
             </div>
+            {confirmPassword.length > 0 && (
+              <small
+                className="form-text d-block mt-2"
+                style={{
+                  color: newPassword === confirmPassword ? "#16a34a" : "#dc2626",
+                  fontWeight: 600,
+                }}
+              >
+                {newPassword === confirmPassword ? "Passwords match" : "Passwords do not match"}
+              </small>
+            )}
           </div>
 
           {/* Submit Button */}

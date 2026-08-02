@@ -11,6 +11,19 @@
   --shadow: 0 28px 90px rgba(15, 23, 42, 0.12);
 }
 
+:root.dark-mode {
+  --bg: #020617;
+  --surface: #0f172a;
+  --surface-soft: rgba(15, 23, 42, 0.88);
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --primary: #60a5fa;
+  --primary-dark: #3b82f6;
+  --accent: #f59e0b;
+  --border: rgba(148, 163, 184, 0.18);
+  --shadow: 0 28px 90px rgba(2, 6, 23, 0.48);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -28,6 +41,13 @@ body {
   color: var(--text);
   background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.15), transparent 20%),
     linear-gradient(180deg, var(--bg) 0%, #f8fafc 100%);
+}
+
+:root.dark-mode body {
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.24), transparent 20%),
+    linear-gradient(180deg, #020617 0%, #0f172a 100%);
 }
 
 a {
@@ -50,15 +70,138 @@ button {
   cursor: pointer;
 }
 
+:root.dark-mode .login-card,
+:root.dark-mode .register-card,
+:root.dark-mode .reset-password-card,
+:root.dark-mode .section-card,
+:root.dark-mode .card-surface,
+:root.dark-mode .glass-card,
+:root.dark-mode .mentor-card,
+:root.dark-mode .stat-box,
+:root.dark-mode .metric-card,
+:root.dark-mode .custom-card,
+:root.dark-mode .sessions-card,
+:root.dark-mode .filters-section,
+:root.dark-mode .sidebar,
+:root.dark-mode .mentor-profile-card,
+:root.dark-mode .mentor-session-stats,
+:root.dark-mode .subs-plan-card,
+:root.dark-mode .subs-includes-card,
+:root.dark-mode .search-box {
+  background: rgba(15, 23, 42, 0.88) !important;
+  border: 1px solid rgba(148, 163, 184, 0.16) !important;
+  box-shadow: 0 28px 90px rgba(2, 6, 23, 0.38) !important;
+  color: #f8fafc !important;
+}
+
 .container {
   width: min(1120px, 100%);
   margin: 0 auto;
   padding: 0 16px;
 }
 
+.page-shell {
+  padding: 28px 0 48px;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.page-header h1,
+.page-header h2,
+.page-header h3 {
+  margin: 0;
+}
+
+.page-header .page-title,
+.page-header .section-title,
+.page-header .hero-title {
+  margin-bottom: 6px;
+}
+
+.page-header .page-subtitle,
+.page-header .section-subtitle {
+  margin: 0;
+}
+
+.page-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.section-card,
+.card-surface,
+.glass-card,
+.metric-card,
+.custom-card,
+.card-box,
+.summary-card,
+.revenue-card,
+.feedback-card,
+.mcq-card,
+.availability-card,
+.sessions-card,
+.history-card,
+.timer-card,
+.subs-plan-card,
+.transactions-section,
+.search-box,
+.filters-section,
+.mentor-profile-card,
+.mentor-session-stats,
+.mentor-plan-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.section-card::after,
+.card-surface::after,
+.glass-card::after,
+.metric-card::after,
+.custom-card::after,
+.card-box::after,
+.summary-card::after,
+.revenue-card::after,
+.feedback-card::after,
+.mcq-card::after,
+.availability-card::after,
+.sessions-card::after,
+.history-card::after,
+.timer-card::after,
+.subs-plan-card::after,
+.transactions-section::after,
+.search-box::after,
+.filters-section::after,
+.mentor-profile-card::after,
+.mentor-session-stats::after,
+.mentor-plan-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), transparent 45%);
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 0 14px;
+  }
+
+  .page-shell {
+    padding-top: 18px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 

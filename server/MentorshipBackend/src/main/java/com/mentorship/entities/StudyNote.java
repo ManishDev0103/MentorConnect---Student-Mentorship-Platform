@@ -39,8 +39,15 @@ public class StudyNote {
     @JoinColumn(name = "mentor_id", nullable = false, foreignKey = @ForeignKey(name = "fk_note_mentor"))
     private Mentor mentor;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "session_id", nullable = false, foreignKey = @ForeignKey(name = "fk_note_session"))
+    private Session session;
+
     @Column(length = 100)
     private String subject;
+
+    @Column(name = "uploaded_by", length = 40)
+    private String uploadedBy;
 
     @Column(name = "file_name", length = 255)
     private String fileName;

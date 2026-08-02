@@ -1,13 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./StudentChatModal.css";
 import {
-  sendMessageToMentor,
   getConversationWithMentor,
   markMessagesAsReadByStudent,
   getStudentConversations,
   getVerifiedMentors,
   getStudentSessions,
 } from "../../../service/studentservice";
+import {
+  connectChatSocket,
+  subscribeToMessages,
+  sendChatMessage,
+  disconnectChatSocket,
+} from "../../../utils/stompClient";
 
 const StudentChatModal = ({ isOpen, onClose, studentId }) => {
   const [conversations, setConversations] = useState([]);
@@ -19,6 +24,8 @@ const StudentChatModal = ({ isOpen, onClose, studentId }) => {
   const messagesEndRef = useRef(null);
   const pollingInterval = useRef(null);
   const conversationPollingInterval = useRef(null);
+  const socketConnectedRef = useRef(false);
+  const subscriptionRef = useRef(null);
 
   console.log("StudentChatModal - Received studentId:", studentId);
 
@@ -47,21 +54,57 @@ const StudentChatModal = ({ isOpen, onClose, studentId }) => {
 
   // Poll for new messages when a conversation is selected
   useEffect(() => {
-    if (selectedMentor) {
-      loadMessages();
+    if (!selectedMentor) return;
 
-      // Start polling every 3 seconds
-      pollingInterval.current = setInterval(() => {
-        loadMessages(true);
-      }, 3000);
+    loadMessages();
 
-      return () => {
-        if (pollingInterval.current) {
-          clearInterval(pollingInterval.current);
-        }
-      };
+    if (!socketConnectedRef.current) {
+      connectChatSocket(
+        () => {
+          socketConnectedRef.current = true;
+          const subscription = subscribeToMessages(studentId, (payload) => {
+            const incomingMessage = {
+              ...payload,
+              senderType: payload.senderType || "MENTOR",
+            };
+            setMessages((prev) => {
+              const exists = prev.some((msg) => msg.messageId === incomingMessage.messageId);
+              if (exists) return prev;
+              return [...prev, incomingMessage];
+            });
+            setConversations((prev) =>
+              prev.map((conv) =>
+                conv.mentorId === incomingMessage.mentorId
+                  ? {
+                      ...conv,
+                      lastMessage: incomingMessage.content,
+                      lastMessageTime: incomingMessage.sentAt || new Date().toISOString(),
+                      unreadCount: incomingMessage.senderType === "MENTOR" ? (conv.unreadCount || 0) + 1 : conv.unreadCount || 0,
+                    }
+                  : conv,
+              ),
+            );
+          });
+          subscriptionRef.current = subscription;
+        },
+        () => {
+          socketConnectedRef.current = false;
+        },
+        () => {
+          socketConnectedRef.current = false;
+        },
+        () => {
+          socketConnectedRef.current = false;
+        },
+      );
     }
-  }, [selectedMentor]);
+
+    return () => {
+      if (pollingInterval.current) {
+        clearInterval(pollingInterval.current);
+      }
+    };
+  }, [selectedMentor, studentId]);
 
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -203,37 +246,69 @@ const StudentChatModal = ({ isOpen, onClose, studentId }) => {
     setMessages([]);
   };
 
+  const buildNoteDownloadUrl = (notePath) => {
+    if (!notePath) return "";
+    if (/^https?:\/\//i.test(notePath)) {
+      return notePath;
+    }
+
+    const normalizedPath = notePath.startsWith("/") ? notePath : `/${notePath}`;
+    return `${window.location.origin}${normalizedPath}`;
+  };
+
+  const renderMessageContent = (content) => {
+    if (!content) return "";
+
+    const noteLinkMatch = content.match(/https?:\/\/[^\s]+\/api\/notes\/download\/[^\s]+|\/api\/notes\/download\/[^\s]+/i);
+    if (noteLinkMatch) {
+      const href = buildNoteDownloadUrl(noteLinkMatch[0]);
+      return (
+        <a href={href} target="_blank" rel="noreferrer" className="chat-note-link">
+          Open shared PDF
+        </a>
+      );
+    }
+
+    return content;
+  };
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
 
     if (!newMessage.trim() || !selectedMentor) return;
 
     try {
-      const response = await sendMessageToMentor({
+      const messagePayload = {
         studentId,
         mentorId: selectedMentor.mentorId,
         content: newMessage.trim(),
         senderType: "STUDENT",
-      });
+      };
 
-      console.log("Message sent:", response);
+      sendChatMessage(messagePayload);
+
+      console.log("Message submitted to chat socket:", messagePayload);
 
       // Clear input
       setNewMessage("");
 
-      // Reload messages immediately
-      await loadMessages(true);
+      const optimisticMessage = {
+        messageId: Date.now(),
+        mentorId: selectedMentor.mentorId,
+        studentId,
+        senderType: "STUDENT",
+        content: messagePayload.content,
+        sentAt: new Date().toISOString(),
+        isRead: false,
+      };
 
-      // Don't mark messages as read after sending - only mark when viewing/opening
-      // This allows the mentor to see the unread count for student messages
-
-      // Update last message in conversation list
+      setMessages((prev) => [...prev, optimisticMessage]);
       setConversations((prev) =>
         prev.map((conv) =>
           conv.mentorId === selectedMentor.mentorId
             ? {
                 ...conv,
-                lastMessage: newMessage.trim(),
+                lastMessage: messagePayload.content,
                 lastMessageTime: new Date().toISOString(),
               }
             : conv,
@@ -249,6 +324,21 @@ const StudentChatModal = ({ isOpen, onClose, studentId }) => {
     setSelectedMentor(null);
     setMessages([]);
   };
+
+  useEffect(() => {
+    return () => {
+      if (subscriptionRef.current) {
+        subscriptionRef.current.unsubscribe();
+      }
+      disconnectChatSocket();
+      if (conversationPollingInterval.current) {
+        clearInterval(conversationPollingInterval.current);
+      }
+      if (pollingInterval.current) {
+        clearInterval(pollingInterval.current);
+      }
+    };
+  }, []);
 
   if (!isOpen) return null;
 
@@ -359,7 +449,7 @@ const StudentChatModal = ({ isOpen, onClose, studentId }) => {
                       } ${message.senderType !== "STUDENT" && !message.isRead ? "unread" : ""}`}
                     >
                       <div className="message-content">
-                        {message.content}
+                        {renderMessageContent(message.content)}
                         {message.senderType !== "STUDENT" &&
                           !message.isRead && (
                             <span className="new-message-badge"> • NEW</span>

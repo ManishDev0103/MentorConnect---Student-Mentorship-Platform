@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./StudentDashboard.css";
 import MyMentor from "../MyMentor/MyMentor";
 import MySessions from "../MySessions/MySessions";
@@ -9,6 +9,7 @@ import Feedback from "../Feedback/Feedback";
 import EditProfileModal from "./EditProfileModal";
 import StudentProfile from "../StudentProfile";
 import StudyTimer from "../StudyTimer/StudyTimer"; // Import StudyTimer
+import BrowseMentors from "../BrowseMentors/BrowseMentors";
 import StudentChatModal from "../../../Component/StudentComponents/ChatModal/StudentChatModal";
 import { getStudentDashboard } from "../../../service/studentservice";
 import { getStudentId, clearStudentAuth } from "../../../service/authService";
@@ -18,10 +19,11 @@ const sidebarItems = [
   { label: "Dashboard", icon: "🏠" },
   { label: "Profile", icon: "👤" },
   { label: "My Mentor", icon: "👩‍🏫" },
+  { label: "Browse Mentors", icon: "🔍" },
   { label: "My Sessions", icon: "📅" },
   { label: "Messages", icon: "💬" },
   { label: "MCQ Practice", icon: "📝" },
-  { label: "Study Timer", icon: "⏱️" }, // Add Sidebar Item
+  { label: "Study Timer", icon: "⏱️" },
   { label: "Subscriptions", icon: "💳" },
   { label: "Feedback", icon: "💬" },
 ];
@@ -34,6 +36,7 @@ const StudentDashboard = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [studentId, setStudentId] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   useEffect(() => {
@@ -51,6 +54,14 @@ const StudentDashboard = () => {
     setStudentId(studentIdFromStorage);
     fetchDashboard(studentIdFromStorage);
   }, [navigate]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tabFromUrl = params.get("tab");
+    if (tabFromUrl) {
+      setActiveTab(tabFromUrl);
+    }
+  }, [location.search]);
 
   const fetchDashboard = async (id) => {
     try {
@@ -192,7 +203,15 @@ const StudentDashboard = () => {
         )}
 
         {activeTab === "Profile" && <StudentProfile />}
-        {activeTab === "My Mentor" && <MyMentor />}
+        {activeTab === "My Mentor" && (
+          <MyMentor onNavigateToDashboard={() => setActiveTab("Browse Mentors")} />
+        )}
+        {activeTab === "Browse Mentors" && (
+          <BrowseMentors
+            onBack={() => setActiveTab("My Mentor")}
+            onNavigateToSubscriptions={() => setActiveTab("Subscriptions")}
+          />
+        )}
         {activeTab === "My Sessions" && <MySessions />}
         {activeTab === "Messages" && (
           <StudentChatModal

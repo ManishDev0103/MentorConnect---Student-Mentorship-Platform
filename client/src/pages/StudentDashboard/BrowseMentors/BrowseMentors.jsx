@@ -5,6 +5,14 @@ import { getStudentId } from "../../../service/authService";
 import ScheduleSessionModal from "../../../Component/ScheduleSessionModal/ScheduleSessionModal";
 import { useNavigate } from "react-router-dom";
 
+const buildMentorAvatarUrl = (userId, name) => {
+  if (!userId) {
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&size=128`;
+  }
+
+  return `http://localhost:8080/api/users/image/${userId}`;
+};
+
 const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
   const navigate = useNavigate();
   const [mentors, setMentors] = useState([]);
@@ -24,7 +32,7 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
 
   useEffect(() => {
     fetchMentors();
-  }, []);
+  }, [selectedDomain]);
 
   useEffect(() => {
     filterMentors();
@@ -34,10 +42,27 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
     try {
       setLoading(true);
       const studentId = getStudentId();
-      console.log("DEBUG: Fetching mentors for Student ID:", studentId);
+      console.log("DEBUG: Fetching mentors for Student ID:", studentId, "domain:", selectedDomain);
 
-      const response = await getVerifiedMentors(studentId);
-      const data = response.data || [];
+      if (!studentId) {
+        const errorMessage = "Student ID not found. Please log in again.";
+        console.error("BrowseMentors error:", errorMessage);
+        setError(errorMessage);
+        setMentors([]);
+        setFilteredMentors([]);
+        return;
+      }
+
+      const response = await getVerifiedMentors(
+        studentId,
+        selectedDomain !== "All" ? selectedDomain : null,
+      );
+      console.log("DEBUG: BrowseMentors response status:", response.status);
+      console.log("DEBUG: BrowseMentors response data:", response.data);
+      const data = (response.data || []).filter((mentor) => {
+        const verificationStatus = mentor.verificationStatus || mentor.verification_status || "PENDING";
+        return verificationStatus.toUpperCase() === "VERIFIED";
+      });
       setMentors(data);
       setFilteredMentors(data);
       setError(null);
@@ -65,15 +90,15 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
   const filterMentors = () => {
     let result = [...mentors];
 
-    // Filter by search query (Name or Specialization)
+    // Filter by search query (Name, specialization, expertise, or custom specialization)
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       result = result.filter(
         (m) =>
           m.name.toLowerCase().includes(query) ||
-          (m.specialization &&
-            m.specialization.toLowerCase().includes(query)) ||
-          (m.expertise && m.expertise.toLowerCase().includes(query)),
+          (m.specialization && m.specialization.toLowerCase().includes(query)) ||
+          (m.expertise && m.expertise.toLowerCase().includes(query)) ||
+          (m.customSpecialization && m.customSpecialization.toLowerCase().includes(query)),
       );
     }
 
@@ -81,7 +106,9 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
     if (selectedDomain !== "All") {
       result = result.filter(
         (m) =>
-          m.specialization === selectedDomain || m.expertise === selectedDomain,
+          m.specialization === selectedDomain ||
+          m.expertise === selectedDomain ||
+          m.customSpecialization === selectedDomain,
       );
     }
 
@@ -100,7 +127,11 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
   // Extract unique domains for filter dropdown
   const domains = [
     "All",
-    ...new Set(mentors.map((m) => m.specialization).filter(Boolean)),
+    ...new Set(
+      mentors
+        .flatMap((m) => [m.specialization, m.customSpecialization])
+        .filter(Boolean),
+    ),
   ];
 
   const handleOpenProfile = (mentor) => {
@@ -120,6 +151,9 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
       <p className="subtitle">
         Find and connect with industry experts to accelerate your learning.
       </p>
+      <div className="verified-mentor-note">
+        Only verified mentors are shown here. Mentors still under verification will appear once approved.
+      </div>
 
       {/* Filters Section */}
       <div className="filters-section">
@@ -169,13 +203,20 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
         </div>
       ) : (
         <div className="mentors-grid">
-          {filteredMentors.map((mentor) => (
+          {filteredMentors.map((mentor) => {
+            const avatarFallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(mentor.name)}&background=random&size=128`;
+            const avatarUrl = buildMentorAvatarUrl(mentor.userId, mentor.name);
+
+            return (
             <div key={mentor.mentorId} className="mentor-card">
               <div className="mentor-card-header">
                 <img
-                  src={`https://ui-avatars.com/api/?name=${mentor.name}&background=random&size=128`}
+                  src={avatarUrl}
                   alt={mentor.name}
                   className="mentor-avatar"
+                  onError={(e) => {
+                    e.currentTarget.src = avatarFallback;
+                  }}
                 />
                 <div className="mentor-info">
                   <h3>{mentor.name}</h3>
@@ -229,7 +270,8 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
                 </button>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -255,9 +297,12 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
             <div className="modal-body-content">
               <div className="modal-profile-info">
                 <img
-                  src={`https://ui-avatars.com/api/?name=${selectedMentor.name}&background=random&size=128`}
+                  src={buildMentorAvatarUrl(selectedMentor.userId, selectedMentor.name)}
                   alt={selectedMentor.name}
                   className="modal-avatar"
+                  onError={(e) => {
+                    e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(selectedMentor.name)}&background=random&size=128`;
+                  }}
                 />
                 <h2 className="modal-name">{selectedMentor.name}</h2>
                 <div className="modal-domain">

@@ -1,8 +1,14 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "7qMOJHDfCtQ=",
   "success": true,
   "projectFilePath": "C:\\CDAC PROJECT\\TeamVersions\\MentorConnectV629726 manjiree\\MentorConnectV629726\\MentorConnect\\PaymentService\\PaymentService.csproj",
+=======
+  "dgSpecHash": "NvxDUM7FUF0=",
+  "success": true,
+  "projectFilePath": "C:\\CDAC PROJECT\\New folder\\MentorConnect---Student-Mentorship-Platform-main\\MentorConnect---Student-Mentorship-Platform-main\\PaymentService\\PaymentService.csproj",
+>>>>>>> 61a8900 (ChatFeatureWorking)
   "expectedPackageFiles": [
     "C:\\Users\\kadam\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\kadam\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",

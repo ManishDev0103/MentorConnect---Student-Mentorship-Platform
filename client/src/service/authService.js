@@ -12,8 +12,13 @@ export const getStudentId = () => {
     // Try to decode JWT if studentId not stored
     try {
       const decoded = parseJwt(token);
-      // JWT has userId, not studentId
-      return decoded?.userId || decoded?.studentId || null;
+      if (decoded?.userId && !decoded?.studentId) {
+        console.warn(
+          "Decoded JWT contains userId but not studentId. This may cause student API request issues.",
+          decoded,
+        );
+      }
+      return decoded?.studentId || decoded?.userId || null;
     } catch (error) {
       console.error("Error decoding token:", error);
       return null;

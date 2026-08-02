@@ -124,23 +124,38 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void processForgotPassword(String email) {
-		// TODO Auto-generated method stub
+	public void processForgotPassword(String emailOrPhone) {
+		if (emailOrPhone == null || emailOrPhone.isBlank()) {
+			throw new ApiException("Email or phone number is required");
+		}
 
-		userRepository.findByEmail(email).ifPresent(user -> {
+		String normalizedIdentifier = emailOrPhone.trim();
+		User user = null;
 
-			String token = UUID.randomUUID().toString();
+		if (normalizedIdentifier.contains("@")) {
+			user = userRepository.findByEmail(normalizedIdentifier).orElse(null);
+		} else {
+			String normalizedPhone = normalizedIdentifier
+				.replace(" ", "")
+				.replace("-", "")
+				.replace("(", "")
+				.replace(")", "");
+			user = userRepository.findByPhoneNo(normalizedPhone).orElse(null);
+		}
 
-			PasswordResetToken resetToken = new PasswordResetToken();
-			resetToken.setToken(token);
-			resetToken.setUser(user);
-			resetToken.setExpiryTime(LocalDateTime.now().plusMinutes(15));
+		if (user == null) {
+			return;
+		}
 
-			resetTokenRepository.save(resetToken);
+		String token = UUID.randomUUID().toString();
 
-			emailService.sendPasswordResetEmail(user.getEmail(), token);
-		});
+		PasswordResetToken resetToken = new PasswordResetToken();
+		resetToken.setToken(token);
+		resetToken.setUser(user);
+		resetToken.setExpiryTime(LocalDateTime.now().plusMinutes(15));
 
+		resetTokenRepository.save(resetToken);
+		emailService.sendPasswordResetEmail(user.getEmail(), token);
 	}
 
 	@Override

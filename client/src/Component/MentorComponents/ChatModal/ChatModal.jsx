@@ -1,15 +1,28 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./ChatModal.css";
 import {
-  sendMessage,
   getConversation,
   markMessagesAsRead,
   getMentorConversations,
   getMyStudents,
+<<<<<<< HEAD
 } from "../../../service/mentorservice";
+=======
+  uploadSessionNote,
+} from "../../../service/mentorservice";
+import { getStudentSessions } from "../../../service/studentservice";
+import {
+  connectChatSocket,
+  subscribeToMessages,
+  sendChatMessage,
+  disconnectChatSocket,
+} from "../../../utils/stompClient";
+>>>>>>> 61a8900 (ChatFeatureWorking)
 
 const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedded = false }) => {
   const [conversations, setConversations] = useState([]);
+  const [filteredConversations, setFilteredConversations] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [allStudents, setAllStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -18,6 +31,9 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
   const messagesEndRef = useRef(null);
   const pollingInterval = useRef(null);
   const conversationPollingInterval = useRef(null);
+  const socketConnectedRef = useRef(false);
+  const subscriptionRef = useRef(null);
+  const noteFileInputRef = useRef(null);
 
   console.log("ChatModal - Received mentorId:", mentorId);
 
@@ -64,26 +80,78 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
 
   // Poll for new messages when a conversation is selected
   useEffect(() => {
-    if (selectedStudent) {
-      loadMessages();
+    if (!selectedStudent) return;
 
-      // Start polling every 3 seconds
-      pollingInterval.current = setInterval(() => {
-        loadMessages(true);
-      }, 3000);
+    loadMessages();
 
-      return () => {
-        if (pollingInterval.current) {
-          clearInterval(pollingInterval.current);
-        }
-      };
+    if (!socketConnectedRef.current) {
+      connectChatSocket(
+        () => {
+          socketConnectedRef.current = true;
+          const subscription = subscribeToMessages(mentorId, (payload) => {
+            const incomingMessage = {
+              ...payload,
+              senderType: payload.senderType || "STUDENT",
+            };
+            setMessages((prev) => {
+              const exists = prev.some((msg) => msg.messageId === incomingMessage.messageId);
+              if (exists) return prev;
+              return [...prev, incomingMessage];
+            });
+            setConversations((prev) =>
+              prev.map((conv) =>
+                conv.studentId === incomingMessage.studentId
+                  ? {
+                      ...conv,
+                      lastMessage: incomingMessage.content,
+                      lastMessageTime: incomingMessage.sentAt || new Date().toISOString(),
+                      unreadCount: incomingMessage.senderType === "STUDENT" ? (conv.unreadCount || 0) + 1 : conv.unreadCount || 0,
+                    }
+                  : conv,
+              ),
+            );
+          });
+          subscriptionRef.current = subscription;
+        },
+        () => {
+          socketConnectedRef.current = false;
+        },
+        () => {
+          socketConnectedRef.current = false;
+        },
+        () => {
+          socketConnectedRef.current = false;
+        },
+      );
     }
-  }, [selectedStudent]);
+
+    return () => {
+      if (pollingInterval.current) {
+        clearInterval(pollingInterval.current);
+      }
+    };
+  }, [selectedStudent, mentorId]);
 
   // Scroll to bottom when messages change
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    const query = searchQuery.toLowerCase().trim();
+    if (!query) {
+      setFilteredConversations(conversations);
+      return;
+    }
+
+    setFilteredConversations(
+      conversations.filter(
+        (conv) =>
+          conv.studentName.toLowerCase().includes(query) ||
+          (conv.lastMessage || "").toLowerCase().includes(query),
+      ),
+    );
+  }, [searchQuery, conversations]);
 
   const loadConversations = async () => {
     try {
@@ -157,11 +225,20 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
       });
 
       const mergedConversations = Array.from(mergedMap.values()).sort(
+<<<<<<< HEAD
         (a, b) => (b.unreadCount || 0) - (a.unreadCount || 0),
+=======
+        (a, b) => {
+          const unreadDiff = (b.unreadCount || 0) - (a.unreadCount || 0);
+          if (unreadDiff !== 0) return unreadDiff;
+          return new Date(b.lastMessageTime || 0) - new Date(a.lastMessageTime || 0);
+        },
+>>>>>>> 61a8900 (ChatFeatureWorking)
       );
 
       console.log("Merged conversations:", mergedConversations);
       setConversations(mergedConversations);
+      setFilteredConversations(mergedConversations);
     } catch (error) {
       console.error("Error loading conversations:", error);
     } finally {
@@ -215,6 +292,99 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
     setMessages([]);
   };
 
+  const buildNoteDownloadUrl = (notePath) => {
+    if (!notePath) return "";
+    if (/^https?:\/\//i.test(notePath)) {
+      return notePath;
+    }
+
+    const normalizedPath = notePath.startsWith("/") ? notePath : `/${notePath}`;
+    return `${window.location.origin}${normalizedPath}`;
+  };
+
+  const renderMessageContent = (content) => {
+    if (!content) return "";
+
+    const noteLinkMatch = content.match(/https?:\/\/[^\s]+\/api\/notes\/download\/[^\s]+|\/api\/notes\/download\/[^\s]+/i);
+    if (noteLinkMatch) {
+      const href = buildNoteDownloadUrl(noteLinkMatch[0]);
+      return (
+        <a href={href} target="_blank" rel="noreferrer" className="chat-note-link">
+          Open shared PDF
+        </a>
+      );
+    }
+
+    return content;
+  };
+
+  const handleSharePdf = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file || !selectedStudent || !mentorId) {
+      return;
+    }
+
+    try {
+      if (file.type !== 'application/pdf') {
+        alert('Please select a PDF file only.');
+        event.target.value = '';
+        return;
+      }
+
+      const sessionsResponse = await getStudentSessions(selectedStudent.studentId);
+      const sessions = sessionsResponse?.data || [];
+      const matchingSession = sessions.find((session) => Number(session.mentorId) === Number(mentorId));
+
+      if (!matchingSession?.sessionId) {
+        alert('No active matching session is available for this student.');
+        event.target.value = '';
+        return;
+      }
+
+      const uploadResponse = await uploadSessionNote(
+        mentorId,
+        matchingSession.sessionId,
+        file.name,
+        `PDF shared from chat for ${selectedStudent.studentName}`,
+        'PDF',
+        file,
+      );
+
+      const uploadedNote = uploadResponse?.data?.data || uploadResponse?.data || {};
+      const sharedLink = buildNoteDownloadUrl(
+        uploadedNote.fileUrl || `/api/notes/download/${file.name}`,
+      );
+
+      const messageData = {
+        mentorId,
+        studentId: selectedStudent.studentId,
+        content: sharedLink,
+        senderType: 'MENTOR',
+      };
+
+      sendChatMessage(messageData);
+
+      const optimisticMessage = {
+        messageId: Date.now(),
+        mentorId,
+        studentId: selectedStudent.studentId,
+        senderType: 'MENTOR',
+        content: sharedLink,
+        sentAt: new Date().toISOString(),
+        isRead: true,
+      };
+
+      setMessages((prev) => [...prev, optimisticMessage]);
+      setNewMessage('');
+      loadConversations();
+    } catch (error) {
+      console.error('Failed to share PDF:', error);
+      alert('Failed to share PDF to the student.');
+    } finally {
+      event.target.value = '';
+    }
+  };
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!newMessage.trim() || !selectedStudent) return;
@@ -228,16 +398,20 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
       };
 
       console.log("Sending message with data:", messageData);
-      const response = await sendMessage(messageData);
-      if (response.data.success) {
-        setNewMessage("");
-        loadMessages(true); // Reload messages silently
-
-        // Mark messages as read since user is actively in the conversation
-        await markMessagesAsRead(mentorId, selectedStudent.studentId);
-
-        loadConversations(); // Update conversation list
-      }
+      sendChatMessage(messageData);
+      setNewMessage("");
+      const optimisticMessage = {
+        messageId: Date.now(),
+        mentorId,
+        studentId: selectedStudent.studentId,
+        senderType: "MENTOR",
+        content: messageData.content,
+        sentAt: new Date().toISOString(),
+        isRead: true,
+      };
+      setMessages((prev) => [...prev, optimisticMessage]);
+      await markMessagesAsRead(mentorId, selectedStudent.studentId);
+      loadConversations();
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -252,6 +426,7 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
     });
   };
 
+<<<<<<< HEAD
   if (!isOpen && !embedded) return null;
 
   const chatContent = (
@@ -265,62 +440,128 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
           )}
         </div>
 
+=======
+  useEffect(() => {
+    return () => {
+      if (subscriptionRef.current) {
+        subscriptionRef.current.unsubscribe();
+      }
+      disconnectChatSocket();
+      if (conversationPollingInterval.current) {
+        clearInterval(conversationPollingInterval.current);
+      }
+      if (pollingInterval.current) {
+        clearInterval(pollingInterval.current);
+      }
+    };
+  }, []);
+
+  if (!isOpen && !embedded) return null;
+
+  const chatContent = (
+    <div className={`chat-modal ${embedded ? "chat-modal-embedded" : ""}`} onClick={(e) => e.stopPropagation()}>
+      <div className="chat-modal-topbar">
+        <div>
+          <h3>Messages</h3>
+          <p>Connect with your students in real time.</p>
+        </div>
+        {!embedded && (
+          <button className="close-btn" onClick={onClose}>
+            &times;
+          </button>
+        )}
+      </div>
+      <div className="chat-body">
+>>>>>>> 61a8900 (ChatFeatureWorking)
         {!selectedStudent ? (
-          // Conversations List
-          <div className="chat-conversations">
-            {loading ? (
-              <div className="loading">Loading conversations...</div>
-            ) : conversations.length === 0 ? (
-              <div className="no-conversations">No conversations yet</div>
-            ) : (
-              conversations.map((conv) => (
-                <div
-                  key={conv.studentId}
-                  className={`conversation-item ${conv.unreadCount > 0 ? "has-unread" : ""}`}
-                  onClick={() => handleSelectStudent(conv)}
-                >
-                  <div className="conversation-header">
-                    <span
-                      className={`student-name ${conv.unreadCount > 0 ? "unread-name" : ""}`}
-                    >
-                      {conv.studentName}
-                    </span>
-                    <div className="conversation-right">
-                      <span className="conversation-time">
-                        {conv.lastMessageTime}
-                      </span>
+          <div className="chat-sidebar">
+            <div className="chat-sidebar-header">
+              <div>
+                <h4>Student conversations</h4>
+                <p>Recent chats and assigned students</p>
+              </div>
+            </div>
+            <div className="chat-search-box">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search students or messages..."
+              />
+            </div>
+            <div className="chat-conversations">
+              {loading ? (
+                <div className="loading">Loading conversations...</div>
+              ) : filteredConversations.length === 0 ? (
+                <div className="no-conversations">
+                  No students found. Refresh or wait for a chat to start.
+                </div>
+              ) : (
+                filteredConversations.map((conv) => (
+                  <div
+                    key={conv.studentId}
+                    className={`conversation-item ${conv.unreadCount > 0 ? "has-unread" : ""}`}
+                    onClick={() => handleSelectStudent(conv)}
+                  >
+                    <div className="conversation-avatar">
+                      {conv.studentName?.charAt(0) || "S"}
+                    </div>
+                    <div className="conversation-info">
+                      <div className="conversation-name">
+                        {conv.studentName}
+                      </div>
+                      <div className="conversation-last-message">
+                        {conv.lastMessage || "Start a conversation"}
+                      </div>
+                    </div>
+                    <div className="conversation-meta">
+                      {conv.lastMessageTime ? (
+                        <span>{new Date(conv.lastMessageTime).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
+                      ) : (
+                        <span className="no-time">—</span>
+                      )}
                       {conv.unreadCount > 0 && (
-                        <span className="unread-count-badge">
+                        <span className="conversation-unread-badge">
                           {conv.unreadCount}
                         </span>
                       )}
                     </div>
                   </div>
-                  <div
-                    className={`last-message ${!conv.lastMessageTime ? "no-messages" : ""} ${conv.unreadCount > 0 ? "unread-message" : ""}`}
-                  >
-                    {conv.lastMessage}
-                  </div>
-                </div>
-              ))
-            )}
+                ))
+              )}
+            </div>
           </div>
         ) : (
-          // Messages View
-          <div className="chat-messages-container">
-            <div className="chat-messages-header">
+          <div className="chat-main">
+            <div className="chat-main-header">
               <button
                 className="back-btn"
                 onClick={() => setSelectedStudent(null)}
               >
                 ← Back
               </button>
-              <h4>{selectedStudent.studentName}</h4>
+              <div className="chat-recipient-info">
+                <div className="conversation-avatar large">
+                  {selectedStudent.studentName?.charAt(0) || "S"}
+                </div>
+                <div>
+                  <div className="conversation-name selected">
+                    {selectedStudent.studentName}
+                  </div>
+                  <div className="conversation-status">
+                    Student • Active
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="chat-messages">
+            <div className="chat-messages-panel">
               {loading && messages.length === 0 ? (
                 <div className="loading">Loading messages...</div>
+              ) : messages.length === 0 ? (
+                <div className="no-messages">
+                  Start the conversation with {selectedStudent.studentName}.
+                </div>
               ) : (
                 messages.map((msg) => (
                   <div
@@ -330,7 +571,7 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
                     }`}
                   >
                     <div className="message-bubble">
-                      {msg.content}
+                      {renderMessageContent(msg.content)}
                       {msg.senderType !== "MENTOR" && !msg.isRead && (
                         <span className="new-message-badge"> • NEW</span>
                       )}
@@ -347,7 +588,14 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
               <div ref={messagesEndRef} />
             </div>
 
-            <div className="chat-input-container">
+            <div className="chat-input-area">
+              <input
+                ref={noteFileInputRef}
+                type="file"
+                accept=".pdf,application/pdf"
+                hidden
+                onChange={handleSharePdf}
+              />
               <form className="chat-input-form" onSubmit={handleSendMessage}>
                 <input
                   type="text"
@@ -356,6 +604,13 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                 />
+                <button
+                  type="button"
+                  className="send-btn"
+                  onClick={() => noteFileInputRef.current?.click()}
+                >
+                  PDF
+                </button>
                 <button
                   type="submit"
                   className="send-btn"
@@ -368,6 +623,16 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
           </div>
         )}
       </div>
+  );
+
+  if (embedded) {
+    return chatContent;
+  }
+
+  return (
+    <div className="chat-modal-overlay" onClick={onClose}>
+      {chatContent}
+    </div>
   );
 
   if (embedded) {

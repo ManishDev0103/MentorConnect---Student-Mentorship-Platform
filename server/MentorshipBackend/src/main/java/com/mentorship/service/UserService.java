@@ -23,7 +23,7 @@ public interface UserService {
 
 	void deleteUserById(Long userId);
 
-	void processForgotPassword(String email);
+	void processForgotPassword(String emailOrPhone);
 
 	void validateResetToken(String token);
 

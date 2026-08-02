@@ -148,10 +148,10 @@ public class UserController {
 	public ResponseEntity<?> forgotPassword(
 			@RequestBody @Valid ForgotPasswordRequest dto) {
 
-		userService.processForgotPassword(dto.getEmail());
+		userService.processForgotPassword(dto.getEmailOrPhone());
 
 		return ResponseEntity.ok(
-				"If the email exists, a reset link has been sent");
+				"If the account exists, a reset link has been sent");
 	}
 
 	@GetMapping("/validate-reset-token")

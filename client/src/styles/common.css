@@ -68,8 +68,24 @@
   font-size: 0.95rem;
 }
 
+.page-title,
+.section-title,
+.hero-title,
+.section-heading,
+.page-header h1,
+.page-header h2,
+.page-header h3 {
+  letter-spacing: -0.02em;
+}
+
 .font-strong {
   font-weight: 700;
+}
+
+.page-shell .page-title,
+.page-shell .section-title,
+.page-shell .hero-title {
+  line-height: 1.12;
 }
 
 .section-card,
@@ -105,6 +121,16 @@
   color: #ffffff;
   border-radius: 999px;
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.14);
+  border: none;
+}
+
+.btn-outline-primary,
+.btn-outline-dark,
+.btn-secondary {
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: rgba(255, 255, 255, 0.9);
+  color: #0f172a;
 }
 
 .btn-primary:hover,
@@ -143,4 +169,38 @@ button:disabled {
 
 button:disabled:hover {
   transform: none;
+}
+
+.page-shell,
+.mentor-page-root,
+.register-page,
+.reset-password-page,
+.admin-dashboard,
+.student-dashboard,
+.dashboard-home,
+.earnings-page,
+.feedback-page,
+.mcq-practice-page,
+.my-students-page,
+.availability-page,
+.my-mentor-page,
+.my-sessions-page,
+.subs-page,
+.mentor-listing-section,
+.browse-mentors-container {
+  padding-top: 4px;
+}
+
+/* Reusable page-level visual rhythm */
+.page-shell > .container,
+.mentor-page-root > .container,
+.student-dashboard > .container,
+.admin-dashboard > .container {
+  position: relative;
+}
+
+.page-shell .badge-pill,
+.page-shell .status-badge {
+  border-radius: 999px;
+  padding: 6px 10px;
 }

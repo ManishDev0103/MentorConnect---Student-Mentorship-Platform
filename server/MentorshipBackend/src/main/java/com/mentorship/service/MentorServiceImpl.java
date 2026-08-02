@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mentorship.custom_exceptions.ApiException;
-import com.mentorship.dto.MentorDTO;
+import com.mentorship.dtos.MentorDTO;
 import com.mentorship.dtos.UpdateMentorProfileRequest;
 import com.mentorship.entities.Mentor;
 import com.mentorship.repository.FeedbackRepository;
@@ -145,6 +145,10 @@ String contentType = resume.getContentType();
 	public List<MentorDTO> getPublicMentors(String domain) {
 		List<Mentor> mentors = mentorRepository.findAll().stream()
 				.filter(mentor -> mentor != null && !mentor.isDeleted())
+<<<<<<< HEAD
+=======
+				.filter(mentor -> mentor.getVerificationStatus() == com.mentorship.entities.VerificationStatus.VERIFIED)
+>>>>>>> 61a8900 (ChatFeatureWorking)
 				.filter(mentor -> domain == null || domain.trim().isEmpty()
 						|| (mentor.getSpecialization() != null && mentor.getSpecialization().toLowerCase().contains(domain.trim().toLowerCase()))
 						|| (mentor.getCustomSpecialization() != null && mentor.getCustomSpecialization().toLowerCase().contains(domain.trim().toLowerCase())))

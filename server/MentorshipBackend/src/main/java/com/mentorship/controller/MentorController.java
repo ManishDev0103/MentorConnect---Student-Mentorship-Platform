@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mentorship.dto.MentorDTO;
+import com.mentorship.dtos.MentorDTO;
 import com.mentorship.dtos.UpdateMentorProfileRequest;
 import jakarta.validation.Valid;
 import com.mentorship.security.SecurityUtils;

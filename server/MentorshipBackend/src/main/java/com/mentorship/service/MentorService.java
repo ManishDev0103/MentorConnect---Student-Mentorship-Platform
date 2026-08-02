@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mentorship.dto.MentorDTO;
+import com.mentorship.dtos.MentorDTO;
 import com.mentorship.dtos.UpdateMentorProfileRequest;
 
 public interface MentorService {

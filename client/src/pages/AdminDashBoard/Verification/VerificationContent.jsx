@@ -2,6 +2,14 @@ import React, { useState, useEffect } from "react";
 import "./VerificationContent.css";
 import { adminDashboardService } from "../../../service/adminDashboardService";
 
+const buildMentorAvatarUrl = (userId, name) => {
+  if (!userId) {
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&size=128`;
+  }
+
+  return `http://localhost:8080/api/users/image/${userId}`;
+};
+
 const VerificationContent = ({ onDataRefresh }) => {
   const [pendingVerifications, setPendingVerifications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -109,7 +117,7 @@ const VerificationContent = ({ onDataRefresh }) => {
             <table className="table table-hover align-middle">
               <thead>
                 <tr>
-                  <th>Name</th>
+                  <th>Mentor</th>
                   <th>Type</th>
                   <th>Submitted</th>
                   <th>Status</th>
@@ -118,9 +126,32 @@ const VerificationContent = ({ onDataRefresh }) => {
                 </tr>
               </thead>
               <tbody>
+<<<<<<< HEAD
                 {pendingVerifications.map((item) => (
                   <tr key={item.mentorId ?? item.userId ?? item.email}>
                     <td className="fw-semibold">{item.name}</td>
+=======
+                {pendingVerifications.map((item) => {
+                  const avatarFallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.name || 'Mentor')}&background=random&size=128`;
+                  const avatarUrl = buildMentorAvatarUrl(item.userId, item.name);
+
+                  return (
+                  <tr key={item.mentorId ?? item.userId ?? item.email}>
+                    <td>
+                      <div className="d-flex align-items-center gap-3">
+                        <img
+                          src={avatarUrl}
+                          alt={item.name}
+                          className="rounded-circle border"
+                          style={{ width: 42, height: 42, objectFit: 'cover' }}
+                          onError={(e) => {
+                            e.currentTarget.src = avatarFallback;
+                          }}
+                        />
+                        <span className="fw-semibold">{item.name}</span>
+                      </div>
+                    </td>
+>>>>>>> 61a8900 (ChatFeatureWorking)
                     <td>
                       <span
                         className={
@@ -188,7 +219,8 @@ const VerificationContent = ({ onDataRefresh }) => {
                       </button>
                     </td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           </div>

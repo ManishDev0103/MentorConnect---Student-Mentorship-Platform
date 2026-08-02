@@ -30,11 +30,12 @@ public class StudyNoteController {
 
     @PostMapping("/mentor/notes")
     public ResponseEntity<ApiResponseDTO<StudyNoteDTO>> createNote(@RequestParam Long mentorId,
+            @RequestParam Long sessionId,
             @RequestParam String title,
             @RequestParam(required = false) String description,
             @RequestParam(required = false) String subject,
             @RequestParam("file") MultipartFile file) {
-        return ResponseEntity.ok(ApiResponseDTO.success("Note uploaded", studyNoteService.createNote(mentorId, title, description, subject, file)));
+        return ResponseEntity.ok(ApiResponseDTO.success("Note uploaded", studyNoteService.createNote(mentorId, sessionId, title, description, subject, file)));
     }
 
     @PutMapping("/mentor/notes/{id}")
@@ -66,5 +67,16 @@ public class StudyNoteController {
     @GetMapping("/mentor/notes/{mentorId}")
     public ResponseEntity<ApiResponseDTO<List<StudyNoteDTO>>> getMentorNotes(@PathVariable Long mentorId) {
         return ResponseEntity.ok(ApiResponseDTO.success(studyNoteService.getMentorNotes(mentorId)));
+    }
+
+    @GetMapping("/sessions/{sessionId}/notes")
+    public ResponseEntity<ApiResponseDTO<List<StudyNoteDTO>>> getSessionNotes(@PathVariable Long sessionId) {
+        return ResponseEntity.ok(ApiResponseDTO.success(studyNoteService.getSessionNotes(sessionId)));
+    }
+
+    @GetMapping("/student/{studentId}/sessions/{sessionId}/notes")
+    public ResponseEntity<ApiResponseDTO<List<StudyNoteDTO>>> getStudentSessionNotes(@PathVariable Long studentId,
+            @PathVariable Long sessionId) {
+        return ResponseEntity.ok(ApiResponseDTO.success(studyNoteService.getSessionNotesForStudent(studentId, sessionId)));
     }
 }

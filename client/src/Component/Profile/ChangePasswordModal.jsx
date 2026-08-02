@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import "./ChangePasswordModal.css";
 import { changePassword } from "../../service/authApiService";
 import { toast } from "react-toastify";
+import {
+  getPasswordStrength,
+  getPasswordStrengthColor,
+  passwordMeetsPolicy,
+} from "../../utils/passwordUtils";
 
 const ChangePasswordModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -12,6 +17,11 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
+  const newPasswordStrength = getPasswordStrength(formData.newPassword);
+  const confirmPasswordMatch =
+    formData.confirmPassword.length > 0 &&
+    formData.newPassword === formData.confirmPassword;
+
   const validate = () => {
     const newErrors = {};
 
@@ -21,8 +31,8 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
 
     if (!formData.newPassword.trim()) {
       newErrors.newPassword = "New password is required";
-    } else if (formData.newPassword.length < 8) {
-      newErrors.newPassword = "Password must be at least 8 characters";
+    } else if (!passwordMeetsPolicy(formData.newPassword)) {
+      newErrors.newPassword = "Password must include uppercase, lowercase, number, and special character";
     }
 
     if (!formData.confirmPassword.trim()) {
@@ -129,10 +139,35 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
                 id="newPassword"
                 name="newPassword"
                 className={`form-control ${errors.newPassword ? "is-invalid" : ""}`}
+                style={{
+                  borderColor:
+                    formData.newPassword.length > 0
+                      ? getPasswordStrengthColor(newPasswordStrength.score)
+                      : undefined,
+                  boxShadow:
+                    formData.newPassword.length > 0
+                      ? `0 0 0 0.2rem ${getPasswordStrengthColor(newPasswordStrength.score)}22`
+                      : undefined,
+                }}
                 value={formData.newPassword}
                 onChange={handleChange}
-                placeholder="Enter new password (min 8 characters)"
+                placeholder="Enter new password"
               />
+              <div className="password-strength-meter mt-2">
+                <div
+                  className="password-strength-track"
+                  style={{
+                    width: `${(newPasswordStrength.score / 5) * 100}%`,
+                    background: getPasswordStrengthColor(newPasswordStrength.score),
+                  }}
+                />
+              </div>
+              <small
+                className="form-text mt-2 d-block"
+                style={{ color: getPasswordStrengthColor(newPasswordStrength.score) }}
+              >
+                {newPasswordStrength.label}
+              </small>
               {errors.newPassword && (
                 <div className="invalid-feedback">{errors.newPassword}</div>
               )}
@@ -145,10 +180,30 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
                 id="confirmPassword"
                 name="confirmPassword"
                 className={`form-control ${errors.confirmPassword ? "is-invalid" : ""}`}
+                style={{
+                  borderColor:
+                    formData.confirmPassword.length > 0
+                      ? confirmPasswordMatch
+                        ? "#22c55e"
+                        : "#ef4444"
+                      : undefined,
+                  boxShadow:
+                    formData.confirmPassword.length > 0
+                      ? `0 0 0 0.2rem ${confirmPasswordMatch ? "#22c55e" : "#ef4444"}22`
+                      : undefined,
+                }}
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="Re-enter new password"
               />
+              {formData.confirmPassword.length > 0 && (
+                <small
+                  className="form-text mt-2 d-block"
+                  style={{ color: confirmPasswordMatch ? "#16a34a" : "#dc2626" }}
+                >
+                  {confirmPasswordMatch ? "Passwords match" : "Passwords do not match"}
+                </small>
+              )}
               {errors.confirmPassword && (
                 <div className="invalid-feedback">{errors.confirmPassword}</div>
               )}

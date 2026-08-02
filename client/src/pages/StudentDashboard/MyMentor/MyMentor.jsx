@@ -62,29 +62,33 @@ const MyMentor = ({ onNavigateToDashboard }) => {
         return;
       }
 
-      // Get UNIQUE mentors from ONLY ACTIVE (non-completed) sessions
-      const activeSessions = sessions.filter(
-        (s) =>
-          s.status !== "COMPLETED" &&
-          s.status !== "CANCELLED" &&
-          s.status !== "CANCELLED_BY_STUDENT" &&
-          s.status !== "CANCELLED_BY_MENTOR",
-      );
-      const uniqueMentorIds = [
-        ...new Set(activeSessions.map((s) => s.mentorId)),
-      ];
+      // Get UNIQUE mentors from all sessions (including past/completed mentors)
+      const uniqueMentorIds = [...new Set(sessions.map((s) => s.mentorId))];
       const mentorsList = [];
+      const activeMentorIds = [
+        ...new Set(
+          sessions
+            .filter(
+              (s) =>
+                s.status !== "COMPLETED" &&
+                s.status !== "CANCELLED" &&
+                s.status !== "CANCELLED_BY_STUDENT" &&
+                s.status !== "CANCELLED_BY_MENTOR",
+            )
+            .map((s) => s.mentorId),
+        ),
+      ];
 
-      // Fetch details for each unique mentor with active sessions
+      // Fetch details for each unique mentor from all sessions
       for (const mentorId of uniqueMentorIds) {
         try {
           const mentorDetailsResponse = await getMentorDetails(mentorId);
           const mentorDetailsData = mentorDetailsResponse.data;
 
-          // Find first session with this mentor to get additional info
+          // Find the first session with this mentor to get additional info
           const mentorSession = sessions.find((s) => s.mentorId === mentorId);
 
-          const mentorInfo = {
+              const mentorInfo = {
             mentorId: mentorId,
             name: mentorDetailsData?.name || mentorSession?.mentorName,
             specialization: mentorDetailsData?.specialization || "N/A",
@@ -102,6 +106,7 @@ const MyMentor = ({ onNavigateToDashboard }) => {
               ? [mentorDetailsData.expertise]
               : [mentorDetailsData?.specialization || "General"],
             email: mentorDetailsData?.email || "N/A",
+            isActiveMentor: activeMentorIds.includes(mentorId),
           };
 
           mentorsList.push(mentorInfo);

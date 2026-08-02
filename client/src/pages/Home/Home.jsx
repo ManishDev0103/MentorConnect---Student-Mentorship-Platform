@@ -34,6 +34,10 @@ const Home = () => {
           <div className="row align-items-center gy-4">
             {/* Text */}
             <div className="col-lg-6">
+              <div className="hero-brand-pill">
+                <img src="/images/mclogo.png" alt="MentorConnect logo" className="hero-brand-logo" />
+                <span>MentorConnect • Personalized learning</span>
+              </div>
               <h1 className="hero-title">
                 Your MentorConnect Journey Starts Here
               </h1>
@@ -41,6 +45,12 @@ const Home = () => {
                 Connect with verified mentors for WebDevelopment, DevOps, Cybersecurity & more.
                 Track your progress and achieve your learning goals with structured guidance.
               </p>
+
+              <div className="hero-badges">
+                <span>Live mentorship</span>
+                <span>Session-based notes</span>
+                <span>Progress analytics</span>
+              </div>
 
               <div className="d-flex flex-wrap gap-3">
                 <Link to="/mentors" className="btn hero-cta-primary">
@@ -52,15 +62,24 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Image */}
+            {/* Illustration / visual card */}
             <div className="col-lg-6">
-              <div className="hero-image-wrapper">
-                {/* Replace src with your own image if needed */}
-                <img
-                  src="/images/mcmain.png"
-                  alt="Mentor Guiding Student"
-                  className="img-fluid hero-image"
-                />
+              <div className="hero-visual-shell">
+                <div className="hero-image-wrapper">
+                  <img
+                    src="/images/mcmain.png"
+                    alt="Mentor Guiding Student"
+                    className="img-fluid hero-image"
+                  />
+                </div>
+                <div className="hero-float-card hero-float-card-1">
+                  <strong>1:1 mentoring</strong>
+                  <span>Clear sessions and accountable progress.</span>
+                </div>
+                <div className="hero-float-card hero-float-card-2">
+                  <strong>PDF note sharing</strong>
+                  <span>Share support material during each session.</span>
+                </div>
               </div>
             </div>
           </div>
@@ -247,6 +266,71 @@ const Home = () => {
           <Link to="/register/student" className="btn cta-btn">
             Get Started Today
           </Link>
+        </div>
+      </section>
+
+      {/* Footer / About / Contact */}
+      <section className="home-footer-section">
+        <div className="container">
+          <div className="row g-4 align-items-start">
+            <div className="col-lg-4">
+              <div className="footer-panel">
+                <h3 className="footer-heading">About Us</h3>
+                <p className="footer-text">
+                  MentorConnect is a mentorship-focused learning platform that connects students
+                  with experienced mentors for structured guidance, session tracking, progress
+                  reviews, and personalized support across professional and technical learning paths.
+                </p>
+              </div>
+            </div>
+
+            <div className="col-lg-4">
+              <div className="footer-panel">
+                <h3 className="footer-heading">Contact Us</h3>
+                <ul className="footer-contact-list">
+                  <li>
+                    <span className="footer-label">Phone:</span>
+                    <a href="tel:+919876543210">+91 98765 43210</a>
+                  </li>
+                  <li>
+                    <span className="footer-label">Instagram:</span>
+                    <a href="https://instagram.com/mentorconnect" target="_blank" rel="noreferrer">
+                      @mentorconnect
+                    </a>
+                  </li>
+                  <li>
+                    <span className="footer-label">X:</span>
+                    <a href="https://x.com/mentorconnect" target="_blank" rel="noreferrer">
+                      @mentorconnect
+                    </a>
+                  </li>
+                  <li>
+                    <span className="footer-label">YouTube:</span>
+                    <a href="https://youtube.com/@mentorconnect" target="_blank" rel="noreferrer">
+                      MentorConnect Channel
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="col-lg-4">
+              <div className="footer-panel footer-flag-panel">
+                <div className="india-flag" aria-hidden="true">
+                  <span className="flag-saffron" />
+                  <span className="flag-white" />
+                  <span className="flag-green" />
+                  <span className="flag-chakra" />
+                </div>
+                <div className="footer-developers">
+                  <p className="footer-text">Developed by</p>
+                  <h4 className="developer-names">
+                    Manjiree Mule, Shraddha Shinde, Manish Kadam and Varad Mane
+                  </h4>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

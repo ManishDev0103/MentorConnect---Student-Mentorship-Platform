@@ -9,6 +9,7 @@ import com.mentorship.entities.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	Optional<User> findByEmail(String email);
+	Optional<User> findByPhoneNo(String phoneNo);
 	
 	// derived finder
 		boolean existsByEmail(String email);
