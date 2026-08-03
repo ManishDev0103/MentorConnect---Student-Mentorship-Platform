@@ -8,6 +8,7 @@ import ForgotPasswordModal from "../../Component/Profile/ForgotPasswordModal";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [redirectRole, setRedirectRole] = useState(null);
@@ -198,15 +199,37 @@ const Login = () => {
         {/* Password */}
         <div className="mb-4">
           <label className="login-label">Password</label>
-          <input
-            type="password"
-            className="form-control login-input"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onKeyPress={handleKeyPress}
-            disabled={loading}
-          />
+          <div className="input-group">
+            <input
+              type={showPassword ? "text" : "password"}
+              className="form-control login-input"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyPress={handleKeyPress}
+              disabled={loading}
+              aria-label="Password"
+            />
+            <button
+              type="button"
+              className="btn btn-outline-secondary password-toggle-btn"
+              onClick={() => setShowPassword((s) => !s)}
+              aria-pressed={showPassword}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                  <path d="M3 3l18 18" stroke="#0f172a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M10.58 10.58A3 3 0 0 0 13.42 13.42" stroke="#0f172a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              ) : (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                  <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" stroke="#0f172a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <circle cx="12" cy="12" r="3" stroke="#0f172a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Error with Forgot Password Link */}
@@ -263,12 +286,12 @@ const Login = () => {
           <p>
             Don't have an account?
             <span className="login-link-primary">
-              <a href="/register/student"> Sign up as Student</a>
+              <Link to="/register/student"> Sign up as Student</Link>
             </span>{" "}
             or
           </p>
           <span className="login-link-mentor">
-            <a href="/register/mentor"> Apply as Mentor</a>
+            <Link to="/register/mentor"> Apply as Mentor</Link>
           </span>
         </div>
       </div>

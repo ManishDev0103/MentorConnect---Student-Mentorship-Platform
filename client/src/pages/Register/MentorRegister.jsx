@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./Registration.css";
 import { Link, useNavigate } from "react-router-dom";
 import { registerMentor } from "../../API/authService";
+import { showSuccess, showError } from "../../utils/toast";
 import {
   getPasswordStrength,
   passwordMeetsPolicy,
@@ -32,6 +33,8 @@ const MentorRegister = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -48,6 +51,12 @@ const MentorRegister = () => {
     setLoading(true);
 
     try {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(form.email)) {
+        setError("Please enter a valid email address");
+        setLoading(false);
+        return;
+      }
       // Validate required fields
       if (!form.firstName || !form.email || !form.password || !form.confirmPassword || !form.specialization || !form.experience || !form.ratePerSession || !form.highestEducation || !form.currentPosition || !form.organization || !form.professionalBio) {
         setError("Please fill in all required fields");
@@ -117,12 +126,13 @@ const MentorRegister = () => {
       };
 
       await registerMentor(signupData);
-
-      alert("Mentor application submitted successfully! Your account is pending admin verification.");
+      showSuccess("Mentor application submitted successfully! Your account is pending admin verification.");
       navigate("/login");
     } catch (err) {
       console.error("Registration error:", err);
-      setError(err.message || "Registration failed. Please try again.");
+      const msg = err?.message || "Registration failed. Please try again.";
+      setError(msg);
+      showError(err);
     } finally {
       setLoading(false);
     }
@@ -249,15 +259,37 @@ const MentorRegister = () => {
 
             <div className="col-md-6">
               <label className="form-label">Password *</label>
-              <input
-                name="password"
-                type="password"
-                className="form-control register-input"
-                placeholder="At least 8 characters, uppercase, lowercase, number, special char"
-                value={form.password}
-                onChange={handleChange}
-                required
-              />
+              <div className="input-group">
+                <input
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  className="form-control register-input"
+                  placeholder="At least 8 characters, uppercase, lowercase, number, special char"
+                  value={form.password}
+                  onChange={handleChange}
+                  required
+                  aria-label="Password"
+                />
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary password-toggle-btn"
+                  onClick={() => setShowPassword((s) => !s)}
+                  aria-pressed={showPassword}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                      <path d="M3 3l18 18" stroke="#0f172a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M10.58 10.58A3 3 0 0 0 13.42 13.42" stroke="#0f172a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  ) : (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                      <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" stroke="#0f172a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <circle cx="12" cy="12" r="3" stroke="#0f172a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                </button>
+              </div>
               <div className="password-strength-bar mt-2">
                 <div
                   className="password-strength-fill"
@@ -276,15 +308,37 @@ const MentorRegister = () => {
 
             <div className="col-md-6">
               <label className="form-label">Confirm Password *</label>
-              <input
-                name="confirmPassword"
-                type="password"
-                className="form-control register-input"
-                placeholder="Re-enter your password"
-                value={form.confirmPassword}
-                onChange={handleChange}
-                required
-              />
+              <div className="input-group">
+                <input
+                  name="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  className="form-control register-input"
+                  placeholder="Re-enter your password"
+                  value={form.confirmPassword}
+                  onChange={handleChange}
+                  required
+                  aria-label="Confirm password"
+                />
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary password-toggle-btn"
+                  onClick={() => setShowConfirmPassword((s) => !s)}
+                  aria-pressed={showConfirmPassword}
+                  aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                >
+                  {showConfirmPassword ? (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                      <path d="M3 3l18 18" stroke="#0f172a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M10.58 10.58A3 3 0 0 0 13.42 13.42" stroke="#0f172a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  ) : (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                      <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" stroke="#0f172a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <circle cx="12" cy="12" r="3" stroke="#0f172a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
