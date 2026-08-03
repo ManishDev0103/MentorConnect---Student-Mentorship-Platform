@@ -489,6 +489,7 @@ public class StudentServiceImpl implements StudentService {
 
         dto.setSessionId(session.getSessionId());
         dto.setEndTime(endTime); // Return the calculated end time
+        dto.setSessionFee(feeToCharge);
         return dto;
     }
 

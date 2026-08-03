@@ -45,10 +45,12 @@ const applyInterceptors = (client) => {
       if (error.response) {
         const errorMessage = error.response.data?.message || error.response.data?.error || 'An error occurred';
         console.error('API Error:', errorMessage);
-        return Promise.reject(new Error(errorMessage));
+        error.message = errorMessage;
+        return Promise.reject(error);
       } else if (error.request) {
         console.error('Network Error:', error.message);
-        return Promise.reject(new Error('Network error. Please check your connection.'));
+        error.message = 'Network error. Please check your connection.';
+        return Promise.reject(error);
       } else {
         console.error('Error:', error.message);
         return Promise.reject(error);

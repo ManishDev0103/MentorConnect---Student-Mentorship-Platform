@@ -14,4 +14,5 @@ public class StudentSessionDTO {
     private LocalTime endTime;
     private String topic;
     private String description;
+    private Double sessionFee;
 }
