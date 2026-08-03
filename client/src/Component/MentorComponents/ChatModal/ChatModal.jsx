@@ -5,9 +5,6 @@ import {
   markMessagesAsRead,
   getMentorConversations,
   getMyStudents,
-<<<<<<< HEAD
-} from "../../../service/mentorservice";
-=======
   uploadSessionNote,
 } from "../../../service/mentorservice";
 import { getStudentSessions } from "../../../service/studentservice";
@@ -17,7 +14,6 @@ import {
   sendChatMessage,
   disconnectChatSocket,
 } from "../../../utils/stompClient";
->>>>>>> 61a8900 (ChatFeatureWorking)
 
 const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedded = false }) => {
   const [conversations, setConversations] = useState([]);
@@ -225,15 +221,11 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
       });
 
       const mergedConversations = Array.from(mergedMap.values()).sort(
-<<<<<<< HEAD
-        (a, b) => (b.unreadCount || 0) - (a.unreadCount || 0),
-=======
         (a, b) => {
           const unreadDiff = (b.unreadCount || 0) - (a.unreadCount || 0);
           if (unreadDiff !== 0) return unreadDiff;
           return new Date(b.lastMessageTime || 0) - new Date(a.lastMessageTime || 0);
         },
->>>>>>> 61a8900 (ChatFeatureWorking)
       );
 
       console.log("Merged conversations:", mergedConversations);
@@ -426,21 +418,6 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
     });
   };
 
-<<<<<<< HEAD
-  if (!isOpen && !embedded) return null;
-
-  const chatContent = (
-    <div className={`chat-modal ${embedded ? "chat-modal-embedded" : ""}`} onClick={(e) => e.stopPropagation()}>
-        <div className="chat-header">
-          <h3>Messages</h3>
-          {!embedded && (
-            <button className="close-btn" onClick={onClose}>
-              &times;
-            </button>
-          )}
-        </div>
-
-=======
   useEffect(() => {
     return () => {
       if (subscriptionRef.current) {
@@ -472,7 +449,6 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
         )}
       </div>
       <div className="chat-body">
->>>>>>> 61a8900 (ChatFeatureWorking)
         {!selectedStudent ? (
           <div className="chat-sidebar">
             <div className="chat-sidebar-header">
@@ -623,15 +599,6 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
           </div>
         )}
       </div>
-  );
-
-  if (embedded) {
-    return chatContent;
-  }
-
-  return (
-    <div className="chat-modal-overlay" onClick={onClose}>
-      {chatContent}
     </div>
   );
 

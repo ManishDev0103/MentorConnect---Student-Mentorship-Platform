@@ -26,14 +26,6 @@
 
 .chat-modal.chat-modal-embedded {
   width: 100%;
-<<<<<<< HEAD
-  height: 100%;
-  animation: none;
-  box-shadow: none;
-}
-
-@keyframes slideIn {
-=======
   max-height: none;
   height: 100%;
   border-radius: 0;
@@ -41,7 +33,6 @@
 }
 
 @keyframes chatFadeIn {
->>>>>>> 61a8900 (ChatFeatureWorking)
   from {
     opacity: 0;
     transform: translateY(20px);

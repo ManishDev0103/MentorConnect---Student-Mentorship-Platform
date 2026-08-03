@@ -198,38 +198,22 @@ export const updateSessionProgress = async (sessionId) => {
 
 // Chat APIs
 export const sendMessage = async (messageData) => {
-<<<<<<< HEAD
   const response = await api.post('/api/messages/send', messageData);
-=======
-  const response = await api.post('messages/send', messageData);
->>>>>>> 61a8900 (ChatFeatureWorking)
   return response;
 };
 
 export const getConversation = async (mentorId, studentId) => {
-<<<<<<< HEAD
   const response = await api.get(`/api/messages/mentor/${mentorId}/student/${studentId}`);
-=======
-  const response = await api.get(`messages/mentor/${mentorId}/student/${studentId}`);
->>>>>>> 61a8900 (ChatFeatureWorking)
   return response;
 };
 
 export const markMessagesAsRead = async (mentorId, studentId) => {
-<<<<<<< HEAD
   const response = await api.put(`/api/messages/mentor/${mentorId}/student/${studentId}/mark-read`);
-=======
-  const response = await api.put(`messages/mentor/${mentorId}/student/${studentId}/mark-read`);
->>>>>>> 61a8900 (ChatFeatureWorking)
   return response;
 };
 
 export const getMentorConversations = async (mentorId) => {
-<<<<<<< HEAD
   const response = await api.get(`/api/messages/mentor/${mentorId}/conversations`);
-=======
-  const response = await api.get(`messages/mentor/${mentorId}/conversations`);
->>>>>>> 61a8900 (ChatFeatureWorking)
   return response;
 };
 
@@ -258,11 +242,7 @@ export const getStudentSessionNotes = async (studentId, sessionId) => {
 };
 
 export const getUnreadCount = async (mentorId, studentId) => {
-<<<<<<< HEAD
   const response = await api.get(`/api/messages/unread-count/${mentorId}/${studentId}`);
-=======
-  const response = await api.get(`messages/unread-count/${mentorId}/${studentId}`);
->>>>>>> 61a8900 (ChatFeatureWorking)
   return response;
 };
 

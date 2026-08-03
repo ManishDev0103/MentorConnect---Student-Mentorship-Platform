@@ -1,31 +1,17 @@
 {
   "format": 1,
   "restore": {
-<<<<<<< HEAD
-    "C:\\CDAC PROJECT\\TeamVersions\\MentorConnectV629726 manjiree\\MentorConnectV629726\\MentorConnect\\PaymentService\\PaymentService.csproj": {}
+    "C:\\CDAC PROJECT\\MentorConnect\\PaymentService\\PaymentService.csproj": {}
   },
   "projects": {
-    "C:\\CDAC PROJECT\\TeamVersions\\MentorConnectV629726 manjiree\\MentorConnectV629726\\MentorConnect\\PaymentService\\PaymentService.csproj": {
+    "C:\\CDAC PROJECT\\MentorConnect\\PaymentService\\PaymentService.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\CDAC PROJECT\\TeamVersions\\MentorConnectV629726 manjiree\\MentorConnectV629726\\MentorConnect\\PaymentService\\PaymentService.csproj",
+        "projectUniqueName": "C:\\CDAC PROJECT\\MentorConnect\\PaymentService\\PaymentService.csproj",
         "projectName": "PaymentService",
-        "projectPath": "C:\\CDAC PROJECT\\TeamVersions\\MentorConnectV629726 manjiree\\MentorConnectV629726\\MentorConnect\\PaymentService\\PaymentService.csproj",
+        "projectPath": "C:\\CDAC PROJECT\\MentorConnect\\PaymentService\\PaymentService.csproj",
         "packagesPath": "C:\\Users\\kadam\\.nuget\\packages\\",
-        "outputPath": "C:\\CDAC PROJECT\\TeamVersions\\MentorConnectV629726 manjiree\\MentorConnectV629726\\MentorConnect\\PaymentService\\obj\\",
-=======
-    "C:\\CDAC PROJECT\\New folder\\MentorConnect---Student-Mentorship-Platform-main\\MentorConnect---Student-Mentorship-Platform-main\\PaymentService\\PaymentService.csproj": {}
-  },
-  "projects": {
-    "C:\\CDAC PROJECT\\New folder\\MentorConnect---Student-Mentorship-Platform-main\\MentorConnect---Student-Mentorship-Platform-main\\PaymentService\\PaymentService.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\CDAC PROJECT\\New folder\\MentorConnect---Student-Mentorship-Platform-main\\MentorConnect---Student-Mentorship-Platform-main\\PaymentService\\PaymentService.csproj",
-        "projectName": "PaymentService",
-        "projectPath": "C:\\CDAC PROJECT\\New folder\\MentorConnect---Student-Mentorship-Platform-main\\MentorConnect---Student-Mentorship-Platform-main\\PaymentService\\PaymentService.csproj",
-        "packagesPath": "C:\\Users\\kadam\\.nuget\\packages\\",
-        "outputPath": "C:\\CDAC PROJECT\\New folder\\MentorConnect---Student-Mentorship-Platform-main\\MentorConnect---Student-Mentorship-Platform-main\\PaymentService\\obj\\",
->>>>>>> 61a8900 (ChatFeatureWorking)
+        "outputPath": "C:\\CDAC PROJECT\\MentorConnect\\PaymentService\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

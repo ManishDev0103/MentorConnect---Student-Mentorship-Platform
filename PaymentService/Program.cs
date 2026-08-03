@@ -63,8 +63,11 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithOpenApi();
 
-// Run Payment Service on Port 5000
-app.Run("http://localhost:5000");
+// Run Payment Service with dynamic port from configuration or environment
+var urls = Environment.GetEnvironmentVariable("ASPNETCORE_URLS") 
+    ?? builder.Configuration["Kestrel:Endpoints:Http:Url"] 
+    ?? "http://localhost:5083";
+app.Run(urls);
 
 // ==========================
 // RECORD TYPE

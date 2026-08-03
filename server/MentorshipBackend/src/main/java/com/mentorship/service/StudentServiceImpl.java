@@ -342,18 +342,11 @@ public class StudentServiceImpl implements StudentService {
                 dto.setMentorId(m.getMentorId());
                 dto.setName(m.getUserDetails().getFirstName() + " " + m.getUserDetails().getLastName());
                 dto.setSpecialization(m.getSpecialization());
-<<<<<<< HEAD
-                    dto.setRatePerSession(m.getRatePerSession());
-                    dto.setDiscountPercent(m.getDiscountPercent());
-                    double finalPriceList = m.getRatePerSession() - (m.getRatePerSession() * m.getDiscountPercent() / 100.0);
-                    dto.setFinalPrice((double) Math.round(finalPriceList));
-=======
                 dto.setCustomSpecialization(m.getCustomSpecialization());
                 dto.setRatePerSession(m.getRatePerSession());
                 dto.setDiscountPercent(m.getDiscountPercent());
                 double finalPriceList = m.getRatePerSession() - (m.getRatePerSession() * m.getDiscountPercent() / 100.0);
                 dto.setFinalPrice((double) Math.round(finalPriceList));
->>>>>>> 61a8900 (ChatFeatureWorking)
                 dto.setEmail(m.getUserDetails().getEmail());
                 dto.setExperience(m.getExperience());
                 dto.setAbout(m.getCustomSpecialization() != null && !m.getCustomSpecialization().isEmpty()

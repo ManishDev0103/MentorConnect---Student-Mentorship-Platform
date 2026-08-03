@@ -145,10 +145,7 @@ String contentType = resume.getContentType();
 	public List<MentorDTO> getPublicMentors(String domain) {
 		List<Mentor> mentors = mentorRepository.findAll().stream()
 				.filter(mentor -> mentor != null && !mentor.isDeleted())
-<<<<<<< HEAD
-=======
 				.filter(mentor -> mentor.getVerificationStatus() == com.mentorship.entities.VerificationStatus.VERIFIED)
->>>>>>> 61a8900 (ChatFeatureWorking)
 				.filter(mentor -> domain == null || domain.trim().isEmpty()
 						|| (mentor.getSpecialization() != null && mentor.getSpecialization().toLowerCase().contains(domain.trim().toLowerCase()))
 						|| (mentor.getCustomSpecialization() != null && mentor.getCustomSpecialization().toLowerCase().contains(domain.trim().toLowerCase())))
@@ -185,7 +182,7 @@ String contentType = resume.getContentType();
 		double rate = mentor.getRatePerSession();
 		double discount = mentor.getDiscountPercent();
 		double finalPrice = rate - (rate * discount / 100.0);
-		dto.setFinalPrice(Math.round(finalPrice));
+		dto.setFinalPrice((double) Math.round(finalPrice));
 		if (mentor.getVerificationStatus() != null) {
 			dto.setVerificationStatus(mentor.getVerificationStatus().name());
 		} else {

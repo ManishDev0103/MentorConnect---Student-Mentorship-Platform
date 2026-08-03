@@ -12,11 +12,7 @@ public class MentorDTO {
     private String customSpecialization;
     private Double ratePerSession;
     private Double discountPercent;
-<<<<<<< HEAD
     private Double finalPrice;
-=======
-    private double finalPrice;
->>>>>>> 61a8900 (ChatFeatureWorking)
     private String experience;
     private String about;
     private String expertise;
