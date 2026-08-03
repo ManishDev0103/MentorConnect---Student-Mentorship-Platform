@@ -121,49 +121,7 @@ const Login = () => {
     }
   };
 
-  // Create a client-side demo JWT token for instant faculty presentation
-  const createDemoToken = (role, email, name, id) => {
-    const header = btoa(JSON.stringify({ alg: "HS256", typ: "JWT" }));
-    const payloadObj = {
-      sub: email,
-      name: name,
-      userId: id,
-      authorities: [role],
-      iat: Math.floor(Date.now() / 1000),
-      exp: Math.floor(Date.now() / 1000) + 86400 * 30,
-    };
-    if (role === "ROLE_STUDENT") payloadObj.studentId = id;
-    if (role === "ROLE_MENTOR") payloadObj.mentorId = id;
-
-    const payload = btoa(JSON.stringify(payloadObj));
-    return `${header}.${payload}.demo_signature`;
-  };
-
-  const handleDemoLogin = (role) => {
-    // Student demo login is disabled to avoid pre-included student accounts
-    let email;
-    let name;
-    let id;
-
-    if (role === "ROLE_MENTOR") {
-      email = "mentor.demo@cdac.in";
-      name = "Dr. Ananya Verma";
-      id = 1;
-    } else if (role === "ROLE_ADMIN") {
-      email = "admin.demo@cdac.in";
-      name = "Admin System";
-      id = 99;
-    } else {
-      return; // do not create demo tokens for students
-    }
-
-    const demoToken = createDemoToken(role, email, name, id);
-    localStorage.setItem("token", demoToken);
-    if (role === "ROLE_MENTOR") localStorage.setItem("mentorId", id.toString());
-
-    setAuthToken(demoToken);
-    setRedirectRole(role);
-  };
+  // Demo login helpers removed — demo accounts not exposed in UI
 
   return (
     <div className="login-container">
@@ -259,27 +217,7 @@ const Login = () => {
           {loading ? "Signing In..." : "Sign In"}
         </button>
 
-        {/* Quick Demo Login Section for Faculty Presentation */}
-        <div className="demo-login-box mt-3 p-3 text-center border rounded bg-light">
-          <p className="mb-2 text-muted fw-bold small">⚡ 1-Click Faculty Demo Login</p>
-          <div className="d-flex gap-2 justify-content-center flex-wrap">
-            {/* Student demo removed to avoid pre-included demo student accounts */}
-            <button
-              type="button"
-              className="btn btn-outline-success btn-sm"
-              onClick={() => handleDemoLogin("ROLE_MENTOR")}
-            >
-              👩‍🏫 Mentor Demo
-            </button>
-            <button
-              type="button"
-              className="btn btn-outline-dark btn-sm"
-              onClick={() => handleDemoLogin("ROLE_ADMIN")}
-            >
-              ⚙️ Admin Demo
-            </button>
-          </div>
-        </div>
+        {/* Demo login options removed */}
 
         {/* Footer */}
         <div className="login-footer text-center mt-4">

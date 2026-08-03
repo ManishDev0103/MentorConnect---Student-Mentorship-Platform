@@ -39,15 +39,28 @@ body {
   font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
   color: var(--text);
-  background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.15), transparent 20%),
+  /* decorative background image + gradients for depth */
+  background-image: url('https://images.unsplash.com/photo-1503424886308-5f8f78b99d2f?auto=format&fit=crop&w=1950&q=80'),
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.12), transparent 20%),
     linear-gradient(180deg, var(--bg) 0%, #f8fafc 100%);
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: center center, left top, center;
+  background-size: cover, auto, auto;
+  background-attachment: fixed, scroll, scroll;
+  background-blend-mode: overlay, normal, normal;
 }
 
 :root.dark-mode body {
   color: var(--text);
-  background:
+  /* dark mode: darker overlay for the same image */
+  background-image: url('https://images.unsplash.com/photo-1503424886308-5f8f78b99d2f?auto=format&fit=crop&w=1950&q=80'),
     radial-gradient(circle at top left, rgba(37, 99, 235, 0.24), transparent 20%),
     linear-gradient(180deg, #020617 0%, #0f172a 100%);
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: center center, left top, center;
+  background-size: cover, auto, auto;
+  background-attachment: fixed, scroll, scroll;
+  background-blend-mode: multiply, normal, normal;
 }
 
 a {
@@ -441,6 +454,23 @@ button {
   min-height: 100vh;
   background: radial-gradient(circle at top left, rgba(96, 165, 250, 0.18), transparent 18%),
     linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+}
+
+/* subtle translucent overlay to improve content readability on top of background image */
+.app-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(4px) saturate(1.02);
+  z-index: 0;
+}
+
+/* ensure page content sits above the overlay */
+.app-shell > * {
+  position: relative;
+  z-index: 1;
 }
 
 .home-root,
