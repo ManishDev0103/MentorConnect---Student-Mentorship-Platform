@@ -9,6 +9,7 @@ import StudentRegister from "./pages/Register/StudentRegister";
 import MentorListing from "./pages/MentorListing/MentorListing";
 import Home from "./pages/Home/Home";
 import Testimonials from "./pages/Testimonials/Testimonials";
+import ComplaintPage from "./pages/Complaint/ComplaintPage";
 import { ToastContainer } from "react-toastify";
 import Dashboard from "./pages/MentorDashBoard/Dashboard/Dashboard";
 import StudentDashboard from "./pages/StudentDashboard/Main/StudentDashboard";
@@ -44,6 +45,10 @@ function App() {
         <Route
           path="/admin-dashboard"
           element={<ProtectedRoute element={<Overview />} requiredRole="admin" />}
+        />
+        <Route
+          path="/complaint"
+          element={<ProtectedRoute element={<ComplaintPage />} />}
         />
       </Routes>
       <ToastContainer />

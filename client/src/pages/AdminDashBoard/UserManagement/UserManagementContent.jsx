@@ -13,6 +13,13 @@ const UserManagementContent = () => {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [statusModal, setStatusModal] = useState({
+    visible: false,
+    user: null,
+    status: "ACTIVE",
+    reason: "",
+    until: "",
+  });
   const [filterRole, setFilterRole] = useState("ALL");
   const [formData, setFormData] = useState({
     name: "",
@@ -82,7 +89,6 @@ const UserManagementContent = () => {
   };
 
   const handleDeleteUser = async (userId, userRole) => {
-    // Prevent deletion of students
     if (userRole === "STUDENT") {
       setError("Cannot delete student users");
       return;
@@ -103,6 +109,47 @@ const UserManagementContent = () => {
         console.error("Error deleting user:", err);
         setError(err.response?.data?.error || `Failed to delete ${roleText}`);
       }
+    }
+  };
+
+  const openStatusModal = (user) => {
+    setStatusModal({
+      visible: true,
+      user,
+      status: user.status || "ACTIVE",
+      reason: user.restrictionReason || "",
+      until: user.restrictionUntil ? new Date(user.restrictionUntil).toISOString().slice(0, 16) : "",
+    });
+  };
+
+  const closeStatusModal = () => {
+    setStatusModal({
+      visible: false,
+      user: null,
+      status: "ACTIVE",
+      reason: "",
+      until: "",
+    });
+  };
+
+  const handleStatusChange = async (event) => {
+    event.preventDefault();
+    if (!statusModal.user) return;
+
+    try {
+      await adminDashboardService.updateUserStatus(
+        statusModal.user.userId,
+        statusModal.status,
+        statusModal.reason,
+        statusModal.until ? new Date(statusModal.until).toISOString() : null,
+      );
+      setSuccessMessage("User status updated successfully");
+      closeStatusModal();
+      fetchUserData(filterRole);
+      setTimeout(() => setSuccessMessage(""), 3000);
+    } catch (err) {
+      console.error("Error updating user status:", err);
+      setError(err.response?.data?.error || err?.message || "Failed to update user status");
     }
   };
 
@@ -198,6 +245,8 @@ const UserManagementContent = () => {
                 <th>Email</th>
                 <th>Role</th>
                 <th>Status</th>
+                <th>Restriction</th>
+                <th>Reason</th>
                 <th>Joined</th>
                 <th>Actions</th>
               </tr>
@@ -231,19 +280,32 @@ const UserManagementContent = () => {
                         "status-badge " +
                         (user.status === "ACTIVE"
                           ? "status-active"
-                          : "status-inactive")
+                          : user.status === "SUSPENDED"
+                            ? "status-suspended"
+                            : user.status === "BANNED"
+                              ? "status-banned"
+                              : "status-inactive")
                       }
                     >
                       {user.status}
                     </span>
                   </td>
                   <td className="text-muted">
+                    {user.restrictionUntil ? new Date(user.restrictionUntil).toLocaleDateString() : "-"}
+                  </td>
+                  <td className="text-muted">
+                    {user.restrictionReason || "-"}
+                  </td>
+                  <td className="text-muted">
                     {new Date(user.joinedDate).toLocaleDateString()}
                   </td>
                   <td>
-                    {/* <button className="btn btn-sm btn-outline-primary me-2">
-                      Edit
-                    </button> */}
+                    <button
+                      className="btn btn-sm btn-outline-secondary me-2"
+                      onClick={() => openStatusModal(user)}
+                    >
+                      Manage
+                    </button>
                     <button
                       className={`btn btn-sm ${user.role === "STUDENT" ? "btn-secondary disabled" : "btn-outline-danger"}`}
                       onClick={() => handleDeleteUser(user.userId, user.role)}
@@ -335,6 +397,76 @@ const UserManagementContent = () => {
                 </button>
                 <button type="submit" className="btn btn-primary">
                   Add Mentor
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {statusModal.visible && (
+        <div className="modal-overlay" onClick={closeStatusModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h5 className="modal-title">Manage User Status</h5>
+              <button
+                className="close-button"
+                onClick={closeStatusModal}
+              >
+                &times;
+              </button>
+            </div>
+            <form onSubmit={handleStatusChange}>
+              <div className="modal-body">
+                <div className="form-group">
+                  <label>Status</label>
+                  <select
+                    className="form-control"
+                    value={statusModal.status}
+                    onChange={(e) =>
+                      setStatusModal((prev) => ({ ...prev, status: e.target.value }))
+                    }
+                  >
+                    <option value="ACTIVE">Active</option>
+                    <option value="SUSPENDED">Suspended</option>
+                    <option value="BANNED">Banned</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Reason</label>
+                  <textarea
+                    className="form-control"
+                    value={statusModal.reason}
+                    onChange={(e) =>
+                      setStatusModal((prev) => ({ ...prev, reason: e.target.value }))
+                    }
+                    rows={3}
+                  />
+                </div>
+                {statusModal.status === "SUSPENDED" && (
+                  <div className="form-group">
+                    <label>Restriction Until</label>
+                    <input
+                      type="datetime-local"
+                      className="form-control"
+                      value={statusModal.until}
+                      onChange={(e) =>
+                        setStatusModal((prev) => ({ ...prev, until: e.target.value }))
+                      }
+                    />
+                  </div>
+                )}
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={closeStatusModal}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-primary">
+                  Save Status
                 </button>
               </div>
             </form>

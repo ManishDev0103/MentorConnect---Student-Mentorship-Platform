@@ -130,10 +130,105 @@
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 32px;
+  gap: 16px;
+}
+
+.dashboard-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .dashboard-header h1 {
   margin: 0;
+}
+
+.dark-mode-toggle-btn {
+  background: #0f172a;
+  color: #f8fafc;
+  border: 1px solid rgba(248, 250, 252, 0.2);
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.dark-mode-toggle-btn:hover {
+  transform: translateY(-1px);
+  background: #111827;
+}
+
+.student-dashboard.dark-mode {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.student-dashboard.dark-mode .sidebar {
+  background: rgba(15, 23, 42, 0.96);
+  color: #e2e8f0;
+  border-right: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.student-dashboard.dark-mode .sidebar-item {
+  color: #cbd5e1;
+}
+
+.student-dashboard.dark-mode .sidebar-item:hover {
+  background: rgba(59, 130, 246, 0.16);
+  color: #f8fafc;
+}
+
+.student-dashboard.dark-mode .sidebar-item.active {
+  background: linear-gradient(135deg, #2563eb, #0ea5e9);
+  color: #fff;
+}
+
+.student-dashboard.dark-mode .sidebar-logout {
+  border-top-color: rgba(148, 163, 184, 0.2);
+}
+
+.student-dashboard.dark-mode .dashboard-content {
+  background: transparent;
+}
+
+.student-dashboard.dark-mode .stat-box,
+.student-dashboard.dark-mode .mentor-section,
+.student-dashboard.dark-mode .weekly-study-section,
+.student-dashboard.dark-mode .upcoming-section,
+.student-dashboard.dark-mode .performance-section,
+.student-dashboard.dark-mode .activity-section {
+  background: rgba(15, 23, 42, 0.92);
+  border-color: rgba(148, 163, 184, 0.16);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.25);
+}
+
+.student-dashboard.dark-mode .stat-label,
+.student-dashboard.dark-mode .dashboard-header p,
+.student-dashboard.dark-mode .sidebar-subtitle,
+.student-dashboard.dark-mode .mentor-field,
+.student-dashboard.dark-mode .message-btn,
+.student-dashboard.dark-mode .view-all-btn,
+.student-dashboard.dark-mode .activity-legend li,
+.student-dashboard.dark-mode .bar-item span,
+.student-dashboard.dark-mode .alert-banner,
+.student-dashboard.dark-mode .error-message,
+.student-dashboard.dark-mode .success-message,
+.student-dashboard.dark-mode .no-sessions,
+.student-dashboard.dark-mode .no-feedback,
+.student-dashboard.dark-mode .text-muted {
+  color: #cbd5e1;
+}
+
+.student-dashboard.dark-mode .edit-profile-btn {
+  background: #2563eb;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+}
+
+.student-dashboard.dark-mode .dashboard-content a,
+.student-dashboard.dark-mode .dashboard-content button {
+  color: #e2e8f0;
 }
 
 .dashboard-header p {

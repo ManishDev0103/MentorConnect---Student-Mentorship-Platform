@@ -40,10 +40,32 @@
   margin-right: 6px;
 }
 
+.search-box-with-clear {
+  position: relative;
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0;
+}
+
 .search-input {
   border: none;
   box-shadow: none;
   border-radius: 999px;
+  padding-right: 32px;
+}
+
+.search-input:focus {
+  box-shadow: none;
 }
 
 .search-input:focus {
@@ -222,5 +244,13 @@
 
   .mentor-card {
     padding: 14px;
+  }
+
+  .search-box-with-clear {
+    max-width: 100%;
+  }
+
+  .clear-search-btn {
+    right: 10px;
   }
 }

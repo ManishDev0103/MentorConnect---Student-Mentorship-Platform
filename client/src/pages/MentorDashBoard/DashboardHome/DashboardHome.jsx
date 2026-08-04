@@ -74,15 +74,14 @@ function DashboardHome() {
       // Fallbacks if data empty or offline
       if (!statsData?.success || !statsData?.data) {
         setStats({
-          activeStudents: 18,
-          totalSessions: 42,
-          totalEarnings: 21000,
-          monthlyEarnings: 8500,
-          averageRating: 4.9,
+          activeStudents: 0,
+          totalSessions: 0,
+          totalEarnings: 0,
+          monthlyEarnings: 0,
+          averageRating: 0,
         });
       }
 
-      // If no sessions or students data, leave lists empty instead of pre-filled demo entries
       if (!todaySessionsData?.success || !todaySessionsData?.data?.length) {
         setSessions([]);
       }
@@ -91,15 +90,14 @@ function DashboardHome() {
         setStudents([]);
       }
     } catch (error) {
-      console.warn("Using mentor dashboard demo fallback state:", error);
+      console.warn("Mentor dashboard data unavailable:", error);
       setStats({
-        activeStudents: 18,
-        totalSessions: 42,
-        totalEarnings: 21000,
-        monthlyEarnings: 8500,
-        averageRating: 4.9,
+        activeStudents: 0,
+        totalSessions: 0,
+        totalEarnings: 0,
+        monthlyEarnings: 0,
+        averageRating: 0,
       });
-      // Do not pre-populate sessions or students with demo entries
       setSessions([]);
       setStudents([]);
     } finally {

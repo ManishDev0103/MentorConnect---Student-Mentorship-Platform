@@ -72,14 +72,13 @@ const StudentDashboard = () => {
       setError(null);
     } catch (err) {
       console.error("Dashboard Error:", err);
-      // Demo fallback stats for faculty presentation if backend offline/empty
       setDashboard({
-        totalSessions: 12,
-        upcomingSessions: 2,
-        completedSessions: 10,
-        totalSpent: 3500,
+        totalSessions: 0,
+        upcomingSessions: 0,
+        completedSessions: 0,
+        totalSpent: 0,
       });
-      setError(null); // Clear error to allow rendering demo state cleanly
+      setError(null);
     } finally {
       setLoading(false);
     }
@@ -156,12 +155,22 @@ const StudentDashboard = () => {
                 <h1>Student Dashboard</h1>
                 <p>Your session analytics</p>
               </div>
-              <button
-                className="edit-profile-btn"
-                onClick={() => setIsEditModalOpen(true)}
-              >
-                ✏️ Edit Profile
-              </button>
+              <div className="dashboard-actions">
+                <button
+                  type="button"
+                  className="dark-mode-toggle-btn"
+                  onClick={toggleDarkMode}
+                >
+                  {isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+                </button>
+                <button
+                  type="button"
+                  className="edit-profile-btn"
+                  onClick={() => setIsEditModalOpen(true)}
+                >
+                  ✏️ Edit Profile
+                </button>
+              </div>
             </div>
 
             {dashboard ? (

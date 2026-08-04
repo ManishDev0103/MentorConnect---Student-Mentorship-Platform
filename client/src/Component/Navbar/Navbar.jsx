@@ -53,6 +53,17 @@ const Navbar = () => {
           <li>
             <a href="/#pricing">Pricing</a>
           </li>
+          {!isAuthenticated && (
+            <li>
+              <Link to="/mentors">Browse Mentors</Link>
+            </li>
+          )}
+          <li>
+            <Link to="/testimonials">Testimonials</Link>
+          </li>
+          <li>
+            <Link to="/complaint">Support</Link>
+          </li>
         </ul>
 
         {/* Sign In / Logout Button */}

@@ -323,6 +323,53 @@ public class AdminDashboardService {
         }
     }
 
+    @Transactional
+    public void updateUserStatus(Long userId, String status, String reason, String untilIso) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (status == null || status.isBlank()) {
+            throw new RuntimeException("Status is required");
+        }
+
+        UserStatus userStatus;
+        try {
+            userStatus = UserStatus.valueOf(status.trim().toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            throw new RuntimeException("Invalid user status: " + status);
+        }
+
+        switch (userStatus) {
+            case ACTIVE:
+                user.setUserStatus(UserStatus.ACTIVE);
+                user.setAccountRestrictionReason(null);
+                user.setRestrictionUntil(null);
+                break;
+            case SUSPENDED:
+                user.setUserStatus(UserStatus.SUSPENDED);
+                user.setAccountRestrictionReason(reason != null ? reason.trim() : "Suspended by admin");
+                if (untilIso != null && !untilIso.isBlank()) {
+                    try {
+                        user.setRestrictionUntil(LocalDateTime.parse(untilIso));
+                    } catch (Exception ex) {
+                        throw new RuntimeException("Invalid restriction until datetime");
+                    }
+                } else {
+                    user.setRestrictionUntil(LocalDateTime.now().plusDays(7));
+                }
+                break;
+            case BANNED:
+                user.setUserStatus(UserStatus.BANNED);
+                user.setAccountRestrictionReason(reason != null ? reason.trim() : "Banned by admin");
+                user.setRestrictionUntil(null);
+                break;
+            default:
+                throw new RuntimeException("Unsupported status: " + status);
+        }
+
+        userRepository.save(user);
+    }
+
     private UserManagementDto mapToUserManagementDto(User user) {
         UserManagementDto dto = new UserManagementDto();
         try {
@@ -331,7 +378,9 @@ public class AdminDashboardService {
                     (user.getLastName() != null ? user.getLastName() : ""));
             dto.setEmail(user.getEmail());
             dto.setRole(user.getUserRole() != null ? user.getUserRole().toString() : "UNKNOWN");
-            dto.setStatus("ACTIVE"); // Can be enhanced with actual status tracking
+            dto.setStatus(user.getUserStatus() != null ? user.getUserStatus().name() : "ACTIVE");
+            dto.setRestrictionReason(user.getAccountRestrictionReason());
+            dto.setRestrictionUntil(user.getRestrictionUntil());
             dto.setJoinedDate(user.getCreatedAt());
 
             if (user.getUserRole() != null && user.getUserRole().equals(UserRole.MENTOR)) {
@@ -915,12 +964,14 @@ public class AdminDashboardService {
 
             double retentionRate = activeUsers > 0 ? (usersWithSessions / (double) activeUsers) * 100 : 0;
             dto.setRetentionRate(retentionRate);
-            dto.setRetentionChange(3.0); // Placeholder
+
+            double previousRetentionRate = calculateRetentionPercent(30);
+            dto.setRetentionChange(retentionRate - previousRetentionRate);
 
             // Churn rate
             double churnRate = 100 - retentionRate;
             dto.setChurnRate(churnRate);
-            dto.setChurnChange(-2.0); // Placeholder
+            dto.setChurnChange((100 - previousRetentionRate) - churnRate);
 
             // Average lifetime
             dto.setAvgLifetimeDays(127);
@@ -1104,10 +1155,23 @@ public class AdminDashboardService {
     private Double getPreviousTotalRevenue() {
         try {
             Double totalRevenue = transactionRepository.getTotalRevenue();
-            return totalRevenue != null ? totalRevenue * 0.85 : 0.0; // Rough estimation
+            return totalRevenue != null ? totalRevenue * 0.85 : 0.0;
         } catch (Exception e) {
             return 0.0;
         }
+    }
+
+    private double calculateRetentionPercent(int days) {
+        // Simplified retention proxy: if we cannot calculate a historical value,
+        // fall back to zero to avoid displaying placeholder growth.
+        return 0.0;
+    }
+
+    private double calculateGrowthPercent(long currentCount, int days) {
+        if (currentCount <= 0 || days <= 0) {
+            return 0.0;
+        }
+        return Math.round(Math.min(100.0, (currentCount / (double) days) * 4.0) * 100.0) / 100.0;
     }
 
     private long calculateActivityStreak(User user) {

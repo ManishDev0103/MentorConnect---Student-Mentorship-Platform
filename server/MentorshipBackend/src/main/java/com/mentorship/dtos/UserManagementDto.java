@@ -16,7 +16,9 @@ public class UserManagementDto {
     private String name;
     private String email;
     private String role; // STUDENT, MENTOR, ADMIN
-    private String status; // ACTIVE, INACTIVE
+    private String status; // ACTIVE, SUSPENDED, BANNED
     private LocalDateTime joinedDate;
+    private String restrictionReason;
+    private LocalDateTime restrictionUntil;
     private boolean verified;
 }

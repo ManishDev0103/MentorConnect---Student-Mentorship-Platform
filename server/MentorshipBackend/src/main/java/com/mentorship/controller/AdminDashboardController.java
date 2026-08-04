@@ -28,8 +28,11 @@ import com.mentorship.dtos.RecentActivityDto;
 import com.mentorship.dtos.RetentionChurnDto;
 import com.mentorship.dtos.RevenueStatsDto;
 import com.mentorship.dtos.StudentLeaderboardDto;
+import com.mentorship.dtos.ComplaintDto;
+import com.mentorship.dtos.UpdateComplaintStatusRequest;
 import com.mentorship.dtos.UserManagementDto;
 import com.mentorship.service.AdminDashboardService;
+import com.mentorship.service.ComplaintService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -40,6 +43,7 @@ import lombok.RequiredArgsConstructor;
 public class AdminDashboardController {
     
     private final AdminDashboardService adminDashboardService;
+    private final ComplaintService complaintService;
     
     // ==================== OVERVIEW ====================
     
@@ -91,10 +95,27 @@ public class AdminDashboardController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, String>> updateUserStatus(
             @PathVariable Long userId,
-            @RequestParam String status) {
+            @RequestParam String status,
+            @RequestParam(required = false) String reason,
+            @RequestParam(required = false) String until) {
+        adminDashboardService.updateUserStatus(userId, status, reason, until);
         Map<String, String> response = new HashMap<>();
         response.put("message", "User status updated successfully");
         return ResponseEntity.ok(response);
+    }
+    
+    @GetMapping("/complaints")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<ComplaintDto>> getAllComplaints() {
+        return ResponseEntity.ok(complaintService.getAllComplaints());
+    }
+
+    @PutMapping("/complaints/{complaintId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ComplaintDto> updateComplaintStatus(
+            @PathVariable Long complaintId,
+            @RequestBody UpdateComplaintStatusRequest request) {
+        return ResponseEntity.ok(complaintService.updateComplaintStatus(complaintId, request));
     }
     
     @DeleteMapping("/users/{userId}")

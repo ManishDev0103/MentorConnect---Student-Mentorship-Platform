@@ -16,10 +16,8 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
-		// TODO Auto-generated method stub
-		
-		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, 
-				"You are unauthorized to access this endpoint!!!!!!!!!");
+		response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+				"Unauthorized access. Please sign in and try again.");
 
 	}
 

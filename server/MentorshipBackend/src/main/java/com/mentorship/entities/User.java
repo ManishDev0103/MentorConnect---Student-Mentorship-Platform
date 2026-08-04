@@ -1,6 +1,7 @@
 package com.mentorship.entities;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 
@@ -17,6 +18,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import com.mentorship.entities.UserStatus;
 
 @Entity
 @Table(name = "users")
@@ -57,6 +60,16 @@ public class User extends BaseEntity{
 	@Enumerated(EnumType.STRING)
 	@Column(name="user_role")
 	private UserRole userRole;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "user_status", length = 20, nullable = false)
+	private UserStatus userStatus = UserStatus.ACTIVE;
+
+	@Column(name = "account_restriction_reason", length = 255)
+	private String accountRestrictionReason;
+
+	@Column(name = "restriction_until")
+	private LocalDateTime restrictionUntil;
 
 	@Column(name="is_deleted", nullable = false)
 	private boolean deleted = false;

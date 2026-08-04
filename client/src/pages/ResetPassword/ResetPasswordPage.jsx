@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { resetPassword, validateResetToken } from "../../service/authApiService";
 import {
@@ -112,7 +112,12 @@ const ResetPasswordPage = () => {
     return (
       <div className="reset-password-page d-flex align-items-center justify-content-center">
         <div className="reset-password-card success-card shadow-lg">
-          <div className="success-icon-large">✓</div>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <div className="success-icon-large">✓</div>
+            <Link to="/" className="btn btn-outline-secondary btn-sm">
+              Home
+            </Link>
+          </div>
           <h3>Password Reset Successful</h3>
           <p>Your password has been updated successfully.</p>
           <p className="redirect-text">Redirecting to login...</p>
@@ -130,9 +135,14 @@ const ResetPasswordPage = () => {
   return (
     <div className="reset-password-page d-flex align-items-center justify-content-center">
       <div className="reset-password-card shadow-lg">
-        <div className="reset-password-header">
-          <h2>Reset Your Password</h2>
-          <p className="text-muted">Enter your new password below</p>
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h2>Reset Your Password</h2>
+            <p className="text-muted">Enter your new password below</p>
+          </div>
+          <Link to="/" className="btn btn-outline-secondary btn-sm">
+            Home
+          </Link>
         </div>
 
         {error && (

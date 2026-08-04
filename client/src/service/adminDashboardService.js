@@ -65,12 +65,12 @@ export const adminDashboardService = {
     }
   },
 
-  updateUserStatus: async (userId, status) => {
+  updateUserStatus: async (userId, status, reason = null, until = null) => {
     try {
       const response = await api.put(
         `${ADMIN_DASHBOARD_API}/users/${userId}/status`,
         null,
-        { params: { status } },
+        { params: { status, reason, until } },
       );
       return response.data;
     } catch (error) {
@@ -85,6 +85,29 @@ export const adminDashboardService = {
       return response.data;
     } catch (error) {
       console.error("Error deleting user:", error);
+      throw error;
+    }
+  },
+
+  getAllComplaints: async () => {
+    try {
+      const response = await api.get(`${ADMIN_DASHBOARD_API}/complaints`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching complaints:", error);
+      throw error;
+    }
+  },
+
+  updateComplaintStatus: async (complaintId, payload) => {
+    try {
+      const response = await api.put(
+        `${ADMIN_DASHBOARD_API}/complaints/${complaintId}`,
+        payload,
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error updating complaint status:", error);
       throw error;
     }
   },

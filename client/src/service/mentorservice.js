@@ -259,7 +259,7 @@ export const uploadResume = async (file) => {
   return response.data;
 };
 
-// Demo video upload (mentor authenticated)
+// Mentor demo/video upload endpoint
 export const uploadDemo = async (file, description = '', onUploadProgress = null) => {
   const formData = new FormData();
   formData.append('demo', file);
