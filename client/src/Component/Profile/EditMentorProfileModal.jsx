@@ -9,6 +9,7 @@ const EditMentorProfileModal = ({ isOpen, onClose, onProfileUpdated }) => {
     highestEducation: "",
     currentPosition: "",
     organization: "",
+    collegeUniversity: "",
     professionalBio: "",
     linkedinUrl: "",
     githubUrl: "",
@@ -35,6 +36,7 @@ const EditMentorProfileModal = ({ isOpen, onClose, onProfileUpdated }) => {
         highestEducation: mentor.highestEducation || "",
         currentPosition: mentor.currentPosition || "",
         organization: mentor.organization || "",
+        collegeUniversity: mentor.collegeUniversity || "",
         professionalBio: mentor.professionalBio || mentor.about || "",
         linkedinUrl: mentor.linkedinUrl || "",
         githubUrl: mentor.githubUrl || "",
@@ -189,6 +191,17 @@ const EditMentorProfileModal = ({ isOpen, onClose, onProfileUpdated }) => {
                 value={formData.organization}
                 onChange={handleInputChange}
                 placeholder="e.g., Google, Microsoft"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>College / University</label>
+              <input
+                type="text"
+                name="collegeUniversity"
+                value={formData.collegeUniversity}
+                onChange={handleInputChange}
+                placeholder="e.g., Stanford University"
               />
             </div>
 

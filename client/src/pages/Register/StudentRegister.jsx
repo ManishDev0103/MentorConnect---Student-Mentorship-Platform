@@ -22,6 +22,7 @@ const StudentRegister = () => {
     phoneNo: "",
     targetDomain: "",
     qualification: "",
+    collegeUniversity: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -84,6 +85,7 @@ const StudentRegister = () => {
         phoneNo: form.phoneNo || "",
         targetDomain: form.targetDomain || "",
         qualification: form.qualification || "",
+        collegeUniversity: form.collegeUniversity || "",
       };
 
       await registerStudent(signupData);
@@ -316,6 +318,17 @@ const StudentRegister = () => {
                 className="form-control register-input"
                 placeholder="e.g., B.Tech, BCA, MBA"
                 value={form.qualification}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-md-6">
+              <label className="form-label">College / University</label>
+              <input
+                name="collegeUniversity"
+                type="text"
+                className="form-control register-input"
+                placeholder="e.g., IIT Bombay"
+                value={form.collegeUniversity}
                 onChange={handleChange}
               />
             </div>

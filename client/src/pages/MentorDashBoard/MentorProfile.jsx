@@ -34,7 +34,7 @@ const MentorProfile = () => {
         avatar: authUser?.avatar || "https://randomuser.me/api/portraits/women/44.jpg",
         phone: authUser?.phone || authUser?.phoneNo || "",
         location: dto.location || "",
-        education: dto.highestEducation || "",
+        education: dto.collegeUniversity || dto.highestEducation || "",
         specialization: dto.specialization || "",
         experience: dto.experience || "",
         bio: dto.professionalBio || dto.about || "",

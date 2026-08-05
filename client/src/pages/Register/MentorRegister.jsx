@@ -28,6 +28,7 @@ const MentorRegister = () => {
     highestEducation: "",
     currentPosition: "",
     organization: "",
+    collegeUniversity: "",
     professionalBio: "",
     linkedinUrl: "",
     githubUrl: "",
@@ -156,6 +157,7 @@ const MentorRegister = () => {
         highestEducation: form.highestEducation,
         currentPosition: form.currentPosition,
         organization: form.organization,
+        collegeUniversity: form.collegeUniversity || "",
         professionalBio: form.professionalBio,
         linkedinUrl: form.linkedinUrl || "",
         githubUrl: form.githubUrl || "",
@@ -502,6 +504,17 @@ const MentorRegister = () => {
                 value={form.organization}
                 onChange={handleChange}
                 required
+              />
+            </div>
+            <div className="col-md-6">
+              <label className="form-label">College / University</label>
+              <input
+                name="collegeUniversity"
+                type="text"
+                className="form-control register-input"
+                placeholder="e.g., Stanford University"
+                value={form.collegeUniversity}
+                onChange={handleChange}
               />
             </div>
             <div className="col-md-6">
