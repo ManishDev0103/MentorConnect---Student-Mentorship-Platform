@@ -346,6 +346,54 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
                 </p>
               </div>
 
+              {(selectedMentor.linkedinUrl || selectedMentor.githubUrl || selectedMentor.twitterUrl || selectedMentor.portfolioUrl) && (
+                <div className="modal-section">
+                  <h4>🔗 Social Links</h4>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+                    {selectedMentor.linkedinUrl && (
+                      <a
+                        href={selectedMentor.linkedinUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mentor-social-link"
+                      >
+                        LinkedIn
+                      </a>
+                    )}
+                    {selectedMentor.githubUrl && (
+                      <a
+                        href={selectedMentor.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mentor-social-link"
+                      >
+                        GitHub
+                      </a>
+                    )}
+                    {selectedMentor.twitterUrl && (
+                      <a
+                        href={selectedMentor.twitterUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mentor-social-link"
+                      >
+                        Twitter/X
+                      </a>
+                    )}
+                    {selectedMentor.portfolioUrl && (
+                      <a
+                        href={selectedMentor.portfolioUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mentor-social-link"
+                      >
+                        Portfolio
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
+
               <button
                 className="book-session-cta"
                 onClick={() => handleBookSession(selectedMentor.mentorId)}

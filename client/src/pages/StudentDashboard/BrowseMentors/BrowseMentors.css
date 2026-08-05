@@ -206,6 +206,25 @@
     text-align: center;
 }
 
+.mentor-social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border-radius: 999px;
+    color: #1f2937;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.mentor-social-link:hover {
+    background: #eff6ff;
+    border-color: #c7d2fe;
+}
+
 .mentor-card-footer {
     padding: 20px 24px;
     background: #fbfbfc;

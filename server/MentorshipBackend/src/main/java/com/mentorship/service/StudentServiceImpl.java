@@ -355,6 +355,10 @@ public class StudentServiceImpl implements StudentService {
                 dto.setExpertise(m.getCustomSpecialization() != null && !m.getCustomSpecialization().isEmpty()
                         ? m.getCustomSpecialization()
                         : m.getSpecialization());
+                dto.setLinkedinUrl(m.getLinkedinUrl());
+                dto.setGithubUrl(m.getGithubUrl());
+                dto.setTwitterUrl(m.getTwitterUrl());
+                dto.setPortfolioUrl(m.getPortfolioUrl());
                 if (m.getVerificationStatus() != null) {
                     dto.setVerificationStatus(m.getVerificationStatus().name());
                 } else {
@@ -399,6 +403,10 @@ public class StudentServiceImpl implements StudentService {
         dto.setExperience(mentor.getExperience());
         dto.setAbout(mentor.getSpecialization());
         dto.setExpertise(mentor.getSpecialization());
+        dto.setLinkedinUrl(mentor.getLinkedinUrl());
+        dto.setGithubUrl(mentor.getGithubUrl());
+        dto.setTwitterUrl(mentor.getTwitterUrl());
+        dto.setPortfolioUrl(mentor.getPortfolioUrl());
 
         return dto;
     }

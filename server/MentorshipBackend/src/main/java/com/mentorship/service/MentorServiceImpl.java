@@ -112,11 +112,33 @@ String contentType = resume.getContentType();
 		if (dto.getProfessionalBio() != null)
 			mentor.setProfessionalBio(dto.getProfessionalBio());
 
-		if (dto.getLinkedinUrl() != null)
-			mentor.setLinkedinUrl(dto.getLinkedinUrl());
+if (dto.getLinkedinUrl() != null) {
+            if (!isValidUrl(dto.getLinkedinUrl())) {
+                throw new ApiException("Invalid LinkedIn URL");
+            }
+            mentor.setLinkedinUrl(dto.getLinkedinUrl());
+    }
 
-		if (dto.getPortfolioUrl() != null)
-			mentor.setPortfolioUrl(dto.getPortfolioUrl());
+    if (dto.getGithubUrl() != null) {
+            if (!isValidUrl(dto.getGithubUrl())) {
+                throw new ApiException("Invalid GitHub URL");
+            }
+            mentor.setGithubUrl(dto.getGithubUrl());
+    }
+
+    if (dto.getTwitterUrl() != null) {
+            if (!isValidUrl(dto.getTwitterUrl())) {
+                throw new ApiException("Invalid Twitter/X URL");
+            }
+            mentor.setTwitterUrl(dto.getTwitterUrl());
+    }
+
+    if (dto.getPortfolioUrl() != null) {
+            if (!isValidUrl(dto.getPortfolioUrl())) {
+                throw new ApiException("Invalid Portfolio URL");
+            }
+            mentor.setPortfolioUrl(dto.getPortfolioUrl());
+    }
 
 		if (dto.getRatePerSession() != null) {
 			double rate = dto.getRatePerSession();
@@ -176,6 +198,8 @@ String contentType = resume.getContentType();
 		dto.setOrganization(mentor.getOrganization());
 		dto.setProfessionalBio(mentor.getProfessionalBio());
 		dto.setLinkedinUrl(mentor.getLinkedinUrl());
+		dto.setGithubUrl(mentor.getGithubUrl());
+		dto.setTwitterUrl(mentor.getTwitterUrl());
 		dto.setPortfolioUrl(mentor.getPortfolioUrl());
 		dto.setHasDemo(mentor.getDemoVideo() != null && mentor.getDemoVideo().length > 0);
 		dto.setDiscountPercent(mentor.getDiscountPercent());
@@ -194,15 +218,27 @@ String contentType = resume.getContentType();
 		return dto;
 	}
 
-	private Double getAverageRating(Long mentorId) {
-		Double rating = feedbackRepository.calculateAverageRating(mentorId);
-		return rating != null ? Math.round(rating * 10.0) / 10.0 : 0.0;
-	}
+    private boolean isValidUrl(String url) {
+        if (url == null || url.isBlank()) {
+            return true;
+        }
+        try {
+            new java.net.URL(url);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
-	private Integer getFeedbackCount(Long mentorId) {
-		Integer count = feedbackRepository.countFeedbackByMentor(mentorId);
-		return count != null ? count : 0;
-	}
+    private Double getAverageRating(Long mentorId) {
+        Double rating = feedbackRepository.calculateAverageRating(mentorId);
+        return rating != null ? Math.round(rating * 10.0) / 10.0 : 0.0;
+    }
+
+    private Integer getFeedbackCount(Long mentorId) {
+        Integer count = feedbackRepository.countFeedbackByMentor(mentorId);
+        return count != null ? count : 0;
+    }
 
 	private Integer getSessionCount(Long mentorId) {
 		return sessionRepository.findByMentor_MentorId(mentorId).size();

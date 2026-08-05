@@ -20,6 +20,8 @@ public class UpdateMentorProfileRequest {
     private String professionalBio;
 
     private String linkedinUrl;
+    private String githubUrl;
+    private String twitterUrl;
     private String portfolioUrl;
 
     @DecimalMin(value = "0.01", inclusive = true, message = "Rate per session must be greater than 0")

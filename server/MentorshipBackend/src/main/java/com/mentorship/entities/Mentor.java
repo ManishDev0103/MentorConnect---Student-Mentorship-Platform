@@ -92,8 +92,14 @@ public class Mentor extends BaseEntity {
 	@Column(name = "linkedin_url")
 	private String linkedinUrl;
 
-	@Column(name = "portfolio_url")
-	private String portfolioUrl;
+    @Column(name = "github_url")
+    private String githubUrl;
+
+    @Column(name = "twitter_url")
+    private String twitterUrl;
+
+    @Column(name = "portfolio_url")
+    private String portfolioUrl;
 
 	// for resume handling
 	@Lob

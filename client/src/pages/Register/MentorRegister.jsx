@@ -29,6 +29,10 @@ const MentorRegister = () => {
     currentPosition: "",
     organization: "",
     professionalBio: "",
+    linkedinUrl: "",
+    githubUrl: "",
+    twitterUrl: "",
+    portfolioUrl: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -43,6 +47,16 @@ const MentorRegister = () => {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const isValidUrl = (url) => {
+    if (!url) return true;
+    try {
+      new URL(url);
+      return true;
+    } catch (error) {
+      return false;
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -60,6 +74,26 @@ const MentorRegister = () => {
       // Validate required fields
       if (!form.firstName || !form.email || !form.password || !form.confirmPassword || !form.specialization || !form.experience || !form.ratePerSession || !form.highestEducation || !form.currentPosition || !form.organization || !form.professionalBio) {
         setError("Please fill in all required fields");
+        setLoading(false);
+        return;
+      }
+      if (form.linkedinUrl && !isValidUrl(form.linkedinUrl)) {
+        setError("Please enter a valid LinkedIn URL");
+        setLoading(false);
+        return;
+      }
+      if (form.githubUrl && !isValidUrl(form.githubUrl)) {
+        setError("Please enter a valid GitHub URL");
+        setLoading(false);
+        return;
+      }
+      if (form.twitterUrl && !isValidUrl(form.twitterUrl)) {
+        setError("Please enter a valid Twitter/X URL");
+        setLoading(false);
+        return;
+      }
+      if (form.portfolioUrl && !isValidUrl(form.portfolioUrl)) {
+        setError("Please enter a valid Portfolio or Website URL");
         setLoading(false);
         return;
       }
@@ -123,6 +157,10 @@ const MentorRegister = () => {
         currentPosition: form.currentPosition,
         organization: form.organization,
         professionalBio: form.professionalBio,
+        linkedinUrl: form.linkedinUrl || "",
+        githubUrl: form.githubUrl || "",
+        twitterUrl: form.twitterUrl || "",
+        portfolioUrl: form.portfolioUrl || "",
       };
 
       await registerMentor(signupData);
@@ -464,6 +502,50 @@ const MentorRegister = () => {
                 value={form.organization}
                 onChange={handleChange}
                 required
+              />
+            </div>
+            <div className="col-md-6">
+              <label className="form-label">LinkedIn URL</label>
+              <input
+                name="linkedinUrl"
+                type="url"
+                className="form-control register-input"
+                placeholder="https://linkedin.com/in/yourprofile"
+                value={form.linkedinUrl}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-md-6">
+              <label className="form-label">GitHub URL</label>
+              <input
+                name="githubUrl"
+                type="url"
+                className="form-control register-input"
+                placeholder="https://github.com/yourusername"
+                value={form.githubUrl}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-md-6">
+              <label className="form-label">Twitter/X URL</label>
+              <input
+                name="twitterUrl"
+                type="url"
+                className="form-control register-input"
+                placeholder="https://twitter.com/yourhandle"
+                value={form.twitterUrl}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-md-6">
+              <label className="form-label">Portfolio / Website URL</label>
+              <input
+                name="portfolioUrl"
+                type="url"
+                className="form-control register-input"
+                placeholder="https://yourportfolio.com"
+                value={form.portfolioUrl}
+                onChange={handleChange}
               />
             </div>
             <div className="col-md-12">

@@ -112,6 +112,8 @@ public class AuthServiceImpl implements AuthService{
         mentor.setOrganization(dto.getOrganization());
         mentor.setProfessionalBio(dto.getProfessionalBio());
         mentor.setLinkedinUrl(dto.getLinkedinUrl());
+        mentor.setGithubUrl(dto.getGithubUrl());
+        mentor.setTwitterUrl(dto.getTwitterUrl());
         mentor.setPortfolioUrl(dto.getPortfolioUrl());
         mentor.setVerificationStatus(VerificationStatus.PENDING);
         mentor.setVerifiedBy(null);

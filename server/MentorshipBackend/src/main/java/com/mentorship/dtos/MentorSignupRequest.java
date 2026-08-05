@@ -59,7 +59,8 @@ public class MentorSignupRequest {
     private String professionalBio;
 
     private String linkedinUrl;
-
+    private String githubUrl;
+    private String twitterUrl;
     private String portfolioUrl;
     private Double ratePerSession;
     private Double discountPercent;

@@ -25,6 +25,8 @@ public class MentorDTO {
     private String organization;
     private String professionalBio;
     private String linkedinUrl;
+    private String githubUrl;
+    private String twitterUrl;
     private String portfolioUrl;
     private boolean hasDemo;
     private Integer sessions;
