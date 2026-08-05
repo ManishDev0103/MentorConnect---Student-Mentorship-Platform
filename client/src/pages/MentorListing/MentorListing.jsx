@@ -78,6 +78,10 @@ const MentorListing = () => {
     setIsModalOpen(true);
   };
 
+  const handleNavigateToMentor = (mentorId, mentorData) => {
+    navigate(`/mentor-profile/${mentorId}`, { state: { mentor: mentorData } });
+  };
+
   const visibleMentors = useMemo(() => {
     const verifiedMentors = mentors.filter(
       (m) => (m.verificationStatus || "PENDING").toUpperCase() === "VERIFIED"
@@ -153,7 +157,7 @@ const MentorListing = () => {
           <div className="row g-4">
             {visibleMentors.map((m) => (
               <div className="col-md-6 col-lg-4" key={m.id}>
-                <div className="mentor-card">
+                <div className="mentor-card" onClick={() => handleNavigateToMentor(m.id, m)}>
                   <div className="mentor-card-header">
                     <span className={`badge-verified ${m.verificationStatus !== "VERIFIED" ? "badge-pending" : ""}`}>
                       {m.verificationStatus === "VERIFIED" ? "Verified" : "Pending"}
@@ -207,17 +211,21 @@ const MentorListing = () => {
                     <div className="d-flex gap-2">
                       <button
                         className="btn btn-sm mentor-book-btn"
-                        onClick={() => handleBookSession(m.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleBookSession(m.id);
+                        }}
                       >
                         Book Session
                       </button>
                       <button
                         className="btn btn-sm btn-outline-primary"
-                        onClick={() =>
+                        onClick={(e) => {
+                          e.stopPropagation();
                           setOpenDemoUserId((current) =>
                             current === m.userId ? null : m.userId,
-                          )
-                        }
+                          );
+                        }}
                       >
                         {openDemoUserId === m.userId ? 'Close Demo' : 'View Demo'}
                       </button>

@@ -5,8 +5,12 @@ import "./Navbar.css";
 import { useAuth } from "../../API/AuthContext";
 
 const Navbar = () => {
-  const { isAuthenticated, logout, hasRole } = useAuth();
+  const { isAuthenticated, logout, hasRole, user } = useAuth();
   const navigate = useNavigate();
+
+  const displayName = user?.name || user?.email || "User";
+  const defaultAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=0f172a&color=ffffff&size=128`;
+  const avatarUrl = user?.avatar || user?.picture || user?.photoUrl || defaultAvatar;
 
   const handleLogout = () => {
     logout();
@@ -59,6 +63,14 @@ const Navbar = () => {
         <div>
           {isAuthenticated ? (
             <div className="d-flex gap-2 align-items-center">
+              <button
+                type="button"
+                onClick={handleDashboardClick}
+                className="navbar-user-info d-flex align-items-center gap-2"
+              >
+                <img src={avatarUrl} alt="User avatar" className="navbar-user-avatar" />
+                <span className="navbar-user-name">{displayName}</span>
+              </button>
               <button
                 onClick={handleDashboardClick}
                 className="btn mp-signin-btn"

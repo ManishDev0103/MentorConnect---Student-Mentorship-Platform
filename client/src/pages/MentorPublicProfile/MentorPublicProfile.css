@@ -1,0 +1,156 @@
+.mentor-profile-page {
+  min-height: 100vh;
+  background: #f4f7fb;
+}
+
+.mentor-profile-loading,
+.mentor-profile-error,
+.mentor-profile-empty {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.mentor-profile-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.mentor-profile-card {
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(17, 24, 39, 0.08);
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.mentor-profile-hero {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  padding: 36px;
+  background: linear-gradient(90deg, #3b82f6 0%, #6366f1 100%);
+  color: white;
+}
+
+.mentor-profile-avatar {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 24px;
+  border: 4px solid rgba(255, 255, 255, 0.25);
+  background: #fff;
+}
+
+.mentor-profile-info h1 {
+  margin: 0 0 8px;
+  font-size: 2.3rem;
+}
+
+.mentor-profile-subject {
+  margin: 0 0 16px;
+  font-size: 1.05rem;
+  opacity: 0.9;
+}
+
+.mentor-profile-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 600;
+}
+
+.mentor-profile-details {
+  padding: 36px;
+}
+
+.mentor-profile-section {
+  margin-bottom: 28px;
+}
+
+.mentor-profile-section h2 {
+  margin-bottom: 12px;
+  font-size: 1.15rem;
+  color: #111827;
+}
+
+.mentor-profile-section p {
+  margin: 0;
+  line-height: 1.7;
+  color: #475569;
+}
+
+.mentor-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mentor-tag {
+  display: inline-flex;
+  padding: 8px 12px;
+  border-radius: 9999px;
+  background: rgba(59, 130, 246, 0.12);
+  color: #1d4ed8;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.mentor-contact-section p {
+  color: #334155;
+}
+
+.mentor-pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.pricing-label {
+  display: block;
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.pricing-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  padding: 10px 16px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.back-button:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+
+.spinner {
+  width: 56px;
+  height: 56px;
+  border: 6px solid rgba(148, 163, 184, 0.25);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  margin: 0 auto 24px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -9,7 +9,7 @@ import {
 import ScheduleSessionModal from "../../../Component/ScheduleSessionModal/ScheduleSessionModal";
 import { getStudentId } from "../../../service/authService";
 
-const MyMentor = ({ onNavigateToDashboard }) => {
+const MyMentor = ({ onNavigateToDashboard, initialMentorId = null }) => {
   const [mentors, setMentors] = useState([]); // Assigned mentors
   const [selectedMentorId, setSelectedMentorId] = useState(null); // Track selected mentor for display
   const [sessionStats, setSessionStats] = useState({
@@ -137,7 +137,11 @@ const MyMentor = ({ onNavigateToDashboard }) => {
       const finalMentorsList = mentorsList;
       setMentors(finalMentorsList);
       if (finalMentorsList.length > 0) {
-        setSelectedMentorId(finalMentorsList[0].mentorId);
+        const defaultMentorId =
+          initialMentorId && finalMentorsList.some((m) => m.mentorId === initialMentorId)
+            ? initialMentorId
+            : finalMentorsList[0].mentorId;
+        setSelectedMentorId(defaultMentorId);
       } else {
         setSelectedMentorId(null);
         setError("No mentors assigned yet. Book a session to get started.");
@@ -175,6 +179,15 @@ const MyMentor = ({ onNavigateToDashboard }) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (initialMentorId && mentors.length > 0) {
+      const exists = mentors.some((m) => m.mentorId === initialMentorId);
+      if (exists) {
+        setSelectedMentorId(initialMentorId);
+      }
+    }
+  }, [initialMentorId, mentors]);
 
   if (loading) {
     return (

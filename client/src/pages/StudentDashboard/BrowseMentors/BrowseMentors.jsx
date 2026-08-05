@@ -145,6 +145,10 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
     setShowProfileModal(false); // Close profile if open
   };
 
+  const handleNavigateToMentor = (mentorId, mentorData) => {
+    navigate(`/mentor-profile/${mentorId}`, { state: { mentor: mentorData } });
+  };
+
   return (
     <div className="browse-mentors-container">
       <h2>Browse Mentors</h2>
@@ -208,7 +212,12 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
             const avatarUrl = buildMentorAvatarUrl(mentor.userId, mentor.name);
 
             return (
-            <div key={mentor.mentorId} className="mentor-card">
+            <div
+              key={mentor.mentorId}
+              className="mentor-card"
+              onClick={() => handleNavigateToMentor(mentor.mentorId, mentor)}
+              style={{ cursor: "pointer" }}
+            >
               <div className="mentor-card-header">
                 <img
                   src={avatarUrl}
@@ -264,7 +273,10 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
                 </div>
                 <button
                   className="view-profile-btn"
-                  onClick={() => handleOpenProfile(mentor)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleOpenProfile(mentor);
+                  }}
                 >
                   View Profile
                 </button>

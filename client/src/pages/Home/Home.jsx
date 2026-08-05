@@ -47,9 +47,15 @@ const Home = () => {
               </p>
 
               <div className="hero-badges">
-                <span>Live mentorship</span>
-                <span>Session-based notes</span>
-                <span>Progress analytics</span>
+                <Link to="/mentors" className="hero-badge" title="Explore live mentorship">
+                  Live mentorship
+                </Link>
+                <Link to="/mentors" className="hero-badge" title="View session-based notes support">
+                  Session-based notes
+                </Link>
+                <Link to="/mentors" className="hero-badge" title="See progress analytics features">
+                  Progress analytics
+                </Link>
               </div>
 
               <div className="d-flex flex-wrap gap-3">

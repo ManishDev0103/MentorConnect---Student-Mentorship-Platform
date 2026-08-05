@@ -1,9 +1,9 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Hp\\Downloads\\MentorConnectV629726\\MentorConnect\\",
+  "WorkspaceRootPath": "C:\\Users\\Hp\\Downloads\\MentorConnectProject\\MentorConnect---Student-Mentorship-Platform\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7DDA886F-7022-E231-A5D2-8BDF0FBB44D6}|PaymentService\\PaymentService.csproj|c:\\users\\hp\\downloads\\mentorconnectv629726\\mentorconnect\\paymentservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7DDA886F-7022-E231-A5D2-8BDF0FBB44D6}|PaymentService\\PaymentService.csproj|c:\\users\\hp\\downloads\\mentorconnectproject\\mentorconnect---student-mentorship-platform\\paymentservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7DDA886F-7022-E231-A5D2-8BDF0FBB44D6}|PaymentService\\PaymentService.csproj|solutionrelative:paymentservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -20,11 +20,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\MentorConnectV629726\\MentorConnect\\PaymentService\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\MentorConnectProject\\MentorConnect---Student-Mentorship-Platform\\PaymentService\\Program.cs",
               "RelativeDocumentMoniker": "PaymentService\\Program.cs",
-              "ToolTip": "C:\\Users\\Hp\\Downloads\\MentorConnectV629726\\MentorConnect\\PaymentService\\Program.cs",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\MentorConnectProject\\MentorConnect---Student-Mentorship-Platform\\PaymentService\\Program.cs",
               "RelativeToolTip": "PaymentService\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAoAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-07-29T06:51:42.204Z",
               "EditorCaption": ""
