@@ -76,11 +76,107 @@
   border-top: 1px solid #e5e7eb;
 }
 
+.settings-item .form-check-input {
+  accent-color: #2563eb;
+  cursor: pointer;
+  width: 2.2rem;
+  height: 1.2rem;
+  background-color: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.settings-item .form-check-input:checked {
+  background-color: #2563eb !important;
+  border-color: #2563eb !important;
+}
+
+.settings-item .form-check-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.18) !important;
+}
+
+.settings-item .form-check-label {
+  margin-left: 0.75rem;
+  color: #475569;
+}
+
+html.dark-mode .settings-item .form-check-input,
+body.dark-mode .settings-item .form-check-input,
+.dark-mode .settings-item .form-check-input,
+html.dark-mode .form-switch .form-check-input,
+body.dark-mode .form-switch .form-check-input,
+.dark-mode .form-switch .form-check-input {
+  accent-color: #60a5fa !important;
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(148, 163, 184, 0.5) !important;
+  --bs-form-switch-bg: rgba(255, 255, 255, 0.12) !important;
+  --bs-form-check-bg: rgba(255, 255, 255, 0.12) !important;
+}
+
+html.dark-mode .settings-item .form-check-input:checked,
+body.dark-mode .settings-item .form-check-input:checked,
+.dark-mode .settings-item .form-check-input:checked,
+html.dark-mode .form-switch .form-check-input:checked,
+body.dark-mode .form-switch .form-check-input:checked,
+.dark-mode .form-switch .form-check-input:checked {
+  background-color: #60a5fa !important;
+  border-color: #60a5fa !important;
+  --bs-form-switch-bg: #60a5fa !important;
+  --bs-form-check-bg: #60a5fa !important;
+}
+
+html.dark-mode .settings-item .form-check-input:focus,
+body.dark-mode .settings-item .form-check-input:focus,
+.dark-mode .settings-item .form-check-input:focus,
+html.dark-mode .form-switch .form-check-input:focus,
+body.dark-mode .form-switch .form-check-input:focus,
+.dark-mode .form-switch .form-check-input:focus {
+  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.25) !important;
+}
+
+html.dark-mode .settings-item .form-check-label,
+body.dark-mode .settings-item .form-check-label,
+.dark-mode .settings-item .form-check-label {
+  color: #f8fafc !important;
+}
+
 .settings-item.danger {
   background: #fef2f2;
   border-radius: 10px;
   padding: 14px;
   margin-top: 10px;
+}
+
+.settings-item.danger button.btn-danger {
+  background: #dc2626 !important;
+  border-color: #b91c1c !important;
+  color: #ffffff !important;
+}
+
+.settings-item.danger button.btn-danger:hover {
+  background: #b91c1c !important;
+  border-color: #991b1b !important;
+}
+
+html.dark-mode .settings-item.danger,
+body.dark-mode .settings-item.danger,
+.dark-mode .settings-item.danger {
+  background: rgba(220, 38, 38, 0.18) !important;
+  border: 1px solid rgba(248, 113, 113, 0.24) !important;
+}
+
+html.dark-mode .settings-item.danger button.btn-danger,
+body.dark-mode .settings-item.danger button.btn-danger,
+.dark-mode .settings-item.danger button.btn-danger {
+  background: #dc2626 !important;
+  border-color: #b91c1c !important;
+  color: #ffffff !important;
+}
+
+html.dark-mode .settings-item.danger .muted-text,
+body.dark-mode .settings-item.danger .muted-text,
+.dark-mode .settings-item.danger .muted-text {
+  color: #e2e8f0 !important;
 }
 
 .muted-text {

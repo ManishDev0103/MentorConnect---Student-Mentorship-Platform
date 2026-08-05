@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Sidebar from '../../../Component/MentorComponents/Sidebar/Sidebar';
 import { Routes, Route } from 'react-router-dom'
 import DashboardHome from '../DashboardHome/DashboardHome';
@@ -12,10 +12,24 @@ import MCQPractice from '../MCQPractice/MCQPractice';
 import "./Dashboard.css";
 
 function Dashboard() {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const toggleSidebar = () => setSidebarCollapsed((prev) => !prev);
+
   return (
-    <div className='dashboard-layout'>
+    <div className={`dashboard-layout${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
       <Sidebar />
       <main className='main-content'>
+        <div className='d-flex justify-content-end mb-3'>
+          <button
+            type='button'
+            className='btn btn-outline-secondary btn-sm sidebar-toggle-btn'
+            onClick={toggleSidebar}
+            aria-label={sidebarCollapsed ? 'Show Menu' : 'Hide Menu'}
+            title={sidebarCollapsed ? 'Show Menu' : 'Hide Menu'}
+          >
+            {sidebarCollapsed ? '☰' : '◀'}
+          </button>
+        </div>
         <Routes>
           <Route index element={<DashboardHome />} />
           <Route path='dashboard' element={<DashboardHome />} />

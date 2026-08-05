@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { getMyProfileDetails, updateEmailPreferences, deleteAccount } from "../../service/userService";
+import { useDarkMode } from "../../context/DarkModeContext";
 import "./Profile.css";
 import ChangePasswordModal from "./ChangePasswordModal";
 
 const AccountSettings = () => {
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
   const [emailNotificationsEnabled, setEmailNotificationsEnabled] = useState(true);
   const [loadingPref, setLoadingPref] = useState(false);
@@ -96,6 +98,26 @@ const AccountSettings = () => {
               htmlFor="emailNotificationsToggle"
             >
               {emailNotificationsEnabled ? "Enabled" : "Disabled"}
+            </label>
+          </div>
+        </div>
+
+        <div className="settings-item notification-item">
+          <div>
+            <strong>Dark Mode</strong>
+            <p className="muted-text">Toggle the app theme across the workspace</p>
+          </div>
+          <div className="form-check form-switch">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              role="switch"
+              id="darkModeToggle"
+              checked={isDarkMode}
+              onChange={toggleDarkMode}
+            />
+            <label className="form-check-label" htmlFor="darkModeToggle">
+              {isDarkMode ? "Enabled" : "Disabled"}
             </label>
           </div>
         </div>

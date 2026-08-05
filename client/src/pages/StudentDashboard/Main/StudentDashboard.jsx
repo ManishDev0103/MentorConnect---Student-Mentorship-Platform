@@ -35,9 +35,14 @@ const StudentDashboard = () => {
   const [error, setError] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [studentId, setStudentId] = useState(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+
+  const toggleSidebar = () => {
+    setSidebarCollapsed((prev) => !prev);
+  };
 
   useEffect(() => {
     let studentIdFromStorage = getStudentId();
@@ -100,7 +105,7 @@ const StudentDashboard = () => {
   }
 
   return (
-    <div className={`student-dashboard ${isDarkMode ? 'dark-mode' : ''}`}>
+    <div className={`student-dashboard ${isDarkMode ? 'dark-mode' : ''} ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
       <aside className="sidebar student-sidebar">
 
         {/* Logo */}
@@ -140,6 +145,17 @@ const StudentDashboard = () => {
 
       {/* MAIN CONTENT */}
       <main className="dashboard-content">
+        <div className="d-flex justify-content-end mb-3">
+          <button
+            type="button"
+            className="btn btn-outline-secondary btn-sm sidebar-toggle-btn"
+            onClick={toggleSidebar}
+            aria-label={sidebarCollapsed ? "Show Menu" : "Hide Menu"}
+            title={sidebarCollapsed ? "Show Menu" : "Hide Menu"}
+          >
+            {sidebarCollapsed ? "☰" : "◀"}
+          </button>
+        </div>
         {error && (
           <div className="alert-banner">
             <span>⚠️ {error}</span>
@@ -155,22 +171,12 @@ const StudentDashboard = () => {
                 <h1>Student Dashboard</h1>
                 <p>Your session analytics</p>
               </div>
-              <div className="dashboard-actions">
-                <button
-                  type="button"
-                  className="dark-mode-toggle-btn"
-                  onClick={toggleDarkMode}
-                >
-                  {isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
-                </button>
-                <button
-                  type="button"
-                  className="edit-profile-btn"
-                  onClick={() => setIsEditModalOpen(true)}
-                >
-                  ✏️ Edit Profile
-                </button>
-              </div>
+              <button
+                className="edit-profile-btn"
+                onClick={() => setIsEditModalOpen(true)}
+              >
+                ✏️ Edit Profile
+              </button>
             </div>
 
             {dashboard ? (

@@ -11,6 +11,7 @@ import Home from "./pages/Home/Home";
 import Testimonials from "./pages/Testimonials/Testimonials";
 import ComplaintPage from "./pages/Complaint/ComplaintPage";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./pages/MentorDashBoard/Dashboard/Dashboard";
 import StudentDashboard from "./pages/StudentDashboard/Main/StudentDashboard";
 import { ProtectedRoute, PublicRoute } from "./API/ProtectedRoute";
@@ -51,7 +52,17 @@ function App() {
           element={<ProtectedRoute element={<ComplaintPage />} />}
         />
       </Routes>
-      <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 }

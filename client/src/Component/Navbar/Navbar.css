@@ -97,3 +97,30 @@
     display: none;
   }
 }
+
+/* Dark Mode Support */
+html.dark-mode .mp-navbar,
+body.dark-mode .mp-navbar,
+.dark-mode .mp-navbar {
+  background: rgba(15, 23, 42, 0.96) !important;
+  border-bottom-color: rgba(148, 163, 184, 0.18) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+html.dark-mode .mp-logo-wrapper,
+body.dark-mode .mp-logo-wrapper,
+.dark-mode .mp-logo-wrapper {
+  color: #f8fafc !important;
+}
+
+html.dark-mode .mp-nav-links li a,
+body.dark-mode .mp-nav-links li a,
+.dark-mode .mp-nav-links li a {
+  color: #cbd5e1 !important;
+}
+
+html.dark-mode .mp-nav-links li a:hover,
+body.dark-mode .mp-nav-links li a:hover,
+.dark-mode .mp-nav-links li a:hover {
+  color: #f8fafc !important;
+}

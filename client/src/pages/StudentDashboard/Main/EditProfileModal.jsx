@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../../Component/Modal.css";
 import { updateStudentProfile, getStudentDetails } from "../../../service/studentservice";
 import { getStudentId } from "../../../service/authService";
+import { useDarkMode } from "../../../context/DarkModeContext";
 
 const EditProfileModal = ({ isOpen, onClose, onProfileUpdated }) => {
   const [formData, setFormData] = useState({
@@ -14,6 +15,14 @@ const EditProfileModal = ({ isOpen, onClose, onProfileUpdated }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const { isDarkMode } = useDarkMode();
+
+  // Dark mode style helpers
+  const getSuccessStyle = () => ({
+    background: isDarkMode ? "rgba(34, 197, 94, 0.15)" : "#d1fae5",
+    color: isDarkMode ? "#86efac" : "#065f46",
+    border: isDarkMode ? "1px solid rgba(34, 197, 94, 0.3)" : "1px solid #6ee7b7"
+  });
 
   useEffect(() => {
     if (isOpen) {
@@ -132,7 +141,7 @@ const EditProfileModal = ({ isOpen, onClose, onProfileUpdated }) => {
             {success && (
               <div
                 className="form-error-message"
-                style={{ background: "#d1fae5", color: "#065f46", border: "1px solid #6ee7b7" }}
+                style={getSuccessStyle()}
               >
                 <span>✅ {success}</span>
               </div>

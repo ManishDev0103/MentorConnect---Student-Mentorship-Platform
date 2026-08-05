@@ -4,6 +4,7 @@ import { getVerifiedMentors } from "../../../service/studentservice";
 import { getStudentId } from "../../../service/authService";
 import ScheduleSessionModal from "../../../Component/ScheduleSessionModal/ScheduleSessionModal";
 import { useNavigate } from "react-router-dom";
+import { useDarkMode } from "../../../context/DarkModeContext";
 
 const buildMentorAvatarUrl = (userId, name) => {
   if (!userId) {
@@ -15,6 +16,7 @@ const buildMentorAvatarUrl = (userId, name) => {
 
 const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
   const navigate = useNavigate();
+  const { isDarkMode } = useDarkMode();
   const [mentors, setMentors] = useState([]);
   const [filteredMentors, setFilteredMentors] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,6 +31,12 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [bookingMentorId, setBookingMentorId] = useState(null);
+
+  // Dark mode color helpers
+  const getTextColor = () => isDarkMode ? "#cbd5e1" : "#555";
+  const getMutedColor = () => isDarkMode ? "#94a3b8" : "#888";
+  const getStarColor = () => "#ffc107"; // Yellow works in both modes
+  const getDiscountColor = () => isDarkMode ? "#86efac" : "#10b981"; // Lighter green for dark mode
 
   useEffect(() => {
     fetchMentors();
@@ -231,12 +239,12 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
 
               <div className="mentor-card-body">
                 <div className="mentor-rating">
-                  <span style={{ color: "#ffc107" }}>⭐</span>
+                  <span style={{ color: getStarColor() }}>⭐</span>
                   {mentor.rating ? parseFloat(mentor.rating).toFixed(1) : "N/A"}
                   <span
                     style={{
                       fontWeight: "normal",
-                      color: "#888",
+                      color: getMutedColor(),
                       fontSize: "12px",
                       marginLeft: "4px",
                     }}
@@ -254,9 +262,9 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
                 <div className="mentor-price">
                   {mentor.discountPercent > 0 ? (
                     <>
-                      <span style={{ textDecoration: 'line-through', color: '#888', marginRight: 8 }}>₹{mentor.ratePerSession}</span>
+                      <span style={{ textDecoration: 'line-through', color: getMutedColor(), marginRight: 8 }}>₹{mentor.ratePerSession}</span>
                       <span style={{ fontWeight: 700 }}>₹{mentor.finalPrice}</span>
-                      <span style={{ color: '#10b981', marginLeft: 8 }}>{mentor.discountPercent}% OFF</span>
+                      <span style={{ color: getDiscountColor(), marginLeft: 8 }}>{mentor.discountPercent}% OFF</span>
                     </>
                   ) : (
                     <>₹{mentor.ratePerSession || 500} <span>/ session</span></>
@@ -333,7 +341,7 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
 
               <div className="modal-section">
                 <h4>👤 About</h4>
-                <p style={{ lineHeight: "1.6", color: "#555" }}>
+                <p style={{ lineHeight: "1.6", color: getTextColor() }}>
                   {selectedMentor.about ||
                     `${selectedMentor.name} is a ${selectedMentor.specialization} expert with ${selectedMentor.experience} of experience.`}
                 </p>
@@ -341,7 +349,7 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
 
               <div className="modal-section">
                 <h4>📧 Contact</h4>
-                <p style={{ color: "#555" }}>
+                <p style={{ color: getTextColor() }}>
                   {selectedMentor.email || "Email not available"}
                 </p>
               </div>

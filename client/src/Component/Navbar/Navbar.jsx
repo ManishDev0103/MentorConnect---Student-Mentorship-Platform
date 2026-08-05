@@ -32,7 +32,7 @@ const Navbar = () => {
   className="mp-logo-wrapper d-flex align-items-center text-decoration-none"
 >
   <img
-    src="images/mclogo.png"
+    src="/images/mclogo.png"
     alt="MentorConnect Logo"
     className="mp-logo me-2"
   />

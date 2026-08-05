@@ -55,6 +55,12 @@ public class Transaction extends BaseEntity {
     @Column(name = "amount", nullable = false)
     private Double amount;
 
+    @Column(name = "mentor_amount")
+    private Double mentorAmount;
+
+    @Column(name = "platform_cut")
+    private Double platformCut;
+
     @Column(name = "transaction_date", nullable = false)
     private LocalDate transactionDate;
 

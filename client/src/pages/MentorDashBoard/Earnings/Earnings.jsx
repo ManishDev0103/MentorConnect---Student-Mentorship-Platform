@@ -182,13 +182,21 @@ function Earnings() {
                     <div className="transaction-info">
                       <div className="transaction-name">{t.studentName}</div>
                       <div className="transaction-details">
-                        {t.description || "Session Payment"} •{" "}
-                        {formatDate(t.transactionDate)}
+                        {t.description || "Session Payment"} • {formatDate(t.transactionDate)}
                       </div>
                     </div>
-                    <span className="transaction-amount">
-                      {formatCurrency(t.amount)}
-                    </span>
+                    <div className="transaction-amounts">
+                      <span className="transaction-amount">
+                        {formatCurrency(t.amount)}
+                      </span>
+                      {t.mentorAmount != null && t.platformCut != null && (
+                        <div className="transaction-split">
+                          <small>
+                            Mentor {formatCurrency(t.mentorAmount)} • Platform {formatCurrency(t.platformCut)}
+                          </small>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>

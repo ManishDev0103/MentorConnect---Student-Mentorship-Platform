@@ -1,6 +1,7 @@
 package com.mentorship.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -31,6 +32,7 @@ import com.mentorship.entities.Student;
 import com.mentorship.entities.User;
 import com.mentorship.entities.UserRole;
 import com.mentorship.entities.VerificationStatus;
+import com.mentorship.entities.UserStatus;
 import com.mentorship.repository.MentorRepository;
 import com.mentorship.repository.RatingRepository;
 import com.mentorship.repository.SessionRepository;
@@ -1127,12 +1129,7 @@ public class AdminDashboardService {
 
     // ==================== HELPER METHODS ====================
 
-    @SuppressWarnings("unused")
-    private double calculateGrowthPercent(long currentCount, int days) {
-        // Simplified calculation - can be enhanced with actual historical data
-        // currentCount and days can be used for more sophisticated growth calculations
-        return 12.0 + (Math.random() * 11); // 12-23% range
-    }
+    
 
     private double calculateRevenueGrowth(double current, double previous) {
         if (previous == 0)

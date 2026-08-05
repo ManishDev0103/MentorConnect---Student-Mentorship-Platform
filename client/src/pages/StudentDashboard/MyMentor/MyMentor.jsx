@@ -8,6 +8,7 @@ import {
 } from "../../../service/studentservice";
 import ScheduleSessionModal from "../../../Component/ScheduleSessionModal/ScheduleSessionModal";
 import { getStudentId } from "../../../service/authService";
+import { useDarkMode } from "../../../context/DarkModeContext";
 
 const MyMentor = ({ onNavigateToDashboard }) => {
   const [mentors, setMentors] = useState([]); // Assigned mentors
@@ -21,6 +22,10 @@ const MyMentor = ({ onNavigateToDashboard }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const { isDarkMode } = useDarkMode();
+
+  // Star color helper - yellow works well in both modes
+  const getStarColor = () => "#ffc107";
 
   useEffect(() => {
     fetchMentorData();
@@ -338,7 +343,7 @@ const MyMentor = ({ onNavigateToDashboard }) => {
                     lineHeight: "1.4",
                   }}
                 >
-                  <span style={{ color: "#ffc107" }}>⭐</span> {m.rating} |{" "}
+                  <span style={{ color: getStarColor() }}>⭐</span> {m.rating} |{" "}
                   {m.experience}
                 </div>
               </div>

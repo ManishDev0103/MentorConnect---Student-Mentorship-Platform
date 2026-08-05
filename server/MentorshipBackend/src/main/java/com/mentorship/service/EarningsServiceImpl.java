@@ -121,6 +121,8 @@ public class EarningsServiceImpl implements EarningsService {
                 .studentName(studentName)
                 .sessionId(transaction.getSession() != null ? transaction.getSession().getSessionId() : null)
                 .amount(transaction.getAmount())
+                .mentorAmount(transaction.getMentorAmount())
+                .platformCut(transaction.getPlatformCut())
                 .transactionDate(transaction.getTransactionDate())
                 .paymentStatus(transaction.getPaymentStatus().name())
                 .paymentMethod(transaction.getPaymentMethod() != null ? transaction.getPaymentMethod().name() : null)
