@@ -23,6 +23,7 @@ public class MentorDTO {
     private String highestEducation;
     private String currentPosition;
     private String organization;
+    private String collegeUniversity;
     private String professionalBio;
     private String linkedinUrl;
     private String githubUrl;

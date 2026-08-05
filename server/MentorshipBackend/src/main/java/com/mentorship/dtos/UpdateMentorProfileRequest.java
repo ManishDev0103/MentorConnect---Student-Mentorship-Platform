@@ -15,6 +15,7 @@ public class UpdateMentorProfileRequest {
     private String highestEducation;
     private String currentPosition;
     private String organization;
+    private String collegeUniversity;
 
     @Size(min = 50)
     private String professionalBio;

@@ -57,6 +57,7 @@ public class AuthServiceImpl implements AuthService{
 			student.setUserDetails(user);
 			student.setTargetDomain(dto.getTargetDomain());
 			student.setQualification(dto.getQualification());
+			student.setCollegeUniversity(dto.getCollegeUniversity());
 			
 			studentRepository.save(student);
 			log.info("Student registered successfully with email: {}", dto.getEmail());

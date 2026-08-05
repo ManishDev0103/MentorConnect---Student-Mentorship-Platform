@@ -109,10 +109,13 @@ String contentType = resume.getContentType();
 		if (dto.getOrganization() != null)
 			mentor.setOrganization(dto.getOrganization());
 
+		if (dto.getCollegeUniversity() != null)
+			mentor.setCollegeUniversity(dto.getCollegeUniversity());
+
 		if (dto.getProfessionalBio() != null)
 			mentor.setProfessionalBio(dto.getProfessionalBio());
 
-if (dto.getLinkedinUrl() != null) {
+		if (dto.getLinkedinUrl() != null) {
             if (!isValidUrl(dto.getLinkedinUrl())) {
                 throw new ApiException("Invalid LinkedIn URL");
             }
@@ -196,6 +199,7 @@ if (dto.getLinkedinUrl() != null) {
 		dto.setHighestEducation(mentor.getHighestEducation());
 		dto.setCurrentPosition(mentor.getCurrentPosition());
 		dto.setOrganization(mentor.getOrganization());
+		dto.setCollegeUniversity(mentor.getCollegeUniversity());
 		dto.setProfessionalBio(mentor.getProfessionalBio());
 		dto.setLinkedinUrl(mentor.getLinkedinUrl());
 		dto.setGithubUrl(mentor.getGithubUrl());

@@ -101,6 +101,9 @@ public class Mentor extends BaseEntity {
     @Column(name = "portfolio_url")
     private String portfolioUrl;
 
+    @Column(name = "college_university", length = 255)
+    private String collegeUniversity;
+
 	// for resume handling
 	@Lob
 	@Column(name = "resume", columnDefinition = "LONGBLOB")

@@ -68,6 +68,14 @@ public class MyStudentsServiceImpl implements MyStudentsService {
     }
 
     @Override
+    public com.mentorship.entities.Student getAssignedStudent(Long mentorId, Long studentId) {
+        MentorStudent mentorStudent = mentorStudentRepository
+                .findByMentor_MentorIdAndStudent_StudentId(mentorId, studentId)
+                .orElseThrow(() -> new RuntimeException("Student relationship not found"));
+        return mentorStudent.getStudent();
+    }
+
+    @Override
     public void updateStudentProgress(Long mentorId, Long studentId, Integer progress) {
         MentorStudent mentorStudent = mentorStudentRepository
                 .findByMentor_MentorIdAndStudent_StudentId(mentorId, studentId)
@@ -155,6 +163,9 @@ public class MyStudentsServiceImpl implements MyStudentsService {
                 .nextSession(nextSession)
                 .email(ms.getStudent().getUserDetails().getEmail())
                 .targetDomain(ms.getStudent().getTargetDomain())
+                .collegeUniversity(ms.getStudent().getCollegeUniversity())
+                .resumeAvailable(ms.getStudent().getResume() != null && ms.getStudent().getResume().length > 0)
+                .mentorId(ms.getMentor().getMentorId())
                 .status(ms.getStatus().name())
                 .build();
     }

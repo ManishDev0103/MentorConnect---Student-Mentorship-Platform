@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -37,4 +38,18 @@ public class Student extends BaseEntity {
     private String targetDomain;
     
     private String qualification;
+
+    @Column(name = "college_university", length = 255)
+    private String collegeUniversity;
+
+    // for CV/resume handling
+    @Lob
+    @Column(name = "resume", columnDefinition = "LONGBLOB")
+    private byte[] resume;
+
+    @Column(name = "resume_file_name")
+    private String resumeFileName;
+
+    @Column(name = "resume_content_type")
+    private String resumeContentType;
 }

@@ -62,6 +62,7 @@ public class MentorSignupRequest {
     private String githubUrl;
     private String twitterUrl;
     private String portfolioUrl;
+    private String collegeUniversity;
     private Double ratePerSession;
     private Double discountPercent;
 }
