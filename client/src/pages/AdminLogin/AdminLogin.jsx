@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginUser, decodeToken } from "../../API/authService";
 import { useAuth } from "../../API/AuthContext";
 import "./AdminLogin.css";
 
 const AdminLogin = () => {
-  const [email, setEmail] = useState("admin@mentorconnect.com");
-  const [password, setPassword] = useState("Admin@1234");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -58,7 +58,12 @@ const AdminLogin = () => {
   return (
     <div className="admin-login-container">
       <div className="admin-login-card">
-        <h2>Admin Sign In</h2>
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h2>Admin Sign In</h2>
+          <Link to="/" className="btn btn-outline-secondary btn-sm">
+            Home
+          </Link>
+        </div>
 
         <label>Email</label>
         <input
@@ -79,10 +84,6 @@ const AdminLogin = () => {
         />
 
         {error && <div className="text-danger">{error}</div>}
-
-        <div className="mt-3 small text-muted">
-          Demo admin: <strong>admin@mentorconnect.com</strong> / <strong>Admin@1234</strong>
-        </div>
 
         <button className="btn btn-primary mt-3" onClick={onLogin} disabled={loading}>
           {loading ? "Signing in..." : "Sign in as Admin"}

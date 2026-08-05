@@ -1,5 +1,6 @@
 package com.mentorship.security;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.mentorship.entities.User;
+import com.mentorship.entities.UserStatus;
 
 public class CustomUserDetails implements UserDetails {
 
@@ -28,24 +30,53 @@ public class CustomUserDetails implements UserDetails {
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
 		return List.of(new SimpleGrantedAuthority("ROLE_"+ user.getUserRole().name()));
 	}
 
 	@Override
 	public @Nullable String getPassword() {
-		// TODO Auto-generated method stub
 		return user.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
 		return user.getEmail();
 	}
 	
 	public long getUserId() {
 		return user.getUserId();
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		UserStatus status = user.getUserStatus();
+		if (status == UserStatus.BANNED) {
+			return false;
+		}
+		if (status == UserStatus.SUSPENDED) {
+			LocalDateTime until = user.getRestrictionUntil();
+			return until == null || until.isBefore(LocalDateTime.now());
+		}
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		if (user.isDeleted()) {
+			return false;
+		}
+		UserStatus status = user.getUserStatus();
+		return status != UserStatus.BANNED;
 	}
 	
 	public Long getStudentId() {

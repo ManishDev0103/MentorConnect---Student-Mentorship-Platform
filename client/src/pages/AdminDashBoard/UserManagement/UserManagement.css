@@ -56,9 +56,19 @@
   color: #065f46;
 }
 
-.status-inactive {
+.status-suspended {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-banned {
   background: #fee2e2;
   color: #991b1b;
+}
+
+.status-inactive {
+  background: #f8f9fa;
+  color: #6c757d;
 }
 
 /* Modal Styles */

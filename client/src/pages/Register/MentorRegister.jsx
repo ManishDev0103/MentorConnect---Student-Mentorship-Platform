@@ -161,8 +161,13 @@ const MentorRegister = () => {
   return (
     <div className="register-page d-flex align-items-center justify-content-center">
       <div className="register-card register-card-wide">
-        <div className="register-icon-wrapper">
-          <div className="register-icon register-icon-mentor">🎓</div>
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <Link to="/" className="btn btn-outline-secondary btn-sm">
+            Home
+          </Link>
+          <div className="register-icon-wrapper">
+            <div className="register-icon register-icon-mentor">🎓</div>
+          </div>
         </div>
 
         <h1 className="register-title text-center">Become a Mentor</h1>

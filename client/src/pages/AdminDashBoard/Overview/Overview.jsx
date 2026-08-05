@@ -5,6 +5,7 @@ import Sidebar from "../Sidebar/Sidebar";
 import OverviewContent from "../OverviewContent/OverviewContent";
 import VerificationContent from "../Verification/VerificationContent";
 import UserManagementContent from "../UserManagement/UserManagementContent";
+import ComplaintsContent from "../Complaints/ComplaintsContent";
 import RevenueContent from "../Revenue/RevenueContent";
 import PerformanceLeaderboards from "../PerformanceLeaderBoard/PerformanceLeaderBoard";
 import RetentionChurn from "../RetentionChurn/RetentionChurn";
@@ -70,6 +71,8 @@ const Overview = () => {
         );
       case "verification":
         return <VerificationContent onDataRefresh={handleDataRefresh} />;
+      case "complaints":
+        return <ComplaintsContent />;
       case "users":
         return <UserManagementContent />;
       case "revenue":

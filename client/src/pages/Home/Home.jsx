@@ -3,9 +3,11 @@ import React, { useEffect, useState } from "react";
 import "./Home.css";
 import Navbar from "../../Component/Navbar/Navbar";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../API/AuthContext";
 import { getRecentPlatformFeedback } from "../../service/testimonialService";
 
 const Home = () => {
+  const { isAuthenticated, hasRole } = useAuth();
   const [testimonials, setTestimonials] = useState([]);
   const [loadingTestimonials, setLoadingTestimonials] = useState(true);
 
@@ -59,12 +61,29 @@ const Home = () => {
               </div>
 
               <div className="d-flex flex-wrap gap-3">
-                <Link to="/mentors" className="btn hero-cta-primary">
-                  Find a Mentor
-                </Link>
-                <Link to="/register/mentor" className="btn hero-cta-secondary">
-                  Become a Mentor
-                </Link>
+                {isAuthenticated ? (
+                  <Link
+                    to={
+                      hasRole("admin")
+                        ? "/admin-dashboard"
+                        : hasRole("mentor")
+                        ? "/mentor"
+                        : "/student-dashboard"
+                    }
+                    className="btn hero-cta-primary"
+                  >
+                    Go to Dashboard
+                  </Link>
+                ) : (
+                  <>
+                    <Link to="/mentors" className="btn hero-cta-primary">
+                      Find a Mentor
+                    </Link>
+                    <Link to="/register/mentor" className="btn hero-cta-secondary">
+                      Become a Mentor
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
 
@@ -251,8 +270,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Pricing anchor (simple placeholder) */}
-      <section id="pricing" className="pricing-placeholder-section">
+      <section id="pricing" className="pricing-section">
         <div className="container text-center">
           <h2 className="section-heading">Simple, Transparent Pricing</h2>
           <p className="section-subtitle">

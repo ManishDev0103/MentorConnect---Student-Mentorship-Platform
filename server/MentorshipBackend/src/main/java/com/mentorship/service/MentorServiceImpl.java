@@ -27,7 +27,6 @@ public class MentorServiceImpl implements MentorService {
 
 	@Override
 	public void uploadResume(Long userId, MultipartFile resume) {
-		// TODO Auto-generated method stub
 		Mentor mentor = mentorRepository.findByUserDetails_UserId(userId)
 				.orElseThrow(() -> new ApiException("Mentor Profile NOT Found.!"));
 

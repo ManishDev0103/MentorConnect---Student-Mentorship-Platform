@@ -121,8 +121,6 @@ const Login = () => {
     }
   };
 
-  // Demo login helpers removed — demo accounts not exposed in UI
-
   return (
     <div className="login-container">
       <div className="login-card">
@@ -216,8 +214,6 @@ const Login = () => {
         >
           {loading ? "Signing In..." : "Sign In"}
         </button>
-
-        {/* Demo login options removed */}
 
         {/* Footer */}
         <div className="login-footer text-center mt-4">

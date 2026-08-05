@@ -19,54 +19,58 @@ const MentorListing = () => {
   const [openDemoUserId, setOpenDemoUserId] = useState(null);
 
   const navigate = useNavigate();
+
+  const fetchMentors = async () => {
+    try {
+      setLoading(true);
+      setError("");
+      const response = await getPublicMentors();
+      const list = response?.data || [];
+      const mapped = list.map((m) => {
+        const name = m.name || "Mentor";
+        const specialization = m.specialization || "General";
+        const tags = m.expertise
+          ? m.expertise.split(/[,|]/).map((t) => t.trim()).filter(Boolean)
+          : specialization ? [specialization] : [];
+        const avatarFallback = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}`;
+        const avatarUrl = m.userId
+          ? `http://localhost:8080/api/users/image/${m.userId}`
+          : avatarFallback;
+
+        return {
+          id: m.mentorId,
+          userId: m.userId,
+          name,
+          subject: specialization,
+          rating: m.rating ?? 0,
+          reviews: m.reviews ?? 0,
+          sessions: m.sessions ?? 0,
+          price: m.ratePerSession ?? 0,
+          discountPercent: m.discountPercent ?? 0,
+          finalPrice: m.finalPrice ?? (m.ratePerSession ?? 0),
+          desc: m.about || m.experience || m.expertise || "Experienced mentor.",
+          tags,
+          avatar: avatarUrl,
+          avatarFallback,
+          verificationStatus: m.verificationStatus || "PENDING",
+        };
+      });
+      setMentors(mapped);
+    } catch (err) {
+      console.warn("Unable to load mentors:", err);
+      setMentors([]);
+      setError("Unable to load mentors at this time. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const timer = setTimeout(async () => {
-      try {
-        setLoading(true);
-        setError("");
-        const response = await getPublicMentors(search || null);
-        const list = response?.data || [];
-        const mapped = list.map((m) => {
-          const name = m.name || "Mentor";
-          const specialization = m.specialization || "General";
-          const tags = m.expertise
-            ? m.expertise.split(/[,|]/).map((t) => t.trim()).filter(Boolean)
-            : specialization ? [specialization] : [];
-          const avatarFallback = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}`;
-          const avatarUrl = m.userId
-            ? `http://localhost:8080/api/users/image/${m.userId}`
-            : avatarFallback;
-
-          return {
-            id: m.mentorId,
-            userId: m.userId,
-            name,
-            subject: specialization,
-            rating: m.rating ?? 0,
-            reviews: m.reviews ?? 0,
-            sessions: m.sessions ?? 0,
-            price: m.ratePerSession ?? 0,
-            discountPercent: m.discountPercent ?? 0,
-            finalPrice: m.finalPrice ?? (m.ratePerSession ?? 0),
-            desc: m.about || m.experience || m.expertise || "Experienced mentor.",
-            tags,
-            avatar: avatarUrl,
-            avatarFallback,
-            verificationStatus: m.verificationStatus || "PENDING",
-          };
-        });
-        setMentors(mapped);
-      } catch (err) {
-        console.warn("Unable to load mentors:", err);
-        setMentors([]);
-        setError("Unable to load mentors at this time. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    }, 400);
-
+    const timer = setTimeout(() => {
+      fetchMentors();
+    }, 200);
     return () => clearTimeout(timer);
-  }, [search]);
+  }, []);
 
   const handleBookSession = (mentorId) => {
     const token = localStorage.getItem("token");
@@ -80,6 +84,10 @@ const MentorListing = () => {
 
   const handleNavigateToMentor = (mentorId, mentorData) => {
     navigate(`/mentor-profile/${mentorId}`, { state: { mentor: mentorData } });
+  };
+
+  const handleClearSearch = () => {
+    setSearch("");
   };
 
   const visibleMentors = useMemo(() => {
@@ -117,8 +125,8 @@ const MentorListing = () => {
           {/* Search + Filters (static for now) */}
           <div className="mentor-filters mb-3">
             <div className="row g-3 align-items-center">
-              <div className="col-md-5">
-                <div className="search-box">
+              <div className="col-md-6">
+                <div className="search-box search-box-with-clear">
                   <span className="search-icon">🔍</span>
                   <input
                     type="text"
@@ -127,9 +135,21 @@ const MentorListing = () => {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
+                  {search && (
+                    <button
+                      type="button"
+                      className="clear-search-btn"
+                      onClick={handleClearSearch}
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+                <div className="search-helper-text mt-2">
+                  Start typing to filter mentors by name, subject, or expertise.
                 </div>
               </div>
-              <div className="col-md-7 d-flex flex-wrap gap-3 justify-content-md-end">
+              <div className="col-md-6 d-flex flex-wrap gap-3 justify-content-md-end">
                 <button className="btn filter-btn">
                   Filters: <span className="filter-label">All Exams</span>
                 </button>
@@ -155,93 +175,101 @@ const MentorListing = () => {
 
           {/* Mentor Cards */}
           <div className="row g-4">
-            {visibleMentors.map((m) => (
-              <div className="col-md-6 col-lg-4" key={m.id}>
-                <div className="mentor-card" onClick={() => handleNavigateToMentor(m.id, m)}>
-                  <div className="mentor-card-header">
-                    <span className={`badge-verified ${m.verificationStatus !== "VERIFIED" ? "badge-pending" : ""}`}>
-                      {m.verificationStatus === "VERIFIED" ? "Verified" : "Pending"}
-                    </span>
-                    <div className="mentor-avatar-wrap">
-                      <img
-                        src={m.avatar}
-                        alt={m.name}
-                        className="mentor-avatar"
-                        onError={(e) => {
-                          e.currentTarget.src = m.avatarFallback;
-                        }}
-                      />
-                    </div>
-                    <h5 className="mentor-name">{m.name}</h5>
-                    <p className="mentor-subject">{m.subject}</p>
-                    <div className="mentor-rating">
-                      <span className="star">★</span>
-                      <span className="rating-score">{m.rating}</span>
-                      <span className="rating-details">
-                        ({m.reviews}) · {m.sessions} sessions
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Description */}
-                  <p className="mentor-desc mt-3">{m.desc}</p>
-
-                  {/* Tags */}
-                  <div className="mentor-tags">
-                    {m.tags.map((tag) => (
-                      <span className="mentor-tag" key={tag}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Price + button */}
-                  <div className="mentor-footer">
-                    <div className="mentor-price">
-                      {m.discountPercent > 0 ? (
-                        <>
-                          <span style={{ textDecoration: 'line-through', color: '#888', marginRight: 8 }}>₹{m.price}</span>
-                          <span style={{ color: '#b91c1c', fontWeight: 700 }}>₹{m.finalPrice}</span>
-                          <div style={{ fontSize: 12, color: '#10b981', marginLeft: 8 }}>{m.discountPercent}% OFF</div>
-                        </>
-                      ) : (
-                        <>₹{m.price}/hr</>
-                      )}
-                    </div>
-                    <div className="d-flex gap-2">
-                      <button
-                        className="btn btn-sm mentor-book-btn"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleBookSession(m.id);
-                        }}
-                      >
-                        Book Session
-                      </button>
-                      <button
-                        className="btn btn-sm btn-outline-primary"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setOpenDemoUserId((current) =>
-                            current === m.userId ? null : m.userId,
-                          );
-                        }}
-                      >
-                        {openDemoUserId === m.userId ? 'Close Demo' : 'View Demo'}
-                      </button>
-                    </div>
-                  </div>
-                  {openDemoUserId === m.userId && (
-                    <div className="mt-3">
-                      <DemoPlayer
-                        mentorUserId={m.userId}
-                        onClose={() => setOpenDemoUserId(null)}
-                      />
-                    </div>
-                  )}
+            {visibleMentors.length === 0 && !loading && !error ? (
+              <div className="col-12">
+                <div className="alert alert-info text-center">
+                  No mentors match your search. Try another keyword or clear the search box.
                 </div>
               </div>
-            ))}
+            ) : (
+              visibleMentors.map((m) => (
+                <div className="col-md-6 col-lg-4" key={m.id}>
+                  <div className="mentor-card" onClick={() => handleNavigateToMentor(m.id, m)}>
+                    <div className="mentor-card-header">
+                      <span className={`badge-verified ${m.verificationStatus !== "VERIFIED" ? "badge-pending" : ""}`}>
+                        {m.verificationStatus === "VERIFIED" ? "Verified" : "Pending"}
+                      </span>
+                      <div className="mentor-avatar-wrap">
+                        <img
+                          src={m.avatar}
+                          alt={m.name}
+                          className="mentor-avatar"
+                          onError={(e) => {
+                            e.currentTarget.src = m.avatarFallback;
+                          }}
+                        />
+                      </div>
+                      <h5 className="mentor-name">{m.name}</h5>
+                      <p className="mentor-subject">{m.subject}</p>
+                      <div className="mentor-rating">
+                        <span className="star">★</span>
+                        <span className="rating-score">{m.rating}</span>
+                        <span className="rating-details">
+                          ({m.reviews}) · {m.sessions} sessions
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    <p className="mentor-desc mt-3">{m.desc}</p>
+
+                    {/* Tags */}
+                    <div className="mentor-tags">
+                      {m.tags.map((tag) => (
+                        <span className="mentor-tag" key={tag}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Price + button */}
+                    <div className="mentor-footer">
+                      <div className="mentor-price">
+                        {m.discountPercent > 0 ? (
+                          <>
+                            <span style={{ textDecoration: 'line-through', color: '#888', marginRight: 8 }}>₹{m.price}</span>
+                            <span style={{ color: '#b91c1c', fontWeight: 700 }}>₹{m.finalPrice}</span>
+                            <div style={{ fontSize: 12, color: '#10b981', marginLeft: 8 }}>{m.discountPercent}% OFF</div>
+                          </>
+                        ) : (
+                          <>₹{m.price}/hr</>
+                        )}
+                      </div>
+                      <div className="d-flex gap-2">
+                        <button
+                          className="btn btn-sm mentor-book-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleBookSession(m.id);
+                          }}
+                        >
+                          Book Session
+                        </button>
+                        <button
+                          className="btn btn-sm btn-outline-primary"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setOpenDemoUserId((current) =>
+                              current === m.userId ? null : m.userId,
+                            );
+                          }}
+                        >
+                          {openDemoUserId === m.userId ? 'Close Demo' : 'View Demo'}
+                        </button>
+                      </div>
+                    </div>
+                    {openDemoUserId === m.userId && (
+                      <div className="mt-3">
+                        <DemoPlayer
+                          mentorUserId={m.userId}
+                          onClose={() => setOpenDemoUserId(null)}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </section>
