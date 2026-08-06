@@ -80,6 +80,42 @@
   color: #0f172a;
 }
 
+.navbar-user-info {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.08);
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.navbar-user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+}
+
+.navbar-user-name {
+  font-size: 0.95rem;
+}
+
+.navbar-user-info {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.08);
+  color: #0f172a;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+.navbar-user-info:hover,
+.navbar-user-info:focus-visible {
+  background: rgba(37, 99, 235, 0.16);
+}
+
 .mp-signin-btn {
   background: linear-gradient(135deg, #0f4ecd, #2563eb);
   color: #ffffff;

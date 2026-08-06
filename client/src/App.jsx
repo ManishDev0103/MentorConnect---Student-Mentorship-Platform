@@ -7,6 +7,7 @@ import Overview from "./pages/AdminDashBoard/Overview/Overview";
 import MentorRegister from "./pages/Register/MentorRegister";
 import StudentRegister from "./pages/Register/StudentRegister";
 import MentorListing from "./pages/MentorListing/MentorListing";
+import MentorPublicProfile from "./pages/MentorPublicProfile/MentorPublicProfile";
 import Home from "./pages/Home/Home";
 import Testimonials from "./pages/Testimonials/Testimonials";
 import ComplaintPage from "./pages/Complaint/ComplaintPage";
@@ -26,6 +27,7 @@ function App() {
         <Route path="/admin-login" element={<PublicRoute element={<AdminLogin />} />} />
         <Route path="/reset-password" element={<PublicRoute element={<ResetPasswordPage />} />} />
         <Route path="/mentors" element={<MentorListing />} />
+        <Route path="/mentor-profile/:mentorId" element={<MentorPublicProfile />} />
         <Route path="/register/mentor" element={<PublicRoute element={<MentorRegister />} />} />
         <Route path="/register/student" element={<PublicRoute element={<StudentRegister />} />} />
         <Route path="/testimonials" element={<Testimonials />} />

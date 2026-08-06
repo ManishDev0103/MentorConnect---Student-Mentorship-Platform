@@ -26,6 +26,7 @@ import com.mentorship.dtos.RevenueStatsDto;
 import com.mentorship.dtos.StudentLeaderboardDto;
 import com.mentorship.dtos.UserManagementDto;
 import com.mentorship.entities.Mentor;
+import com.mentorship.entities.UserStatus;
 import com.mentorship.entities.Session;
 import com.mentorship.entities.SessionStatus;
 import com.mentorship.entities.Student;
@@ -1128,7 +1129,6 @@ public class AdminDashboardService {
     }
 
     // ==================== HELPER METHODS ====================
-
     
 
     private double calculateRevenueGrowth(double current, double previous) {

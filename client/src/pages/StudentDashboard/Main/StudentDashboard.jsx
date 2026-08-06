@@ -36,6 +36,7 @@ const StudentDashboard = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [studentId, setStudentId] = useState(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [initialMentorId, setInitialMentorId] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
@@ -45,6 +46,17 @@ const StudentDashboard = () => {
   };
 
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const mentorIdFromUrl = params.get("mentorId");
+    const tabFromUrl = params.get("tab");
+
+    if (mentorIdFromUrl) {
+      setInitialMentorId(Number(mentorIdFromUrl));
+      setActiveTab(tabFromUrl || "My Mentor");
+    } else if (tabFromUrl) {
+      setActiveTab(tabFromUrl);
+    }
+
     let studentIdFromStorage = getStudentId();
 
     if (!studentIdFromStorage) {
@@ -219,7 +231,10 @@ const StudentDashboard = () => {
 
         {activeTab === "Profile" && <StudentProfile />}
         {activeTab === "My Mentor" && (
-          <MyMentor onNavigateToDashboard={() => setActiveTab("Browse Mentors")} />
+          <MyMentor
+            initialMentorId={initialMentorId}
+            onNavigateToDashboard={() => setActiveTab("Browse Mentors")}
+          />
         )}
         {activeTab === "Browse Mentors" && (
           <BrowseMentors
