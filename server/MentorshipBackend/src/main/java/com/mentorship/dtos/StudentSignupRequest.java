@@ -41,5 +41,6 @@ public class StudentSignupRequest {
 
 	    private String qualification;
 
-	}
+    private String collegeUniversity;
+}
 

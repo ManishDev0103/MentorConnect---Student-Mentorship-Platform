@@ -4,7 +4,11 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mentorship.dtos.ApiResponseDTO;
 import com.mentorship.dtos.StudentCardDTO;
+import com.mentorship.security.SecurityUtils;
 import com.mentorship.service.MyStudentsService;
 
 import lombok.RequiredArgsConstructor;
@@ -110,6 +115,39 @@ public class MyStudentsController {
         } catch (Exception e) {
             logger.error("Error adding student {} to mentorId: {} - {}", studentId, mentorId, e.getMessage());
             return ResponseEntity.badRequest().body(ApiResponseDTO.error(e.getMessage()));
+        }
+    }
+
+    /**
+     * Download assigned student's resume/CV
+     */
+    @GetMapping("/{mentorId}/student/{studentId}/resume")
+    @PreAuthorize("hasRole('MENTOR')")
+    public ResponseEntity<byte[]> downloadStudentResume(
+            @PathVariable Long mentorId,
+            @PathVariable Long studentId) {
+        try {
+            Long loggedUserId = SecurityUtils.getLoggedInUserId();
+            Long loggedMentorId = myStudentsService.getMentorIdByUserId(loggedUserId);
+            if (!loggedMentorId.equals(mentorId)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+
+            com.mentorship.entities.Student student = myStudentsService.getAssignedStudent(mentorId, studentId);
+            if (student.getResume() == null || student.getResume().length == 0) {
+                return ResponseEntity.notFound().build();
+            }
+
+            String contentType = student.getResumeContentType() != null ? student.getResumeContentType() : "application/pdf";
+            String fileName = student.getResumeFileName() != null ? student.getResumeFileName() : "resume.pdf";
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
+                    .body(student.getResume());
+        } catch (Exception e) {
+            logger.error("Error downloading student resume for mentorId {} studentId {}: {}", mentorId, studentId, e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
     }
 

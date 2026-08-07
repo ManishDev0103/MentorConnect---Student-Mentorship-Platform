@@ -11,4 +11,5 @@ public class StudentDTO {
     private String email;
     private String targetDomain;
     private String qualification;
+    private String collegeUniversity;
 }

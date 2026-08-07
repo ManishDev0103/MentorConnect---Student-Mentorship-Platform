@@ -406,6 +406,54 @@ const MyMentor = ({ onNavigateToDashboard, initialMentorId = null }) => {
                   <br />
                   {selectedMentor.email}
                 </div>
+                {(selectedMentor.linkedinUrl || selectedMentor.githubUrl || selectedMentor.twitterUrl || selectedMentor.portfolioUrl) && (
+                  <div className="mentor-social-links" style={{ marginTop: "14px" }}>
+                    <b>Social</b>
+                    <br />
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "6px" }}>
+                      {selectedMentor.linkedinUrl && (
+                        <a
+                          href={selectedMentor.linkedinUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: "#1d4ed8" }}
+                        >
+                          LinkedIn
+                        </a>
+                      )}
+                      {selectedMentor.githubUrl && (
+                        <a
+                          href={selectedMentor.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: "#111" }}
+                        >
+                          GitHub
+                        </a>
+                      )}
+                      {selectedMentor.twitterUrl && (
+                        <a
+                          href={selectedMentor.twitterUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: "#0ea5e9" }}
+                        >
+                          Twitter/X
+                        </a>
+                      )}
+                      {selectedMentor.portfolioUrl && (
+                        <a
+                          href={selectedMentor.portfolioUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: "#0f172a" }}
+                        >
+                          Portfolio
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

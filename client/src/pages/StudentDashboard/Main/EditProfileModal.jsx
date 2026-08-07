@@ -11,6 +11,7 @@ const EditProfileModal = ({ isOpen, onClose, onProfileUpdated }) => {
     email: "",
     targetDomain: "",
     qualification: "",
+    collegeUniversity: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -46,6 +47,7 @@ const EditProfileModal = ({ isOpen, onClose, onProfileUpdated }) => {
         email: student.email || "",
         targetDomain: student.targetDomain || "",
         qualification: student.qualification || "",
+        collegeUniversity: student.collegeUniversity || "",
       });
       setError("");
     } catch (err) {
@@ -205,6 +207,18 @@ const EditProfileModal = ({ isOpen, onClose, onProfileUpdated }) => {
                 onChange={handleInputChange}
                 disabled={loading}
                 placeholder="e.g., B.Tech Computer Science"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>College / University</label>
+              <input
+                type="text"
+                name="collegeUniversity"
+                value={formData.collegeUniversity}
+                onChange={handleInputChange}
+                disabled={loading}
+                placeholder="e.g., IIT Bombay"
               />
             </div>
 

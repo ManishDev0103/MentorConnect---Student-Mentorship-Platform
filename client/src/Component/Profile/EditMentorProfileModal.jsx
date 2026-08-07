@@ -9,8 +9,11 @@ const EditMentorProfileModal = ({ isOpen, onClose, onProfileUpdated }) => {
     highestEducation: "",
     currentPosition: "",
     organization: "",
+    collegeUniversity: "",
     professionalBio: "",
     linkedinUrl: "",
+    githubUrl: "",
+    twitterUrl: "",
     portfolioUrl: "",
   });
   const [loading, setLoading] = useState(false);
@@ -33,8 +36,11 @@ const EditMentorProfileModal = ({ isOpen, onClose, onProfileUpdated }) => {
         highestEducation: mentor.highestEducation || "",
         currentPosition: mentor.currentPosition || "",
         organization: mentor.organization || "",
+        collegeUniversity: mentor.collegeUniversity || "",
         professionalBio: mentor.professionalBio || mentor.about || "",
         linkedinUrl: mentor.linkedinUrl || "",
+        githubUrl: mentor.githubUrl || "",
+        twitterUrl: mentor.twitterUrl || "",
         portfolioUrl: mentor.portfolioUrl || "",
       });
       setError("");
@@ -52,17 +58,35 @@ const EditMentorProfileModal = ({ isOpen, onClose, onProfileUpdated }) => {
     }));
   };
 
+  const isValidUrl = (url) => {
+    if (!url) return true;
+    try {
+      new URL(url);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   const validateForm = () => {
     if (formData.professionalBio && formData.professionalBio.length < 50) {
       setError("Professional bio must be at least 50 characters");
       return false;
     }
-    if (formData.linkedinUrl && !formData.linkedinUrl.startsWith("http")) {
-      setError("LinkedIn URL must start with http:// or https://");
+    if (formData.linkedinUrl && !isValidUrl(formData.linkedinUrl)) {
+      setError("LinkedIn URL must be a valid URL");
       return false;
     }
-    if (formData.portfolioUrl && !formData.portfolioUrl.startsWith("http")) {
-      setError("Portfolio URL must start with http:// or https://");
+    if (formData.githubUrl && !isValidUrl(formData.githubUrl)) {
+      setError("GitHub URL must be a valid URL");
+      return false;
+    }
+    if (formData.twitterUrl && !isValidUrl(formData.twitterUrl)) {
+      setError("Twitter/X URL must be a valid URL");
+      return false;
+    }
+    if (formData.portfolioUrl && !isValidUrl(formData.portfolioUrl)) {
+      setError("Portfolio URL must be a valid URL");
       return false;
     }
     return true;
@@ -171,6 +195,17 @@ const EditMentorProfileModal = ({ isOpen, onClose, onProfileUpdated }) => {
             </div>
 
             <div className="form-group">
+              <label>College / University</label>
+              <input
+                type="text"
+                name="collegeUniversity"
+                value={formData.collegeUniversity}
+                onChange={handleInputChange}
+                placeholder="e.g., Stanford University"
+              />
+            </div>
+
+            <div className="form-group">
               <label>LinkedIn URL</label>
               <input
                 type="url"
@@ -178,6 +213,28 @@ const EditMentorProfileModal = ({ isOpen, onClose, onProfileUpdated }) => {
                 value={formData.linkedinUrl}
                 onChange={handleInputChange}
                 placeholder="https://linkedin.com/in/yourprofile"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>GitHub URL</label>
+              <input
+                type="url"
+                name="githubUrl"
+                value={formData.githubUrl}
+                onChange={handleInputChange}
+                placeholder="https://github.com/yourusername"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Twitter/X URL</label>
+              <input
+                type="url"
+                name="twitterUrl"
+                value={formData.twitterUrl}
+                onChange={handleInputChange}
+                placeholder="https://twitter.com/yourhandle"
               />
             </div>
 

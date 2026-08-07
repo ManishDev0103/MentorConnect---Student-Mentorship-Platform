@@ -56,7 +56,7 @@ public class Mentor extends BaseEntity {
 	private double discountPercent;
 
 	@Column(name = "is_deleted", nullable = false)
-	private boolean deleted = false;
+	private Boolean deleted = false;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "verification_status", length = 20)
@@ -92,8 +92,17 @@ public class Mentor extends BaseEntity {
 	@Column(name = "linkedin_url")
 	private String linkedinUrl;
 
-	@Column(name = "portfolio_url")
-	private String portfolioUrl;
+    @Column(name = "github_url")
+    private String githubUrl;
+
+    @Column(name = "twitter_url")
+    private String twitterUrl;
+
+    @Column(name = "portfolio_url")
+    private String portfolioUrl;
+
+    @Column(name = "college_university", length = 255)
+    private String collegeUniversity;
 
 	// for resume handling
 	@Lob
@@ -119,5 +128,9 @@ public class Mentor extends BaseEntity {
 
 	@Column(name = "demo_video_description", length = 500)
 	private String demoVideoDescription;
+
+	public boolean isDeleted() {
+		return Boolean.TRUE.equals(this.deleted);
+	}
 
 }

@@ -72,10 +72,14 @@ public class User extends BaseEntity{
 	private LocalDateTime restrictionUntil;
 
 	@Column(name="is_deleted", nullable = false)
-	private boolean deleted = false;
+	private Boolean deleted = false;
 
 	@Column(name = "email_notifications_enabled", nullable = false)
 	private Boolean emailNotificationsEnabled = true;
+
+	public boolean isDeleted() {
+		return Boolean.TRUE.equals(this.deleted);
+	}
 
 	public User(String firstName, String lastName, String email, String password, LocalDate dob, String address,
 			String phoneNo) {

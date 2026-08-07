@@ -18,5 +18,8 @@ public class StudentCardDTO {
     private String nextSession;
     private String email;
     private String targetDomain;
+    private String collegeUniversity;
+    private boolean resumeAvailable;
+    private Long mentorId;
     private String status;
 }
