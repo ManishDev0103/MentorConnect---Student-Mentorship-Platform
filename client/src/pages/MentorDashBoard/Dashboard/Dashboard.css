@@ -1,6 +1,6 @@
 .dashboard-layout {
   display: flex;
-  min-height: 100vh;
+  min-height: calc(100vh - var(--dark-notice-height, 35px));
   background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
   position: relative;
 }
@@ -8,8 +8,8 @@
 .dashboard-layout .sidebar {
   position: fixed;
   left: 0;
-  top: 0;
-  height: 100vh;
+  top: var(--dark-notice-height, 35px);
+  height: calc(100vh - var(--dark-notice-height, 35px));
   z-index: 20;
 }
 
@@ -22,7 +22,7 @@
 .dashboard-layout .main-content {
   flex: 1;
   padding: 28px 28px 40px;
-  min-height: 100vh;
+  min-height: calc(100vh - var(--dark-notice-height, 35px));
   margin-left: 260px;
   transition: margin-left 0.25s ease;
 }

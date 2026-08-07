@@ -9,7 +9,7 @@ body.dark-mode .admin-dashboard,
 }
 
 .admin-dashboard-row {
-  min-height: 100vh;
+  min-height: calc(100vh - var(--dark-notice-height, 35px));
   display: flex;
   flex-wrap: nowrap;
 }

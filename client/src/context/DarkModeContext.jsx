@@ -8,7 +8,11 @@ export const DarkModeProvider = ({ children }) => {
     if (typeof window === 'undefined') return false;
     const savedMode = localStorage.getItem('darkModeEnabled');
     if (savedMode !== null) {
-      return JSON.parse(savedMode);
+      try {
+        return JSON.parse(savedMode) === true;
+      } catch {
+        localStorage.removeItem('darkModeEnabled');
+      }
     }
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });

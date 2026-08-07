@@ -16,10 +16,26 @@ import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./pages/MentorDashBoard/Dashboard/Dashboard";
 import StudentDashboard from "./pages/StudentDashboard/Main/StudentDashboard";
 import { ProtectedRoute, PublicRoute } from "./API/ProtectedRoute";
+import Footer from "./Component/Footer/Footer";
+import { useDarkMode } from "./context/DarkModeContext";
 
 function App() {
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
+
   return (
     <div className="app-shell">
+      <div className="dark-mode-notice" role="status">
+        <span>Dark Mode is under development</span>
+        <button
+          type="button"
+          className="dark-mode-toggle"
+          onClick={toggleDarkMode}
+          aria-pressed={isDarkMode}
+          aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+        >
+          {isDarkMode ? "Light mode" : "Dark mode"}
+        </button>
+      </div>
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
@@ -54,6 +70,7 @@ function App() {
           element={<ProtectedRoute element={<ComplaintPage />} />}
         />
       </Routes>
+      <Footer />
       <ToastContainer
         position="top-right"
         autoClose={3000}

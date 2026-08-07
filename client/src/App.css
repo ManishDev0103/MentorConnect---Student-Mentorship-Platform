@@ -1,6 +1,47 @@
 .app-shell {
+  --dark-notice-height: 35px;
   min-height: 100vh;
   background: linear-gradient(180deg, #eff6ff 0%, #ffffff 100%);
+}
+
+.dark-mode-notice {
+  min-height: var(--dark-notice-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: #fff7ed;
+  border-bottom: 1px solid #fed7aa;
+  color: #9a3412;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.dark-mode-toggle {
+  padding: 4px 10px;
+  border: 1px solid currentColor !important;
+  border-radius: 999px;
+  color: inherit !important;
+  background: transparent !important;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.dark-mode-toggle:hover,
+.dark-mode-toggle:focus-visible {
+  color: #ffffff !important;
+  background: #9a3412 !important;
+}
+
+html.dark-mode .dark-mode-notice,
+body.dark-mode .dark-mode-notice {
+  background: #431407;
+  border-bottom-color: #9a3412;
+  color: #fed7aa;
 }
 
 body {
