@@ -8,7 +8,7 @@ import api from "./api";
 // Login endpoint - sends email and password
 export const loginUser = async (email, password) => {
   try {
-    const response = await api.post("/api/users/signin", {
+    const response = await api.post("/users/signin", {
       email,
       password,
     });
@@ -33,7 +33,7 @@ export const loginUser = async (email, password) => {
 // Signup endpoint for students
 export const registerStudent = async (studentData) => {
   try {
-    const response = await api.post("/api/users/signup/student", studentData);
+    const response = await api.post("/users/signup/student", studentData);
     return response.data;
   } catch (error) {
     console.error("Student registration error:", error.response?.data || error);
@@ -41,7 +41,7 @@ export const registerStudent = async (studentData) => {
     throw {
       message: errorData?.message || error.message || "Student registration failed",
       status: error.response?.status,
-      data: errorData
+      data: errorData,
     };
   }
 };
@@ -49,7 +49,7 @@ export const registerStudent = async (studentData) => {
 // Signup endpoint for mentors
 export const registerMentor = async (mentorData) => {
   try {
-    const response = await api.post("/api/users/signup/mentor", mentorData);
+    const response = await api.post("/users/signup/mentor", mentorData);
     return response.data;
   } catch (error) {
     console.error("Mentor registration error:", error.response?.data || error);
@@ -57,7 +57,7 @@ export const registerMentor = async (mentorData) => {
     throw {
       message: errorData?.message || error.message || "Mentor registration failed",
       status: error.response?.status,
-      data: errorData
+      data: errorData,
     };
   }
 };
