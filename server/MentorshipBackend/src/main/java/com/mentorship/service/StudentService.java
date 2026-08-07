@@ -1,5 +1,7 @@
 package com.mentorship.service;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 import com.mentorship.dtos.*;
 import com.mentorship.entities.StudentSubscription;
 import com.mentorship.entities.StudySession;
@@ -46,6 +48,8 @@ public interface StudentService {
     StudentDTO updateStudent(Long id, StudentDTO dto);
     void uploadProfileImage(Long studentId, byte[] imageBytes);
     byte[] getProfileImage(Long studentId);
+    void uploadResume(Long studentId, MultipartFile resume);
+    ResponseEntity<byte[]> downloadResume(Long studentId);
     boolean deleteStudent(Long id);
     
     // Mentor Browsing & Subscription Methods

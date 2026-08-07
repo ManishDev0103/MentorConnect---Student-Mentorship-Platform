@@ -17,6 +17,9 @@ public interface MyStudentsService {
     
     // Get student details
     StudentCardDTO getStudentDetails(Long mentorId, Long studentId);
+
+    // Get assigned student entity for mentor-specific operations
+    com.mentorship.entities.Student getAssignedStudent(Long mentorId, Long studentId);
     
     // Update student progress
     void updateStudentProgress(Long mentorId, Long studentId, Integer progress);

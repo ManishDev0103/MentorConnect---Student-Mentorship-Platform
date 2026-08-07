@@ -50,6 +50,10 @@ import com.mentorship.repository.StudentSubscriptionRepository;
 import com.mentorship.repository.StudySessionRepository;
 import com.mentorship.repository.TransactionRepository;
 import com.mentorship.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 
@@ -245,6 +249,7 @@ public class StudentServiceImpl implements StudentService {
         Student student = new Student();
         student.setTargetDomain(dto.getTargetDomain());
         student.setQualification(dto.getQualification());
+        student.setCollegeUniversity(dto.getCollegeUniversity());
 
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -263,6 +268,7 @@ public class StudentServiceImpl implements StudentService {
         student.getUserDetails().setLastName(dto.getLastName());
         student.setTargetDomain(dto.getTargetDomain());
         student.setQualification(dto.getQualification());
+        student.setCollegeUniversity(dto.getCollegeUniversity());
         studentRepository.save(student);
 
         return mapToStudentDTO(student);
@@ -281,6 +287,52 @@ public class StudentServiceImpl implements StudentService {
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
         return student.getUserDetails().getImage();
+    }
+
+    @Override
+    public void uploadResume(Long studentId, MultipartFile resume) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        if (resume.isEmpty()) {
+            throw new RuntimeException("Resume file is empty");
+        }
+
+        String contentType = resume.getContentType();
+        if (contentType == null ||
+                (!contentType.equals("application/pdf")
+                        && !contentType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                        && !contentType.equals("application/msword"))) {
+            throw new RuntimeException("Only PDF, DOC, or DOCX files are allowed");
+        }
+
+        try {
+            student.setResume(resume.getBytes());
+            student.setResumeFileName(resume.getOriginalFilename());
+            student.setResumeContentType(resume.getContentType());
+            studentRepository.save(student);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to upload resume: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public ResponseEntity<byte[]> downloadResume(Long studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        if (student.getResume() == null || student.getResume().length == 0) {
+            throw new RuntimeException("Resume not found for this student");
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(
+                        student.getResumeContentType() != null ? student.getResumeContentType() : "application/pdf"))
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "inline; filename=\"" +
+                                (student.getResumeFileName() != null ? student.getResumeFileName() : "resume.pdf") +
+                                "\"")
+                .body(student.getResume());
     }
 
     public boolean deleteStudent(Long id) {
@@ -302,6 +354,7 @@ public class StudentServiceImpl implements StudentService {
         }
         dto.setTargetDomain(student.getTargetDomain());
         dto.setQualification(student.getQualification());
+        dto.setCollegeUniversity(student.getCollegeUniversity());
         return dto;
     }
 
@@ -355,6 +408,10 @@ public class StudentServiceImpl implements StudentService {
                 dto.setExpertise(m.getCustomSpecialization() != null && !m.getCustomSpecialization().isEmpty()
                         ? m.getCustomSpecialization()
                         : m.getSpecialization());
+                dto.setLinkedinUrl(m.getLinkedinUrl());
+                dto.setGithubUrl(m.getGithubUrl());
+                dto.setTwitterUrl(m.getTwitterUrl());
+                dto.setPortfolioUrl(m.getPortfolioUrl());
                 if (m.getVerificationStatus() != null) {
                     dto.setVerificationStatus(m.getVerificationStatus().name());
                 } else {
@@ -399,6 +456,10 @@ public class StudentServiceImpl implements StudentService {
         dto.setExperience(mentor.getExperience());
         dto.setAbout(mentor.getSpecialization());
         dto.setExpertise(mentor.getSpecialization());
+        dto.setLinkedinUrl(mentor.getLinkedinUrl());
+        dto.setGithubUrl(mentor.getGithubUrl());
+        dto.setTwitterUrl(mentor.getTwitterUrl());
+        dto.setPortfolioUrl(mentor.getPortfolioUrl());
 
         return dto;
     }

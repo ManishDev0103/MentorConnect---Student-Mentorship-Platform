@@ -1,5 +1,6 @@
 import "./StudentCard.css";
 import { useNavigate } from "react-router-dom";
+import { downloadStudentResume } from "../../../service/mentorservice";
 
 export default function StudentCard({ data, onChatClick }) {
   const navigate = useNavigate();
@@ -50,6 +51,28 @@ export default function StudentCard({ data, onChatClick }) {
           >
             📝 MCQ
           </button>
+          {data.resumeAvailable && (
+            <button
+              className="btn btn-secondary"
+              onClick={async () => {
+                try {
+                  const blob = await downloadStudentResume(data.mentorId, data.studentId);
+                  const url = window.URL.createObjectURL(blob);
+                  const link = document.createElement('a');
+                  link.href = url;
+                  link.download = data.name?.replace(/\s+/g, '_') + '_CV';
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                  window.URL.revokeObjectURL(url);
+                } catch (error) {
+                  console.error('Unable to download CV:', error);
+                }
+              }}
+            >
+              📄 View CV
+            </button>
+          )}
         </div>
       </div>
     </div>

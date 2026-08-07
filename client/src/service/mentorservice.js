@@ -67,6 +67,13 @@ export const getMyStudents = async (mentorId) => {
   return response.data;
 };
 
+export const downloadStudentResume = async (mentorId, studentId) => {
+  const response = await api.get(`/mentor/students/${mentorId}/student/${studentId}/resume`, {
+    responseType: 'blob',
+  });
+  return response.data;
+};
+
 export const getStudentProgress = async (mentorId, studentId) => {
   const response = await api.get(`/mentor/students/${mentorId}/${studentId}/progress`);
   return response.data;

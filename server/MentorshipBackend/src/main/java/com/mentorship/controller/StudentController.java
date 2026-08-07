@@ -3,8 +3,11 @@ package com.mentorship.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +30,7 @@ import com.mentorship.dtos.StudentDTO;
 import com.mentorship.dtos.StudentSessionDTO;
 import com.mentorship.dtos.StudentSessionResponseDTO;
 import com.mentorship.dtos.SubmitMCQAnswerDTO;
+import com.mentorship.security.SecurityUtils;
 import com.mentorship.service.MCQPracticeSessionService;
 import com.mentorship.service.MCQService;
 import com.mentorship.service.StudentService;
@@ -96,6 +100,40 @@ public class StudentController {
 			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.ok(image);
+	}
+
+	@PostMapping(value = "/{studentId}/resume", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PreAuthorize("hasRole('STUDENT')")
+	public ResponseEntity<String> uploadResume(
+			@PathVariable Long studentId,
+			@RequestParam("resume") org.springframework.web.multipart.MultipartFile resume) {
+		try {
+			Long loggedUserId = SecurityUtils.getLoggedInUserId();
+			StudentDTO student = studentService.getStudentById(studentId);
+			if (!loggedUserId.equals(student.getUserId())) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Unauthorized");
+			}
+			studentService.uploadResume(studentId, resume);
+			return ResponseEntity.ok("Resume uploaded successfully");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error uploading resume: " + e.getMessage());
+		}
+	}
+
+	@GetMapping("/{studentId}/resume")
+	@PreAuthorize("hasRole('STUDENT')")
+	public ResponseEntity<byte[]> downloadResume(@PathVariable Long studentId) {
+		try {
+			Long loggedUserId = SecurityUtils.getLoggedInUserId();
+			StudentDTO student = studentService.getStudentById(studentId);
+			if (!loggedUserId.equals(student.getUserId())) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+			}
+			return studentService.downloadResume(studentId);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
 	}
 
 	// delete student by id

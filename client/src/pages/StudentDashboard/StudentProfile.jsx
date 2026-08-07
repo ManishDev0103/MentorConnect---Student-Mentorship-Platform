@@ -34,7 +34,7 @@ const StudentProfile = () => {
           location: authUser?.location || "",
           bio: dto.targetDomain ? `Target: ${dto.targetDomain}` : "",
           phone: authUser?.phone || authUser?.phoneNo || "",
-          education: dto.qualification || "",
+          education: dto.collegeUniversity || dto.qualification || "",
         };
         setUser(mapped);
       } else if (authUser) {

@@ -57,6 +57,7 @@ public class AuthServiceImpl implements AuthService{
 			student.setUserDetails(user);
 			student.setTargetDomain(dto.getTargetDomain());
 			student.setQualification(dto.getQualification());
+			student.setCollegeUniversity(dto.getCollegeUniversity());
 			
 			studentRepository.save(student);
 			log.info("Student registered successfully with email: {}", dto.getEmail());
@@ -112,6 +113,8 @@ public class AuthServiceImpl implements AuthService{
         mentor.setOrganization(dto.getOrganization());
         mentor.setProfessionalBio(dto.getProfessionalBio());
         mentor.setLinkedinUrl(dto.getLinkedinUrl());
+        mentor.setGithubUrl(dto.getGithubUrl());
+        mentor.setTwitterUrl(dto.getTwitterUrl());
         mentor.setPortfolioUrl(dto.getPortfolioUrl());
         mentor.setVerificationStatus(VerificationStatus.PENDING);
         mentor.setVerifiedBy(null);
