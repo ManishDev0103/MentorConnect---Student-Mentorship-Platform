@@ -96,3 +96,58 @@
   background: #f9fafb;
   border-color: #d1d5db;
 }
+
+/* Dark Mode Support */
+html.dark-mode .sidebar,
+body.dark-mode .sidebar,
+.dark-mode .sidebar {
+  background: rgba(15, 23, 42, 0.96) !important;
+  border-right-color: rgba(148, 163, 184, 0.18) !important;
+}
+
+html.dark-mode .brand-title,
+body.dark-mode .brand-title,
+.dark-mode .brand-title {
+  color: #f8fafc !important;
+}
+
+html.dark-mode .brand-subtitle,
+body.dark-mode .brand-subtitle,
+.dark-mode .brand-subtitle {
+  color: #94a3b8 !important;
+}
+
+html.dark-mode .nav-item,
+body.dark-mode .nav-item,
+.dark-mode .nav-item {
+  color: #cbd5e1 !important;
+}
+
+html.dark-mode .nav-item:hover,
+body.dark-mode .nav-item:hover,
+.dark-mode .nav-item:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #f8fafc !important;
+}
+
+html.dark-mode .nav-item.active,
+body.dark-mode .nav-item.active,
+.dark-mode .nav-item.active {
+  background: #0d9488 !important;
+  color: #f8fafc !important;
+}
+
+html.dark-mode .logout-btn,
+body.dark-mode .logout-btn,
+.dark-mode .logout-btn {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #cbd5e1 !important;
+  border-color: rgba(148, 163, 184, 0.2) !important;
+}
+
+html.dark-mode .logout-btn:hover,
+body.dark-mode .logout-btn:hover,
+.dark-mode .logout-btn:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(148, 163, 184, 0.3) !important;
+}

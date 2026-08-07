@@ -18,6 +18,8 @@ public class TransactionDTO {
     private String studentName;
     private Long sessionId;
     private Double amount;
+    private Double mentorAmount;
+    private Double platformCut;
     private LocalDate transactionDate;
     private String paymentStatus;
     private String paymentMethod;

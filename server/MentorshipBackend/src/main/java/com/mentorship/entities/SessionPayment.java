@@ -47,6 +47,12 @@ public class SessionPayment {
     @Column(name = "amount", nullable = false)
     private Double amount;
 
+    @Column(name = "mentor_amount")
+    private Double mentorAmount;
+
+    @Column(name = "platform_cut")
+    private Double platformCut;
+
     @Column(name = "payment_time", nullable = false)
     private LocalDateTime paymentTime;
 

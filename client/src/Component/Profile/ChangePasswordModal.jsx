@@ -7,6 +7,7 @@ import {
   getPasswordStrengthColor,
   passwordMeetsPolicy,
 } from "../../utils/passwordUtils";
+import { useDarkMode } from "../../context/DarkModeContext";
 
 const ChangePasswordModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -16,11 +17,30 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const { isDarkMode } = useDarkMode();
 
   const newPasswordStrength = getPasswordStrength(formData.newPassword);
   const confirmPasswordMatch =
     formData.confirmPassword.length > 0 &&
     formData.newPassword === formData.confirmPassword;
+
+  const getConfirmTextColor = () =>
+    confirmPasswordMatch
+      ? isDarkMode
+        ? "#86efac"
+        : "#16a34a"
+      : isDarkMode
+      ? "#fca5a5"
+      : "#dc2626";
+
+  const getConfirmBorderColor = () =>
+    confirmPasswordMatch
+      ? isDarkMode
+        ? "#4ade80"
+        : "#22c55e"
+      : isDarkMode
+      ? "#fca5a5"
+      : "#ef4444";
 
   const validate = () => {
     const newErrors = {};
@@ -199,7 +219,7 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
               {formData.confirmPassword.length > 0 && (
                 <small
                   className="form-text mt-2 d-block"
-                  style={{ color: confirmPasswordMatch ? "#16a34a" : "#dc2626" }}
+                  style={{ color: getConfirmTextColor() }}
                 >
                   {confirmPasswordMatch ? "Passwords match" : "Passwords do not match"}
                 </small>

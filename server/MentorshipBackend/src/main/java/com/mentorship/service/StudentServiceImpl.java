@@ -78,6 +78,8 @@ public class StudentServiceImpl implements StudentService {
     private final SessionService sessionService;
     private final EmailService emailService;
 
+    private static final double PLATFORM_COMMISSION_RATE = 0.15;
+
     @Override
     public SessionDTO getNextSession(Long studentId) {
         Student student = studentRepository.findById(studentId)
@@ -562,13 +564,19 @@ public class StudentServiceImpl implements StudentService {
             session.setStatus(SessionStatus.SCHEDULED);
             sessionRepository.save(session);
 
+            double totalAmount = dto.getAmount() != null ? dto.getAmount() : session.getSessionFee();
+            double platformCut = roundToTwoDecimals(totalAmount * PLATFORM_COMMISSION_RATE);
+            double mentorAmount = roundToTwoDecimals(totalAmount - platformCut);
+
             // Create SessionPayment record
             SessionPayment payment = new SessionPayment();
             payment.setSession(session);
             payment.setStudent(session.getStudent());
             payment.setMentor(session.getMentor());
             payment.setTransactionId(dto.getTransactionId());
-            payment.setAmount(dto.getAmount());
+            payment.setAmount(totalAmount);
+            payment.setMentorAmount(mentorAmount);
+            payment.setPlatformCut(platformCut);
             payment.setPaymentTime(LocalDateTime.now());
             payment.setStatus(dto.getStatus());
             sessionPaymentRepository.save(payment);
@@ -578,7 +586,9 @@ public class StudentServiceImpl implements StudentService {
             transaction.setMentor(session.getMentor());
             transaction.setStudent(session.getStudent());
             transaction.setSession(session);
-            transaction.setAmount(dto.getAmount());
+            transaction.setAmount(totalAmount);
+            transaction.setMentorAmount(mentorAmount);
+            transaction.setPlatformCut(platformCut);
             transaction.setTransactionDate(LocalDate.now());
             transaction.setPaymentStatus(PaymentStatus.COMPLETED);
             transaction.setPaymentMethod(PaymentMethod.UPI);
@@ -625,6 +635,10 @@ public class StudentServiceImpl implements StudentService {
                 log.error("Failed to send payment failure email: {}", e.getMessage(), e);
             }
         }
+    }
+
+    private double roundToTwoDecimals(Double value) {
+        return value == null ? 0.0 : Math.round(value * 100.0) / 100.0;
     }
 
     public List<StudentSessionResponseDTO> getStudentSessions(Long studentId) {

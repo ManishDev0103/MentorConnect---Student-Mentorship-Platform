@@ -28,17 +28,17 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     // Find transactions by status
     List<Transaction> findByMentor_MentorIdAndPaymentStatus(Long mentorId, PaymentStatus status);
 
-    // Calculate total earnings for a mentor
-    @Query("SELECT COALESCE(SUM(t.amount), 0) FROM Transaction t WHERE t.mentor.mentorId = :mentorId AND t.paymentStatus = 'COMPLETED'")
+    // Calculate total mentor earnings after platform commission
+    @Query("SELECT COALESCE(SUM(t.mentorAmount), 0) FROM Transaction t WHERE t.mentor.mentorId = :mentorId AND t.paymentStatus = 'COMPLETED'")
     Double calculateTotalEarnings(@Param("mentorId") Long mentorId);
 
-    // Calculate this month's earnings
-    @Query("SELECT COALESCE(SUM(t.amount), 0) FROM Transaction t WHERE t.mentor.mentorId = :mentorId " +
+    // Calculate this month's mentor earnings after platform commission
+    @Query("SELECT COALESCE(SUM(t.mentorAmount), 0) FROM Transaction t WHERE t.mentor.mentorId = :mentorId " +
            "AND t.paymentStatus = 'COMPLETED' AND YEAR(t.transactionDate) = :year AND MONTH(t.transactionDate) = :month")
     Double calculateMonthlyEarnings(@Param("mentorId") Long mentorId, @Param("year") Integer year, @Param("month") Integer month);
 
-    // Get monthly earnings breakdown
-    @Query("SELECT MONTH(t.transactionDate) as month, YEAR(t.transactionDate) as year, SUM(t.amount) as total " +
+    // Get monthly mentor earnings breakdown after platform commission
+    @Query("SELECT MONTH(t.transactionDate) as month, YEAR(t.transactionDate) as year, SUM(t.mentorAmount) as total " +
            "FROM Transaction t WHERE t.mentor.mentorId = :mentorId AND t.paymentStatus = 'COMPLETED' " +
            "GROUP BY YEAR(t.transactionDate), MONTH(t.transactionDate) " +
            "ORDER BY YEAR(t.transactionDate) DESC, MONTH(t.transactionDate) DESC")
@@ -59,8 +59,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     @Query("SELECT COUNT(t) FROM Transaction t WHERE t.mentor.mentorId = :mentorId AND t.paymentStatus = 'COMPLETED'")
     Integer countCompletedTransactions(@Param("mentorId") Long mentorId);
 
-    // Calculate average per session
-    @Query("SELECT COALESCE(AVG(t.amount), 0) FROM Transaction t WHERE t.mentor.mentorId = :mentorId AND t.paymentStatus = 'COMPLETED'")
+    // Calculate average mentor earnings per session after platform commission
+    @Query("SELECT COALESCE(AVG(t.mentorAmount), 0) FROM Transaction t WHERE t.mentor.mentorId = :mentorId AND t.paymentStatus = 'COMPLETED'")
     Double calculateAveragePerSession(@Param("mentorId") Long mentorId);
 
     List<Transaction> findByPaymentStatus(String status);

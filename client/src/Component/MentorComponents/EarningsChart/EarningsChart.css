@@ -18,3 +18,11 @@
   padding: 6px 14px;
   border-radius: 20px;
 }
+
+/* Dark Mode Support */
+html.dark-mode .chart-badge,
+body.dark-mode .chart-badge,
+.dark-mode .chart-badge {
+  background: rgba(13, 148, 136, 0.8) !important;
+  color: #2dd4bf !important;
+}

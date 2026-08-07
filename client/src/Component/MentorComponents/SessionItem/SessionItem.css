@@ -31,3 +31,32 @@
   color: #9ca3af;
   font-size: 14px;
 }
+
+/* Dark Mode Support */
+html.dark-mode .session-item,
+body.dark-mode .session-item,
+.dark-mode .session-item {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(148, 163, 184, 0.1) !important;
+}
+
+html.dark-mode .session-time-wrapper,
+body.dark-mode .session-time-wrapper,
+.dark-mode .session-time-wrapper {
+  color: #94a3b8 !important;
+}
+
+html.dark-mode .session-time,
+body.dark-mode .session-time,
+.dark-mode .session-time,
+html.dark-mode .session-student,
+body.dark-mode .session-student,
+.dark-mode .session-student {
+  color: #f8fafc !important;
+}
+
+html.dark-mode .session-topic,
+body.dark-mode .session-topic,
+.dark-mode .session-topic {
+  color: #cbd5e1 !important;
+}

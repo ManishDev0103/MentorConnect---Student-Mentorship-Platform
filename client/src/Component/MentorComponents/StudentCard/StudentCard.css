@@ -148,6 +148,86 @@
   cursor: pointer;
 }
 
+/* Dark Mode Support */
+html.dark-mode .student-card,
+body.dark-mode .student-card,
+.dark-mode .student-card {
+  background: rgba(15, 23, 42, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.18) !important;
+}
+
+html.dark-mode .student-name,
+body.dark-mode .student-name,
+.dark-mode .student-name {
+  color: #f8fafc !important;
+}
+
+html.dark-mode .student-sessions,
+body.dark-mode .student-sessions,
+.dark-mode .student-sessions,
+html.dark-mode .progress-label,
+body.dark-mode .progress-label,
+.dark-mode .progress-label,
+html.dark-mode .next-session-label,
+body.dark-mode .next-session-label,
+.dark-mode .next-session-label {
+  color: #94a3b8 !important;
+}
+
+html.dark-mode .progress-value,
+body.dark-mode .progress-value,
+.dark-mode .progress-value {
+  color: #e2e8f0 !important;
+}
+
+html.dark-mode .student-card .progress,
+body.dark-mode .student-card .progress,
+.dark-mode .student-card .progress {
+  background: rgba(148, 163, 184, 0.2) !important;
+}
+
+html.dark-mode .next-session-box,
+body.dark-mode .next-session-box,
+.dark-mode .next-session-box {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(148, 163, 184, 0.1) !important;
+}
+
+html.dark-mode .next-session-time,
+body.dark-mode .next-session-time,
+.dark-mode .next-session-time {
+  color: #f8fafc !important;
+}
+
+html.dark-mode .btn-chat,
+body.dark-mode .btn-chat,
+.dark-mode .btn-chat {
+  background: rgba(59, 130, 246, 0.2) !important;
+  color: #93c5fd !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+}
+
+html.dark-mode .btn-chat:hover,
+body.dark-mode .btn-chat:hover,
+.dark-mode .btn-chat:hover {
+  background: rgba(59, 130, 246, 0.3) !important;
+}
+
+html.dark-mode .btn-schedule,
+body.dark-mode .btn-schedule,
+.dark-mode .btn-schedule {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #e2e8f0 !important;
+  border-color: rgba(148, 163, 184, 0.2) !important;
+}
+
+html.dark-mode .btn-schedule:hover,
+body.dark-mode .btn-schedule:hover,
+.dark-mode .btn-schedule:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(148, 163, 184, 0.3) !important;
+}
+
 .btn-mcq:hover {
   background: #4338ca;
   color: white;

@@ -100,11 +100,910 @@ button {
 :root.dark-mode .mentor-session-stats,
 :root.dark-mode .subs-plan-card,
 :root.dark-mode .subs-includes-card,
-:root.dark-mode .search-box {
+:root.dark-mode .search-box,
+:root.dark-mode .profile-card,
+:root.dark-mode .settings-item,
+:root.dark-mode .form-control,
+:root.dark-mode .form-check-input,
+:root.dark-mode .form-check-label,
+:root.dark-mode .btn,
+:root.dark-mode .btn-outline-secondary,
+:root.dark-mode .btn-danger,
+.dark-mode .profile-card,
+.dark-mode .settings-item,
+.dark-mode .form-control,
+.dark-mode .form-check-input,
+.dark-mode .form-check-label,
+.dark-mode .btn,
+.dark-mode .btn-outline-secondary,
+.dark-mode .btn-danger {
   background: rgba(15, 23, 42, 0.88) !important;
   border: 1px solid rgba(148, 163, 184, 0.16) !important;
   box-shadow: 0 28px 90px rgba(2, 6, 23, 0.38) !important;
   color: #f8fafc !important;
+}
+
+html.dark-mode body,
+body.dark-mode {
+  color: var(--text);
+  background-image: url('https://images.unsplash.com/photo-1503424886308-5f8f78b99d2f?auto=format&fit=crop&w=1950&q=80'),
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.24), transparent 20%),
+    linear-gradient(180deg, #020617 0%, #0f172a 100%);
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: center center, left top, center;
+  background-size: cover, auto, auto;
+  background-attachment: fixed, scroll, scroll;
+  background-blend-mode: multiply, normal, normal;
+}
+
+html.dark-mode .app-shell,
+body.dark-mode .app-shell,
+.dark-mode .app-shell {
+  background: linear-gradient(180deg, #020617 0%, #0f0f1f 100%);
+}
+
+html.dark-mode .page-shell,
+body.dark-mode .page-shell,
+.dark-mode .page-shell,
+html.dark-mode .admin-dashboard,
+body.dark-mode .admin-dashboard,
+.dark-mode .admin-dashboard,
+html.dark-mode .dashboard-home,
+body.dark-mode .dashboard-home,
+.dark-mode .dashboard-home,
+html.dark-mode .mentor-page-root,
+body.dark-mode .mentor-page-root,
+.dark-mode .mentor-page-root,
+html.dark-mode .register-page,
+body.dark-mode .register-page,
+.dark-mode .register-page,
+html.dark-mode .reset-password-page,
+body.dark-mode .reset-password-page,
+.dark-mode .reset-password-page,
+html.dark-mode .student-dashboard,
+body.dark-mode .student-dashboard,
+.dark-mode .student-dashboard,
+html.dark-mode .earnings-page,
+body.dark-mode .earnings-page,
+.dark-mode .earnings-page,
+html.dark-mode .feedback-page,
+body.dark-mode .feedback-page,
+.dark-mode .feedback-page,
+html.dark-mode .mcq-practice-page,
+body.dark-mode .mcq-practice-page,
+.dark-mode .mcq-practice-page,
+html.dark-mode .my-students-page,
+body.dark-mode .my-students-page,
+.dark-mode .my-students-page,
+html.dark-mode .availability-page,
+body.dark-mode .availability-page,
+.dark-mode .availability-page,
+html.dark-mode .my-mentor-page,
+body.dark-mode .my-mentor-page,
+.dark-mode .my-mentor-page,
+html.dark-mode .my-sessions-page,
+body.dark-mode .my-sessions-page,
+.dark-mode .my-sessions-page,
+html.dark-mode .subs-page,
+body.dark-mode .subs-page,
+.dark-mode .subs-page,
+html.dark-mode .mentor-listing-section,
+body.dark-mode .mentor-listing-section,
+.dark-mode .mentor-listing-section,
+html.dark-mode .browse-mentors-container,
+body.dark-mode .browse-mentors-container,
+.dark-mode .browse-mentors-container,
+html.dark-mode .section-card,
+body.dark-mode .section-card,
+.dark-mode .section-card,
+html.dark-mode .card-surface,
+body.dark-mode .card-surface,
+.dark-mode .card-surface,
+html.dark-mode .glass-card,
+body.dark-mode .glass-card,
+.dark-mode .glass-card,
+html.dark-mode .stat-box,
+body.dark-mode .stat-box,
+.dark-mode .stat-box,
+html.dark-mode .mentor-card,
+body.dark-mode .mentor-card,
+.dark-mode .mentor-card,
+html.dark-mode .login-card,
+body.dark-mode .login-card,
+.dark-mode .login-card,
+html.dark-mode .register-card,
+body.dark-mode .register-card,
+.dark-mode .register-card,
+html.dark-mode .reset-password-card,
+body.dark-mode .reset-password-card,
+.dark-mode .reset-password-card,
+html.dark-mode .profile-card,
+body.dark-mode .profile-card,
+.dark-mode .profile-card,
+html.dark-mode .settings-item,
+body.dark-mode .settings-item,
+.dark-mode .settings-item,
+html.dark-mode .search-box,
+body.dark-mode .search-box,
+.dark-mode .search-box,
+html.dark-mode .filters-section,
+body.dark-mode .filters-section,
+.dark-mode .filters-section,
+html.dark-mode .mentor-session-stats,
+body.dark-mode .mentor-session-stats,
+.dark-mode .mentor-session-stats,
+html.dark-mode .subs-plan-card,
+body.dark-mode .subs-plan-card,
+.dark-mode .subs-plan-card,
+html.dark-mode .subs-includes-card,
+body.dark-mode .subs-includes-card,
+.dark-mode .subs-includes-card {
+  background: rgba(15, 23, 42, 0.92) !important;
+  border-color: rgba(148, 163, 184, 0.18) !important;
+  box-shadow: 0 28px 90px rgba(2, 6, 23, 0.36) !important;
+  color: #f8fafc !important;
+}
+
+html.dark-mode .form-control,
+body.dark-mode .form-control,
+.dark-mode .form-control,
+html.dark-mode .login-input,
+body.dark-mode .login-input,
+.dark-mode .login-input,
+html.dark-mode .register-input,
+body.dark-mode .register-input,
+.dark-mode .register-input,
+html.dark-mode .reset-password-input,
+body.dark-mode .reset-password-input,
+.dark-mode .reset-password-input,
+html.dark-mode textarea,
+body.dark-mode textarea,
+.dark-mode textarea,
+html.dark-mode select,
+body.dark-mode select,
+.dark-mode select {
+  background: rgba(15, 23, 42, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  color: #f8fafc !important;
+}
+
+html.dark-mode .form-control:focus,
+body.dark-mode .form-control:focus,
+.dark-mode .form-control:focus,
+html.dark-mode .login-input:focus,
+body.dark-mode .login-input:focus,
+.dark-mode .login-input:focus,
+html.dark-mode .register-input:focus,
+body.dark-mode .register-input:focus,
+.dark-mode .register-input:focus,
+html.dark-mode .reset-password-input:focus,
+body.dark-mode .reset-password-input:focus,
+.dark-mode .reset-password-input:focus {
+  border-color: rgba(96, 165, 250, 0.8) !important;
+  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.14) !important;
+}
+
+html.dark-mode .text-muted,
+body.dark-mode .text-muted,
+.dark-mode .text-muted,
+html.dark-mode .caption-text,
+body.dark-mode .caption-text,
+.dark-mode .caption-text,
+html.dark-mode .page-subtitle,
+body.dark-mode .page-subtitle,
+.dark-mode .page-subtitle,
+html.dark-mode .section-subtitle,
+body.dark-mode .section-subtitle,
+.dark-mode .section-subtitle {
+  color: #94a3b8 !important;
+}
+
+html.dark-mode .btn-primary,
+body.dark-mode .btn-primary,
+.dark-mode .btn-primary {
+  background: linear-gradient(135deg, #2563eb, #0f4ecd) !important;
+  color: #ffffff !important;
+}
+
+html.dark-mode .btn-secondary,
+body.dark-mode .btn-secondary,
+.dark-mode .btn-secondary,
+html.dark-mode .btn-outline-primary,
+body.dark-mode .btn-outline-primary,
+.dark-mode .btn-outline-primary,
+html.dark-mode .btn-outline-secondary,
+body.dark-mode .btn-outline-secondary,
+.dark-mode .btn-outline-secondary,
+html.dark-mode .btn-outline-dark,
+body.dark-mode .btn-outline-dark,
+.dark-mode .btn-outline-dark {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #f8fafc !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+}
+
+html.dark-mode .btn-danger,
+body.dark-mode .btn-danger,
+.dark-mode .btn-danger {
+  background: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+html.dark-mode .modal-content,
+body.dark-mode .modal-content,
+.dark-mode .modal-content {
+  background: rgba(15, 23, 42, 0.98) !important;
+  color: #f8fafc !important;
+  border-color: rgba(148, 163, 184, 0.18) !important;
+}
+
+html.dark-mode .alert,
+body.dark-mode .alert,
+.dark-mode .alert {
+  background: rgba(220, 38, 38, 0.12) !important;
+  color: #f8fafc !important;
+  border-color: rgba(248, 113, 113, 0.4) !important;
+}
+
+html.dark-mode .alert.alert-success,
+body.dark-mode .alert.alert-success,
+.dark-mode .alert.alert-success {
+  background: rgba(16, 185, 129, 0.16) !important;
+  color: #ecfdf5 !important;
+  border-color: rgba(16, 185, 129, 0.32) !important;
+}
+
+html.dark-mode .alert.alert-info,
+body.dark-mode .alert.alert-info,
+.dark-mode .alert.alert-info {
+  background: rgba(56, 189, 248, 0.16) !important;
+  color: #e0f2fe !important;
+  border-color: rgba(56, 189, 248, 0.28) !important;
+}
+
+html.dark-mode .btn-close,
+body.dark-mode .btn-close,
+.dark-mode .btn-close {
+  filter: invert(1) brightness(2.2) !important;
+}
+
+html.dark-mode,
+body.dark-mode,
+.dark-mode {
+  color: #f8fafc !important;
+}
+
+html.dark-mode body * {
+  color: #f8fafc !important;
+}
+
+html.dark-mode .card-box,
+body.dark-mode .card-box,
+.dark-mode .card-box,
+html.dark-mode .table,
+body.dark-mode .table,
+.dark-mode .table,
+html.dark-mode .complaint-table,
+body.dark-mode .complaint-table,
+.dark-mode .complaint-table {
+  background: rgba(15, 23, 42, 0.96) !important;
+  color: #f8fafc !important;
+  border-color: rgba(148, 163, 184, 0.2) !important;
+}
+
+html.dark-mode .card-box::after,
+body.dark-mode .card-box::after,
+.dark-mode .card-box::after {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 45%) !important;
+}
+
+html.dark-mode .table th,
+body.dark-mode .table th,
+.dark-mode .table th,
+html.dark-mode .table td,
+body.dark-mode .table td,
+.dark-mode .table td,
+html.dark-mode .complaint-table th,
+body.dark-mode .complaint-table th,
+.dark-mode .complaint-table th,
+html.dark-mode .complaint-table td,
+body.dark-mode .complaint-table td,
+.dark-mode .complaint-table td {
+  color: #f8fafc !important;
+  border-color: rgba(148, 163, 184, 0.18) !important;
+}
+
+html.dark-mode .badge-type-mentor,
+body.dark-mode .badge-type-mentor,
+.dark-mode .badge-type-mentor,
+html.dark-mode .badge-type-student,
+body.dark-mode .badge-type-student,
+.dark-mode .badge-type-student,
+html.dark-mode .badge-pending,
+body.dark-mode .badge-pending,
+.dark-mode .badge-pending {
+  color: #f8fafc !important;
+  border: 1px solid rgba(148, 163, 184, 0.2) !important;
+}
+
+html.dark-mode .badge-type-mentor,
+body.dark-mode .badge-type-mentor,
+.dark-mode .badge-type-mentor {
+  background: rgba(59, 130, 246, 0.35) !important;
+}
+
+html.dark-mode .badge-type-student,
+body.dark-mode .badge-type-student,
+.dark-mode .badge-type-student {
+  background: rgba(254, 242, 200, 0.24) !important;
+  color: #92400e !important;
+}
+
+html.dark-mode .badge-pending,
+body.dark-mode .badge-pending,
+.dark-mode .badge-pending {
+  background: rgba(217, 119, 6, 0.28) !important;
+  color: #f8fafc !important;
+  border-color: rgba(217, 119, 6, 0.45) !important;
+}
+
+html.dark-mode .bg-light,
+body.dark-mode .bg-light,
+.dark-mode .bg-light {
+  background-color: #0b1220 !important;
+  color: #f8fafc !important;
+}
+
+html.dark-mode .main-content,
+body.dark-mode .main-content,
+.dark-mode .main-content {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border-radius: 24px;
+  color: #f8fafc !important;
+}
+
+html.dark-mode .section-card,
+body.dark-mode .section-card,
+.dark-mode .section-card,
+html.dark-mode .card-surface,
+body.dark-mode .card-surface,
+.dark-mode .card-surface,
+html.dark-mode .glass-card,
+body.dark-mode .glass-card,
+.dark-mode .glass-card,
+html.dark-mode .stat-box,
+body.dark-mode .stat-box,
+.dark-mode .stat-box,
+html.dark-mode .mentor-card,
+body.dark-mode .mentor-card,
+.dark-mode .mentor-card,
+html.dark-mode .metric-card,
+body.dark-mode .metric-card,
+.dark-mode .metric-card,
+html.dark-mode .custom-card,
+body.dark-mode .custom-card,
+.dark-mode .custom-card,
+html.dark-mode .sessions-card,
+body.dark-mode .sessions-card,
+.dark-mode .sessions-card,
+html.dark-mode .summary-card,
+body.dark-mode .summary-card,
+.dark-mode .summary-card,
+html.dark-mode .revenue-card,
+body.dark-mode .revenue-card,
+.dark-mode .revenue-card,
+html.dark-mode .feedback-card,
+body.dark-mode .feedback-card,
+.dark-mode .feedback-card,
+html.dark-mode .mcq-card,
+body.dark-mode .mcq-card,
+.dark-mode .mcq-card,
+html.dark-mode .availability-card,
+body.dark-mode .availability-card,
+.dark-mode .availability-card,
+html.dark-mode .sessions-card,
+body.dark-mode .sessions-card,
+.dark-mode .sessions-card,
+html.dark-mode .history-card,
+body.dark-mode .history-card,
+.dark-mode .history-card,
+html.dark-mode .timer-card,
+body.dark-mode .timer-card,
+.dark-mode .timer-card,
+html.dark-mode .subs-plan-card,
+body.dark-mode .subs-plan-card,
+.dark-mode .subs-plan-card,
+html.dark-mode .transactions-section,
+body.dark-mode .transactions-section,
+.dark-mode .transactions-section,
+html.dark-mode .search-box,
+body.dark-mode .search-box,
+.dark-mode .search-box,
+html.dark-mode .filters-section,
+body.dark-mode .filters-section,
+.dark-mode .filters-section,
+html.dark-mode .mentor-profile-card,
+body.dark-mode .mentor-profile-card,
+.dark-mode .mentor-profile-card,
+html.dark-mode .mentor-session-stats,
+body.dark-mode .mentor-session-stats,
+.dark-mode .mentor-session-stats,
+html.dark-mode .mentor-plan-card,
+body.dark-mode .mentor-plan-card,
+.dark-mode .mentor-plan-card,
+html.dark-mode .feature-card,
+body.dark-mode .feature-card,
+.dark-mode .feature-card,
+html.dark-mode .how-card,
+body.dark-mode .how-card,
+.dark-mode .how-card,
+html.dark-mode .testimonial-card,
+body.dark-mode .testimonial-card,
+.dark-mode .testimonial-card,
+html.dark-mode .hero-float-card,
+body.dark-mode .hero-float-card,
+.dark-mode .hero-float-card {
+  background: rgba(15, 23, 42, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.18) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.32) !important;
+  color: #f8fafc !important;
+}
+
+html.dark-mode .bg-white,
+body.dark-mode .bg-white,
+.dark-mode .bg-white,
+html.dark-mode .form-control,
+body.dark-mode .form-control,
+.dark-mode .form-control,
+html.dark-mode .profile-card,
+body.dark-mode .profile-card,
+.dark-mode .profile-card,
+html.dark-mode .student-card,
+body.dark-mode .student-card,
+.dark-mode .student-card,
+html.dark-mode .stat-card,
+body.dark-mode .stat-card,
+.dark-mode .stat-card,
+html.dark-mode .earnings-stat-card,
+body.dark-mode .earnings-stat-card,
+.dark-mode .earnings-stat-card,
+html.dark-mode .modal-content,
+body.dark-mode .modal-content,
+.dark-mode .modal-content,
+html.dark-mode .modal-header,
+body.dark-mode .modal-header,
+.dark-mode .modal-header,
+html.dark-mode .modal-body,
+body.dark-mode .modal-body,
+.dark-mode .modal-body,
+html.dark-mode .modal-footer,
+body.dark-mode .modal-footer,
+.dark-mode .modal-footer,
+html.dark-mode .table-responsive,
+body.dark-mode .table-responsive,
+.dark-mode .table-responsive,
+html.dark-mode .hero-card,
+body.dark-mode .hero-card,
+.dark-mode .hero-card,
+html.dark-mode .mentor-modal-content,
+body.dark-mode .mentor-modal-content,
+.dark-mode .mentor-modal-content {
+  background: rgba(15, 23, 42, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.18) !important;
+  color: #f8fafc !important;
+}
+
+html.dark-mode .home-root,
+body.dark-mode .home-root,
+.dark-mode .home-root,
+html.dark-mode .pricing-section,
+body.dark-mode .pricing-section,
+.dark-mode .pricing-section,
+html.dark-mode .cta-section,
+body.dark-mode .cta-section,
+.dark-mode .cta-section,
+html.dark-mode .home-footer-section,
+body.dark-mode .home-footer-section,
+.dark-mode .home-footer-section,
+html.dark-mode .admin-login-container,
+body.dark-mode .admin-login-container,
+.dark-mode .admin-login-container,
+html.dark-mode .login-container,
+body.dark-mode .login-container,
+.dark-mode .login-container,
+html.dark-mode .register-page,
+body.dark-mode .register-page,
+.dark-mode .register-page,
+html.dark-mode .reset-password-page,
+body.dark-mode .reset-password-page,
+.dark-mode .reset-password-page,
+html.dark-mode .student-dashboard,
+body.dark-mode .student-dashboard,
+.dark-mode .student-dashboard,
+html.dark-mode .feedback-page,
+body.dark-mode .feedback-page,
+.dark-mode .feedback-page,
+html.dark-mode .mcq-practice-page,
+body.dark-mode .mcq-practice-page,
+.dark-mode .mcq-practice-page,
+html.dark-mode .availability-page,
+body.dark-mode .availability-page,
+.dark-mode .availability-page,
+html.dark-mode .earnings-page,
+body.dark-mode .earnings-page,
+.dark-mode .earnings-page,
+html.dark-mode .mentor-messages-page,
+body.dark-mode .mentor-messages-page,
+.dark-mode .mentor-messages-page,
+html.dark-mode .my-students-page,
+body.dark-mode .my-students-page,
+.dark-mode .my-students-page,
+html.dark-mode .my-mentor-page,
+body.dark-mode .my-mentor-page,
+.dark-mode .my-mentor-page,
+html.dark-mode .my-sessions-page,
+body.dark-mode .my-sessions-page,
+.dark-mode .my-sessions-page,
+html.dark-mode .study-timer-container,
+body.dark-mode .study-timer-container,
+.dark-mode .study-timer-container,
+html.dark-mode .subs-page,
+body.dark-mode .subs-page,
+.dark-mode .subs-page,
+html.dark-mode .mentor-listing-section,
+body.dark-mode .mentor-listing-section,
+.dark-mode .mentor-listing-section,
+html.dark-mode .browse-mentors-container,
+body.dark-mode .browse-mentors-container,
+.dark-mode .browse-mentors-container,
+html.dark-mode .questions-section,
+body.dark-mode .questions-section,
+.dark-mode .questions-section,
+html.dark-mode .stats-section,
+body.dark-mode .stats-section,
+.dark-mode .stats-section,
+html.dark-mode .attempts-section,
+body.dark-mode .attempts-section,
+.dark-mode .attempts-section,
+html.dark-mode .error-message-container,
+body.dark-mode .error-message-container,
+.dark-mode .error-message-container,
+html.dark-mode .modal-section,
+body.dark-mode .modal-section,
+.dark-mode .modal-section,
+html.dark-mode .chat-modal-container,
+body.dark-mode .chat-modal-container,
+.dark-mode .chat-modal-container,
+html.dark-mode .messages-container,
+body.dark-mode .messages-container,
+.dark-mode .messages-container,
+html.dark-mode .demo-player-container,
+body.dark-mode .demo-player-container,
+.dark-mode .demo-player-container,
+html.dark-mode .progress-section,
+body.dark-mode .progress-section,
+.dark-mode .progress-section,
+html.dark-mode .resume-upload-section,
+body.dark-mode .resume-upload-section,
+.dark-mode .resume-upload-section,
+html.dark-mode .admin-dashboard,
+body.dark-mode .admin-dashboard,
+.dark-mode .admin-dashboard,
+html.dark-mode .pl-root,
+body.dark-mode .pl-root,
+.dark-mode .pl-root,
+html.dark-mode .rc-root,
+body.dark-mode .rc-root,
+.dark-mode .rc-root {
+  background: rgba(15, 23, 42, 0.95) !important;
+  color: #f8fafc !important;
+  border-color: rgba(148, 163, 184, 0.18) !important;
+}
+
+html.dark-mode .card,
+body.dark-mode .card,
+.dark-mode .card,
+html.dark-mode .card-body,
+body.dark-mode .card-body,
+.dark-mode .card-body,
+html.dark-mode .card-header,
+body.dark-mode .card-header,
+.dark-mode .card-header,
+html.dark-mode .card-footer,
+body.dark-mode .card-footer,
+.dark-mode .card-footer,
+html.dark-mode .accordion-button,
+body.dark-mode .accordion-button,
+.dark-mode .accordion-button,
+html.dark-mode .accordion-body,
+body.dark-mode .accordion-body,
+.dark-mode .accordion-body,
+html.dark-mode .dropdown-menu,
+body.dark-mode .dropdown-menu,
+.dark-mode .dropdown-menu,
+html.dark-mode .dropdown-item,
+body.dark-mode .dropdown-item,
+.dark-mode .dropdown-item,
+html.dark-mode .list-group-item,
+body.dark-mode .list-group-item,
+.dark-mode .list-group-item,
+html.dark-mode .breadcrumb,
+body.dark-mode .breadcrumb,
+.dark-mode .breadcrumb,
+html.dark-mode .navbar,
+body.dark-mode .navbar,
+.dark-mode .navbar,
+html.dark-mode .nav,
+body.dark-mode .nav,
+.dark-mode .nav,
+html.dark-mode .navbar-nav,
+body.dark-mode .navbar-nav,
+.dark-mode .navbar-nav,
+html.dark-mode .form-select,
+body.dark-mode .form-select,
+.dark-mode .form-select,
+html.dark-mode .form-check-input,
+body.dark-mode .form-check-input,
+.dark-mode .form-check-input,
+html.dark-mode .form-check-label,
+body.dark-mode .form-check-label,
+.dark-mode .form-check-label,
+html.dark-mode .input-group-text,
+body.dark-mode .input-group-text,
+.dark-mode .input-group-text,
+html.dark-mode .input-group,
+body.dark-mode .input-group,
+.dark-mode .input-group,
+html.dark-mode .toast,
+body.dark-mode .toast,
+.dark-mode .toast,
+html.dark-mode .toast-body,
+body.dark-mode .toast-body,
+.dark-mode .toast-body,
+html.dark-mode .Toastify__toast,
+body.dark-mode .Toastify__toast,
+.dark-mode .Toastify__toast,
+html.dark-mode .Toastify__toast-body,
+body.dark-mode .Toastify__toast-body,
+.dark-mode .Toastify__toast-body,
+html.dark-mode .Toastify__toast--error,
+body.dark-mode .Toastify__toast--error,
+.dark-mode .Toastify__toast--error,
+html.dark-mode .Toastify__toast--success,
+body.dark-mode .Toastify__toast--success,
+.dark-mode .Toastify__toast--success,
+html.dark-mode .Toastify__toast--info,
+body.dark-mode .Toastify__toast--info,
+.dark-mode .Toastify__toast--info,
+html.dark-mode .Toastify__toast--warning,
+body.dark-mode .Toastify__toast--warning,
+.dark-mode .Toastify__toast--warning {
+  background: rgba(15, 23, 42, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.18) !important;
+  color: #f8fafc !important;
+}
+
+html.dark-mode .Toastify__toast--error,
+body.dark-mode .Toastify__toast--error,
+.dark-mode .Toastify__toast--error {
+  background: #991b1b !important;
+  color: #ffffff !important;
+}
+
+html.dark-mode .Toastify__toast-body,
+body.dark-mode .Toastify__toast-body,
+.dark-mode .Toastify__toast-body {
+  color: #f8fafc !important;
+}
+
+html.dark-mode .Toastify__toast,
+body.dark-mode .Toastify__toast,
+.dark-mode .Toastify__toast {
+  background: rgba(15, 23, 42, 0.96) !important;
+  color: #f8fafc !important;
+}
+
+html.dark-mode .status-badge,
+body.dark-mode .status-badge,
+.dark-mode .status-badge,
+html.dark-mode .badge-pill,
+body.dark-mode .badge-pill,
+.dark-mode .badge-pill {
+  border-color: rgba(148, 163, 184, 0.18) !important;
+  color: #f8fafc !important;
+}
+
+html.dark-mode input,
+body.dark-mode input,
+.dark-mode input,
+html.dark-mode textarea,
+body.dark-mode textarea,
+.dark-mode textarea,
+html.dark-mode select,
+body.dark-mode select,
+.dark-mode select,
+html.dark-mode button,
+body.dark-mode button,
+.dark-mode button {
+  background: rgba(15, 23, 42, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  color: #f8fafc !important;
+}
+
+html.dark-mode input::placeholder,
+body.dark-mode input::placeholder,
+.dark-mode input::placeholder,
+html.dark-mode textarea::placeholder,
+body.dark-mode textarea::placeholder,
+.dark-mode textarea::placeholder,
+html.dark-mode select::placeholder,
+body.dark-mode select::placeholder,
+.dark-mode select::placeholder {
+  color: #94a3b8 !important;
+}
+
+html.dark-mode .btn-outline-primary,
+body.dark-mode .btn-outline-primary,
+.dark-mode .btn-outline-primary,
+html.dark-mode .btn-outline-secondary,
+body.dark-mode .btn-outline-secondary,
+.dark-mode .btn-outline-secondary,
+html.dark-mode .btn-outline-dark,
+body.dark-mode .btn-outline-dark,
+.dark-mode .btn-outline-dark,
+html.dark-mode .btn-secondary,
+body.dark-mode .btn-secondary,
+.dark-mode .btn-secondary {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #f8fafc !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+}
+
+html.dark-mode .btn-primary,
+body.dark-mode .btn-primary,
+.dark-mode .btn-primary {
+  background: linear-gradient(135deg, #2563eb, #0f4ecd) !important;
+  color: #ffffff !important;
+}
+
+html.dark-mode .btn-danger,
+body.dark-mode .btn-danger,
+.dark-mode .btn-danger {
+  background: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+html.dark-mode .nav,
+body.dark-mode .nav,
+.dark-mode .nav,
+html.dark-mode .navbar,
+body.dark-mode .navbar,
+.dark-mode .navbar,
+html.dark-mode .navbar-nav,
+body.dark-mode .navbar-nav,
+.dark-mode .navbar-nav {
+  background: rgba(15, 23, 42, 0.96) !important;
+  color: #f8fafc !important;
+}
+
+html.dark-mode .page-shell,
+body.dark-mode .page-shell,
+.dark-mode .page-shell,
+html.dark-mode .mentor-page-root,
+body.dark-mode .mentor-page-root,
+.dark-mode .mentor-page-root,
+html.dark-mode .register-page,
+body.dark-mode .register-page,
+.dark-mode .register-page,
+html.dark-mode .reset-password-page,
+body.dark-mode .reset-password-page,
+.dark-mode .reset-password-page,
+html.dark-mode .complaint-page,
+body.dark-mode .complaint-page,
+.dark-mode .complaint-page,
+html.dark-mode .testimonial-section,
+body.dark-mode .testimonial-section,
+.dark-mode .testimonial-section,
+html.dark-mode .hero-section,
+body.dark-mode .hero-section,
+.dark-mode .hero-section,
+html.dark-mode .features-section,
+body.dark-mode .features-section,
+.dark-mode .features-section,
+html.dark-mode .how-section,
+body.dark-mode .how-section,
+.dark-mode .how-section,
+html.dark-mode .mentor-listing-section,
+body.dark-mode .mentor-listing-section,
+.dark-mode .mentor-listing-section,
+html.dark-mode .browse-mentors-container,
+body.dark-mode .browse-mentors-container,
+.dark-mode .browse-mentors-container {
+  background: rgba(15, 23, 42, 0.95) !important;
+  color: #f8fafc !important;
+}
+
+.container {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+html.dark-mode .table th,
+body.dark-mode .table th,
+.dark-mode .table th,
+html.dark-mode .table td,
+body.dark-mode .table td,
+.dark-mode .table td {
+  color: #f8fafc !important;
+  border-color: rgba(148, 163, 184, 0.18) !important;
+  background-color: transparent !important;
+}
+
+html.dark-mode .table thead th,
+body.dark-mode .table thead th,
+.dark-mode .table thead th {
+  background: rgba(15, 23, 42, 0.95) !important;
+}
+
+html.dark-mode .table tbody tr,
+body.dark-mode .table tbody tr,
+.dark-mode .table tbody tr {
+  background: rgba(15, 23, 42, 0.88) !important;
+}
+
+html.dark-mode .table-hover tbody tr:hover,
+body.dark-mode .table-hover tbody tr:hover,
+.dark-mode .table-hover tbody tr:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark-mode a,
+body.dark-mode a,
+.dark-mode a {
+  color: #93c5fd !important;
+}
+
+html.dark-mode .text-muted,
+body.dark-mode .text-muted,
+.dark-mode .text-muted,
+html.dark-mode .caption-text,
+body.dark-mode .caption-text,
+.dark-mode .caption-text,
+html.dark-mode .page-subtitle,
+body.dark-mode .page-subtitle,
+.dark-mode .page-subtitle,
+html.dark-mode .section-subtitle,
+body.dark-mode .section-subtitle,
+.dark-mode .section-subtitle {
+  color: #94a3b8 !important;
+}
+
+html.dark-mode .mentor-listing-section,
+body.dark-mode .mentor-listing-section,
+.dark-mode .mentor-listing-section,
+html.dark-mode .browse-mentors-container,
+body.dark-mode .browse-mentors-container,
+.dark-mode .browse-mentors-container,
+html.dark-mode .page-shell,
+body.dark-mode .page-shell,
+.dark-mode .page-shell,
+html.dark-mode .register-page,
+body.dark-mode .register-page,
+.dark-mode .register-page,
+html.dark-mode .reset-password-page,
+body.dark-mode .reset-password-page,
+.dark-mode .reset-password-page,
+html.dark-mode .student-dashboard,
+body.dark-mode .student-dashboard,
+.dark-mode .student-dashboard,
+html.dark-mode .feedback-page,
+body.dark-mode .feedback-page,
+.dark-mode .feedback-page,
+html.dark-mode .mcq-practice-page,
+body.dark-mode .mcq-practice-page,
+.dark-mode .mcq-practice-page {
+  background: rgba(15, 23, 42, 0.95) !important;
 }
 
 .container {

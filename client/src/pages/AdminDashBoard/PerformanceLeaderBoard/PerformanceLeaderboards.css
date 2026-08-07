@@ -119,3 +119,79 @@
     font-size: 26px;
   }
 }
+
+/* Dark Mode Support */
+html.dark-mode .pl-header .pl-title,
+body.dark-mode .pl-header .pl-title,
+.dark-mode .pl-header .pl-title,
+html.dark-mode .pl-item__name,
+body.dark-mode .pl-item__name,
+.dark-mode .pl-item__name,
+html.dark-mode .streak-name,
+body.dark-mode .streak-name,
+.dark-mode .streak-name {
+  color: #f8fafc !important;
+}
+
+html.dark-mode .pl-header .pl-subtitle,
+body.dark-mode .pl-header .pl-subtitle,
+.dark-mode .pl-header .pl-subtitle,
+html.dark-mode .pl-item__rank,
+body.dark-mode .pl-item__rank,
+.dark-mode .pl-item__rank,
+html.dark-mode .pl-item__subtext,
+body.dark-mode .pl-item__subtext,
+.dark-mode .pl-item__subtext,
+html.dark-mode .streak-last,
+body.dark-mode .streak-last,
+.dark-mode .streak-last {
+  color: #94a3b8 !important;
+}
+
+html.dark-mode .pl-item--highlight,
+body.dark-mode .pl-item--highlight,
+.dark-mode .pl-item--highlight {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+html.dark-mode .pl-score--yellow,
+body.dark-mode .pl-score--yellow,
+.dark-mode .pl-score--yellow {
+  background: rgba(202, 138, 4, 0.2) !important;
+  color: #fcd34d !important;
+}
+
+html.dark-mode .pl-score--blue,
+body.dark-mode .pl-score--blue,
+.dark-mode .pl-score--blue {
+  background: rgba(59, 130, 246, 0.2) !important;
+  color: #93c5fd !important;
+}
+
+html.dark-mode .streak-card,
+body.dark-mode .streak-card,
+.dark-mode .streak-card {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(148, 163, 184, 0.1) !important;
+}
+
+html.dark-mode .streak-value,
+body.dark-mode .streak-value,
+.dark-mode .streak-value {
+  color: #fca5a5 !important;
+}
+
+html.dark-mode .type-mentor,
+body.dark-mode .type-mentor,
+.dark-mode .type-mentor {
+  background: rgba(59, 130, 246, 0.2) !important;
+  color: #93c5fd !important;
+}
+
+html.dark-mode .type-student,
+body.dark-mode .type-student,
+.dark-mode .type-student {
+  background: rgba(202, 138, 4, 0.2) !important;
+  color: #fcd34d !important;
+}
+}
