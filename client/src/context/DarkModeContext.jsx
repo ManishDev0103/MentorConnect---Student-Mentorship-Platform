@@ -4,23 +4,24 @@ import React, { createContext, useState, useEffect } from 'react';
 export const DarkModeContext = createContext();
 
 export const DarkModeProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  // Load dark mode preference from localStorage on mount
-  useEffect(() => {
-    const savedMode = localStorage.getItem('studentDashboardDarkMode');
-    if (savedMode) {
-      setIsDarkMode(JSON.parse(savedMode));
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const savedMode = localStorage.getItem('darkModeEnabled');
+    if (savedMode !== null) {
+      return JSON.parse(savedMode);
     }
-  }, []);
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
 
-  // Save dark mode preference to localStorage
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark-mode', isDarkMode);
+    document.body.classList.toggle('dark-mode', isDarkMode);
+    document.documentElement.dataset.theme = isDarkMode ? 'dark' : 'light';
+    localStorage.setItem('darkModeEnabled', JSON.stringify(isDarkMode));
+  }, [isDarkMode]);
+
   const toggleDarkMode = () => {
-    setIsDarkMode((prev) => {
-      const newMode = !prev;
-      localStorage.setItem('studentDashboardDarkMode', JSON.stringify(newMode));
-      return newMode;
-    });
+    setIsDarkMode((prev) => !prev);
   };
 
   return (

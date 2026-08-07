@@ -33,6 +33,7 @@ import com.mentorship.entities.Student;
 import com.mentorship.entities.User;
 import com.mentorship.entities.UserRole;
 import com.mentorship.entities.VerificationStatus;
+import com.mentorship.entities.UserStatus;
 import com.mentorship.repository.MentorRepository;
 import com.mentorship.repository.RatingRepository;
 import com.mentorship.repository.SessionRepository;
@@ -1128,8 +1129,7 @@ public class AdminDashboardService {
     }
 
     // ==================== HELPER METHODS ====================
-
-    // (Removed duplicate helper) calculateGrowthPercent implemented below.
+    
 
     private double calculateRevenueGrowth(double current, double previous) {
         if (previous == 0)

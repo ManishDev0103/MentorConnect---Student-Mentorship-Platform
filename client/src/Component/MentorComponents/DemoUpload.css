@@ -71,3 +71,39 @@
   text-align:right;
   font-weight:600;
 }
+
+/* Dark Mode Support */
+html.dark-mode .form-label,
+body.dark-mode .form-label,
+.dark-mode .form-label {
+  color: #e2e8f0 !important;
+}
+
+html.dark-mode .form-control-file,
+body.dark-mode .form-control-file,
+.dark-mode .form-control-file,
+html.dark-mode .form-control-textarea,
+body.dark-mode .form-control-textarea,
+.dark-mode .form-control-textarea {
+  background: rgba(15, 23, 42, 0.88) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  color: #f8fafc !important;
+}
+
+html.dark-mode .selected-file,
+body.dark-mode .selected-file,
+.dark-mode .selected-file {
+  color: #cbd5e1 !important;
+}
+
+html.dark-mode .progress-track,
+body.dark-mode .progress-track,
+.dark-mode .progress-track {
+  background: rgba(148, 163, 184, 0.2) !important;
+}
+
+html.dark-mode .progress-label,
+body.dark-mode .progress-label,
+.dark-mode .progress-label {
+  color: #cbd5e1 !important;
+}

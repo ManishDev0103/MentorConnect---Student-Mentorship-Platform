@@ -14,9 +14,14 @@ import AdminProfile from "../AdminProfile";
 const Overview = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const handleDataRefresh = () => {
     setRefreshTrigger((prev) => prev + 1);
+  };
+
+  const toggleSidebar = () => {
+    setSidebarCollapsed((prev) => !prev);
   };
 
   const chartData = useMemo(
@@ -96,7 +101,7 @@ const Overview = () => {
   };
 
   return (
-    <div className="admin-dashboard bg-light">
+    <div className={`admin-dashboard bg-light${sidebarCollapsed ? " sidebar-collapsed" : ""}`}>
       <div className="container-fluid p-0">
         <div className="row g-0 admin-dashboard-row">
           <div className="col-12 col-lg-3 col-xl-2 p-0">
@@ -105,6 +110,17 @@ const Overview = () => {
 
           <div className="col-12 col-lg-9 col-xl-10">
             <main className="main-content py-3 py-md-4 px-2 px-md-4">
+              <div className="d-flex justify-content-end mb-3">
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary btn-sm sidebar-toggle-btn"
+                  onClick={toggleSidebar}
+                  aria-label={sidebarCollapsed ? "Show Sidebar" : "Hide Sidebar"}
+                  title={sidebarCollapsed ? "Show Sidebar" : "Hide Sidebar"}
+                >
+                  {sidebarCollapsed ? "☰" : "◀"}
+                </button>
+              </div>
               {renderContent()}
             </main>
           </div>

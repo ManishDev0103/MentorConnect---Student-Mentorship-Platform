@@ -4,6 +4,7 @@ import { bookSession, deleteSession, getVerifiedMentors, getMentorDetails } from
 import { getStudentId } from "../../service/authService";
 import { createOrder, verifyPayment } from "../../service/paymentService";
 import { getAvailabilityForDate } from "../../service/mentorservice";
+import { useDarkMode } from "../../context/DarkModeContext";
 
 const ScheduleSessionModal = ({
   isOpen,
@@ -12,6 +13,7 @@ const ScheduleSessionModal = ({
   preselectedMentorId = null,
   filterMentorIds = null,
 }) => {
+  const { isDarkMode } = useDarkMode();
   const [mentors, setMentors] = useState([]);
   const [availableSlots, setAvailableSlots] = useState([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
@@ -26,6 +28,11 @@ const ScheduleSessionModal = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [mentorLoading, setMentorLoading] = useState(false);
+
+  const getDisabledInputStyle = () => ({
+    backgroundColor: isDarkMode ? "rgba(148, 163, 184, 0.12)" : "#e9ecef",
+    cursor: "not-allowed",
+  });
 
   useEffect(() => {
     if (isOpen) {
@@ -354,7 +361,7 @@ const ScheduleSessionModal = ({
                 disabled={mentorLoading || loading || !!preselectedMentorId}
                 style={
                   preselectedMentorId
-                    ? { backgroundColor: "#e9ecef", cursor: "not-allowed" }
+                    ? getDisabledInputStyle()
                     : {}
                 }
               >
@@ -410,10 +417,7 @@ const ScheduleSessionModal = ({
                   <select
                     name="startTime"
                     disabled
-                    style={{
-                      backgroundColor: "#e9ecef",
-                      cursor: "not-allowed",
-                    }}
+                    style={getDisabledInputStyle()}
                   >
                     <option value="">
                       {loadingSlots
@@ -433,7 +437,7 @@ const ScheduleSessionModal = ({
                   value={formData.endTime}
                   readOnly
                   disabled
-                  style={{ backgroundColor: "#e9ecef", cursor: "not-allowed" }}
+                  style={getDisabledInputStyle()}
                 />
               </div>
             </div>

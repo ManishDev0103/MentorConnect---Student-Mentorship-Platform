@@ -220,3 +220,181 @@
     padding: 12px 16px;
   }
 }
+
+/* Dark Mode Support */
+html.dark-mode .summary-card,
+body.dark-mode .summary-card,
+.dark-mode .summary-card,
+html.dark-mode .card-box,
+body.dark-mode .card-box,
+.dark-mode .card-box {
+  background: rgba(15, 23, 42, 0.96) !important;
+  border: 1px solid rgba(148, 163, 184, 0.18) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+html.dark-mode .summary-value,
+body.dark-mode .summary-value,
+.dark-mode .summary-value,
+html.dark-mode .card-header-title,
+body.dark-mode .card-header-title,
+.dark-mode .card-header-title {
+  color: #f8fafc !important;
+}
+
+html.dark-mode .role-badge,
+body.dark-mode .role-badge,
+.dark-mode .role-badge {
+  border: 1px solid rgba(148, 163, 184, 0.2) !important;
+}
+
+html.dark-mode .role-mentor,
+body.dark-mode .role-mentor,
+.dark-mode .role-mentor {
+  background: rgba(59, 130, 246, 0.2) !important;
+  color: #93c5fd !important;
+}
+
+html.dark-mode .role-admin,
+body.dark-mode .role-admin,
+.dark-mode .role-admin {
+  background: rgba(147, 51, 234, 0.2) !important;
+  color: #d8b4fe !important;
+}
+
+html.dark-mode .role-student,
+body.dark-mode .role-student,
+.dark-mode .role-student {
+  background: rgba(202, 138, 4, 0.2) !important;
+  color: #fcd34d !important;
+}
+
+html.dark-mode .status-badge,
+body.dark-mode .status-badge,
+.dark-mode .status-badge {
+  border: 1px solid rgba(148, 163, 184, 0.2) !important;
+}
+
+html.dark-mode .status-active,
+body.dark-mode .status-active,
+.dark-mode .status-active {
+  background: rgba(34, 197, 94, 0.2) !important;
+  color: #86efac !important;
+}
+
+html.dark-mode .status-suspended,
+body.dark-mode .status-suspended,
+.dark-mode .status-suspended {
+  background: rgba(202, 138, 4, 0.2) !important;
+  color: #fcd34d !important;
+}
+
+html.dark-mode .status-banned,
+body.dark-mode .status-banned,
+.dark-mode .status-banned {
+  background: rgba(239, 68, 68, 0.2) !important;
+  color: #fca5a5 !important;
+}
+
+html.dark-mode .status-inactive,
+body.dark-mode .status-inactive,
+.dark-mode .status-inactive {
+  background: rgba(148, 163, 184, 0.1) !important;
+  color: #cbd5e1 !important;
+}
+
+html.dark-mode .modal-overlay,
+body.dark-mode .modal-overlay,
+.dark-mode .modal-overlay {
+  background: rgba(0, 0, 0, 0.7) !important;
+}
+
+html.dark-mode .modal-content,
+body.dark-mode .modal-content,
+.dark-mode .modal-content {
+  background: rgba(15, 23, 42, 0.98) !important;
+  border: 1px solid rgba(148, 163, 184, 0.18) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+html.dark-mode .modal-header,
+body.dark-mode .modal-header,
+.dark-mode .modal-header,
+html.dark-mode .modal-footer,
+body.dark-mode .modal-footer,
+.dark-mode .modal-footer {
+  border-color: rgba(148, 163, 184, 0.18) !important;
+}
+
+html.dark-mode .modal-title,
+body.dark-mode .modal-title,
+.dark-mode .modal-title {
+  color: #f8fafc !important;
+}
+
+html.dark-mode .close-button,
+body.dark-mode .close-button,
+.dark-mode .close-button {
+  color: #cbd5e1 !important;
+}
+
+html.dark-mode .close-button:hover,
+body.dark-mode .close-button:hover,
+.dark-mode .close-button:hover {
+  color: #f8fafc !important;
+}
+
+html.dark-mode .form-group label,
+body.dark-mode .form-group label,
+.dark-mode .form-group label {
+  color: #e2e8f0 !important;
+}
+
+html.dark-mode .form-control,
+body.dark-mode .form-control,
+.dark-mode .form-control {
+  background: rgba(15, 23, 42, 0.88) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  color: #f8fafc !important;
+}
+
+html.dark-mode .form-control:focus,
+body.dark-mode .form-control:focus,
+.dark-mode .form-control:focus {
+  border-color: rgba(59, 130, 246, 0.5) !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+}
+
+html.dark-mode .form-control:disabled,
+body.dark-mode .form-control:disabled,
+.dark-mode .form-control:disabled {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #94a3b8 !important;
+}
+
+html.dark-mode .btn-primary,
+body.dark-mode .btn-primary,
+.dark-mode .btn-primary {
+  background: #3b82f6 !important;
+  color: #fff !important;
+}
+
+html.dark-mode .btn-primary:hover,
+body.dark-mode .btn-primary:hover,
+.dark-mode .btn-primary:hover {
+  background: #2563eb !important;
+}
+
+html.dark-mode .btn-secondary,
+body.dark-mode .btn-secondary,
+.dark-mode .btn-secondary {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #cbd5e1 !important;
+  border: 1px solid rgba(148, 163, 184, 0.2) !important;
+}
+
+html.dark-mode .btn-secondary:hover,
+body.dark-mode .btn-secondary:hover,
+.dark-mode .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+}

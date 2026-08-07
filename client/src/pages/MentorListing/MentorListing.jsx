@@ -6,12 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { getPublicMentors } from "../../service/mentorservice";
 import ScheduleSessionModal from "../../Component/ScheduleSessionModal/ScheduleSessionModal";
 import DemoPlayer from "../../Component/MentorComponents/DemoPlayer";
+import { useDarkMode } from "../../context/DarkModeContext";
 
 const MentorListing = () => {
   const [mentors, setMentors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
+  const { isDarkMode } = useDarkMode();
 
   // Modal state
   const [selectedMentorId, setSelectedMentorId] = useState(null);
@@ -19,6 +21,11 @@ const MentorListing = () => {
   const [openDemoUserId, setOpenDemoUserId] = useState(null);
 
   const navigate = useNavigate();
+
+  // Dark mode color helpers
+  const getMutedColor = () => isDarkMode ? "#94a3b8" : "#888";
+  const getPriceColor = () => isDarkMode ? "#fca5a5" : "#b91c1c"; // Lighter red for dark mode
+  const getDiscountColor = () => isDarkMode ? "#86efac" : "#10b981"; // Lighter green for dark mode
 
   const fetchMentors = async () => {
     try {
@@ -227,9 +234,9 @@ const MentorListing = () => {
                       <div className="mentor-price">
                         {m.discountPercent > 0 ? (
                           <>
-                            <span style={{ textDecoration: 'line-through', color: '#888', marginRight: 8 }}>₹{m.price}</span>
-                            <span style={{ color: '#b91c1c', fontWeight: 700 }}>₹{m.finalPrice}</span>
-                            <div style={{ fontSize: 12, color: '#10b981', marginLeft: 8 }}>{m.discountPercent}% OFF</div>
+                            <span style={{ textDecoration: 'line-through', color: getMutedColor(), marginRight: 8 }}>₹{m.price}</span>
+                            <span style={{ color: getPriceColor(), fontWeight: 700 }}>₹{m.finalPrice}</span>
+                            <div style={{ fontSize: 12, color: getDiscountColor(), marginLeft: 8 }}>{m.discountPercent}% OFF</div>
                           </>
                         ) : (
                           <>₹{m.price}/hr</>

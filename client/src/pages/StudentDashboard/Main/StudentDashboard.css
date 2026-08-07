@@ -5,6 +5,7 @@
   background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
   font-family: 'Segoe UI', Arial, sans-serif;
   overflow: hidden;
+  position: relative;
 }
 
 .sidebar {
@@ -15,13 +16,45 @@
   border-right: 1px solid rgba(15, 23, 42, 0.08);
   display: flex;
   flex-direction: column;
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
   flex-shrink: 0;
   z-index: 10;
   box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
   backdrop-filter: blur(10px);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.dashboard-content {
+  flex: 1;
+  margin-left: 260px;
+  padding: 32px 40px;
+  height: 100vh;
+  overflow-y: auto;
+  background: transparent;
+  transition: margin-left 0.25s ease;
+}
+
+.student-dashboard.sidebar-collapsed .sidebar {
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.student-dashboard.sidebar-collapsed .dashboard-content {
+  margin-left: 0;
+  padding-left: 32px;
+}
+
+.sidebar-toggle-btn {
+  min-width: 42px;
+  width: 42px;
+  padding: 0.3rem 0.45rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
 }
 
 .sidebar-logo {
@@ -117,33 +150,6 @@
   margin-top: auto;
 }
 
-.dashboard-content {
-  flex: 1;
-  padding: 32px 40px;
-  height: 100vh;
-  overflow-y: auto;
-  background: transparent;
-}
-
-.dashboard-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 32px;
-  gap: 16px;
-}
-
-.dashboard-actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.dashboard-header h1 {
-  margin: 0;
-}
-
 .dark-mode-toggle-btn {
   background: #0f172a;
   color: #f8fafc;
@@ -160,73 +166,133 @@
   background: #111827;
 }
 
+html.dark-mode .student-dashboard,
+body.dark-mode .student-dashboard,
 .student-dashboard.dark-mode {
   background: #0f172a;
   color: #e2e8f0;
 }
 
+html.dark-mode .student-dashboard .sidebar,
+body.dark-mode .student-dashboard .sidebar,
 .student-dashboard.dark-mode .sidebar {
   background: rgba(15, 23, 42, 0.96);
   color: #e2e8f0;
   border-right: 1px solid rgba(148, 163, 184, 0.15);
 }
 
+html.dark-mode .student-dashboard .sidebar-item,
+body.dark-mode .student-dashboard .sidebar-item,
 .student-dashboard.dark-mode .sidebar-item {
   color: #cbd5e1;
 }
 
+html.dark-mode .student-dashboard .sidebar-item:hover,
+body.dark-mode .student-dashboard .sidebar-item:hover,
 .student-dashboard.dark-mode .sidebar-item:hover {
   background: rgba(59, 130, 246, 0.16);
   color: #f8fafc;
 }
 
+html.dark-mode .student-dashboard .sidebar-item.active,
+body.dark-mode .student-dashboard .sidebar-item.active,
 .student-dashboard.dark-mode .sidebar-item.active {
   background: linear-gradient(135deg, #2563eb, #0ea5e9);
   color: #fff;
 }
 
+html.dark-mode .student-dashboard .sidebar-logout,
+body.dark-mode .student-dashboard .sidebar-logout,
 .student-dashboard.dark-mode .sidebar-logout {
   border-top-color: rgba(148, 163, 184, 0.2);
 }
 
+html.dark-mode .student-dashboard .dashboard-content,
+body.dark-mode .student-dashboard .dashboard-content,
 .student-dashboard.dark-mode .dashboard-content {
   background: transparent;
 }
 
+html.dark-mode .student-dashboard .stat-box,
+body.dark-mode .student-dashboard .stat-box,
 .student-dashboard.dark-mode .stat-box,
+html.dark-mode .student-dashboard .mentor-section,
+body.dark-mode .student-dashboard .mentor-section,
 .student-dashboard.dark-mode .mentor-section,
+html.dark-mode .student-dashboard .weekly-study-section,
+body.dark-mode .student-dashboard .weekly-study-section,
 .student-dashboard.dark-mode .weekly-study-section,
+html.dark-mode .student-dashboard .upcoming-section,
+body.dark-mode .student-dashboard .upcoming-section,
 .student-dashboard.dark-mode .upcoming-section,
+html.dark-mode .student-dashboard .performance-section,
+body.dark-mode .student-dashboard .performance-section,
 .student-dashboard.dark-mode .performance-section,
+html.dark-mode .student-dashboard .activity-section,
+body.dark-mode .student-dashboard .activity-section,
 .student-dashboard.dark-mode .activity-section {
   background: rgba(15, 23, 42, 0.92);
   border-color: rgba(148, 163, 184, 0.16);
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.25);
 }
 
+html.dark-mode .student-dashboard .stat-label,
+body.dark-mode .student-dashboard .stat-label,
 .student-dashboard.dark-mode .stat-label,
+html.dark-mode .student-dashboard .dashboard-header p,
+body.dark-mode .student-dashboard .dashboard-header p,
 .student-dashboard.dark-mode .dashboard-header p,
+html.dark-mode .student-dashboard .sidebar-subtitle,
+body.dark-mode .student-dashboard .sidebar-subtitle,
 .student-dashboard.dark-mode .sidebar-subtitle,
+html.dark-mode .student-dashboard .mentor-field,
+body.dark-mode .student-dashboard .mentor-field,
 .student-dashboard.dark-mode .mentor-field,
+html.dark-mode .student-dashboard .message-btn,
+body.dark-mode .student-dashboard .message-btn,
 .student-dashboard.dark-mode .message-btn,
+html.dark-mode .student-dashboard .view-all-btn,
+body.dark-mode .student-dashboard .view-all-btn,
 .student-dashboard.dark-mode .view-all-btn,
+html.dark-mode .student-dashboard .activity-legend li,
+body.dark-mode .student-dashboard .activity-legend li,
 .student-dashboard.dark-mode .activity-legend li,
+html.dark-mode .student-dashboard .bar-item span,
+body.dark-mode .student-dashboard .bar-item span,
 .student-dashboard.dark-mode .bar-item span,
+html.dark-mode .student-dashboard .alert-banner,
+body.dark-mode .student-dashboard .alert-banner,
 .student-dashboard.dark-mode .alert-banner,
+html.dark-mode .student-dashboard .error-message,
+body.dark-mode .student-dashboard .error-message,
 .student-dashboard.dark-mode .error-message,
+html.dark-mode .student-dashboard .success-message,
+body.dark-mode .student-dashboard .success-message,
 .student-dashboard.dark-mode .success-message,
+html.dark-mode .student-dashboard .no-sessions,
+body.dark-mode .student-dashboard .no-sessions,
 .student-dashboard.dark-mode .no-sessions,
+html.dark-mode .student-dashboard .no-feedback,
+body.dark-mode .student-dashboard .no-feedback,
 .student-dashboard.dark-mode .no-feedback,
+html.dark-mode .student-dashboard .text-muted,
+body.dark-mode .student-dashboard .text-muted,
 .student-dashboard.dark-mode .text-muted {
   color: #cbd5e1;
 }
 
+html.dark-mode .student-dashboard .edit-profile-btn,
+body.dark-mode .student-dashboard .edit-profile-btn,
 .student-dashboard.dark-mode .edit-profile-btn {
   background: #2563eb;
   box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
 }
 
+html.dark-mode .student-dashboard .dashboard-content a,
+body.dark-mode .student-dashboard .dashboard-content a,
 .student-dashboard.dark-mode .dashboard-content a,
+html.dark-mode .student-dashboard .dashboard-content button,
+body.dark-mode .student-dashboard .dashboard-content button,
 .student-dashboard.dark-mode .dashboard-content button {
   color: #e2e8f0;
 }

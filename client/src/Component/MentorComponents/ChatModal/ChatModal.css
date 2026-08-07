@@ -416,3 +416,184 @@
     width: 100%;
   }
 }
+
+/* Dark Mode Support */
+html.dark-mode .chat-modal-overlay,
+body.dark-mode .chat-modal-overlay,
+.dark-mode .chat-modal-overlay {
+  background: rgba(0, 0, 0, 0.7) !important;
+}
+
+html.dark-mode .chat-modal,
+body.dark-mode .chat-modal,
+.dark-mode .chat-modal {
+  background: rgba(15, 23, 42, 0.98) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5) !important;
+}
+
+html.dark-mode .chat-sidebar,
+body.dark-mode .chat-sidebar,
+.dark-mode .chat-sidebar {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border-right-color: rgba(148, 163, 184, 0.18) !important;
+}
+
+html.dark-mode .chat-sidebar-header h4,
+body.dark-mode .chat-sidebar-header h4,
+.dark-mode .chat-sidebar-header h4,
+html.dark-mode .conversations-header h3,
+body.dark-mode .conversations-header h3,
+.dark-mode .conversations-header h3 {
+  color: #f8fafc !important;
+}
+
+html.dark-mode .chat-sidebar-header p,
+body.dark-mode .chat-sidebar-header p,
+.dark-mode .chat-sidebar-header p,
+html.dark-mode .conversation-last-message,
+body.dark-mode .conversation-last-message,
+.dark-mode .conversation-last-message,
+html.dark-mode .conversation-meta span,
+body.dark-mode .conversation-meta span,
+.dark-mode .conversation-meta span,
+html.dark-mode .no-time,
+body.dark-mode .no-time,
+.dark-mode .no-time,
+html.dark-mode .message-time,
+body.dark-mode .message-time,
+.dark-mode .message-time {
+  color: #94a3b8 !important;
+}
+
+html.dark-mode .chat-sidebar-header,
+body.dark-mode .chat-sidebar-header,
+.dark-mode .chat-sidebar-header,
+html.dark-mode .conversations-header,
+body.dark-mode .conversations-header,
+.dark-mode .conversations-header {
+  border-bottom-color: rgba(148, 163, 184, 0.18) !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+
+html.dark-mode .chat-search-box input,
+body.dark-mode .chat-search-box input,
+.dark-mode .chat-search-box input {
+  background: rgba(15, 23, 42, 0.7) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  color: #f8fafc !important;
+}
+
+html.dark-mode .chat-search-box input:focus,
+body.dark-mode .chat-search-box input:focus,
+.dark-mode .chat-search-box input:focus {
+  border-color: rgba(79, 70, 229, 0.5) !important;
+}
+
+html.dark-mode .conversation-item,
+body.dark-mode .conversation-item,
+.dark-mode .conversation-item {
+  border-bottom-color: rgba(148, 163, 184, 0.08) !important;
+}
+
+html.dark-mode .conversation-item:hover,
+body.dark-mode .conversation-item:hover,
+.dark-mode .conversation-item:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+html.dark-mode .conversation-item.has-unread,
+body.dark-mode .conversation-item.has-unread,
+.dark-mode .conversation-item.has-unread {
+  background: rgba(79, 70, 229, 0.1) !important;
+  border-left-color: rgba(79, 70, 229, 0.3) !important;
+}
+
+html.dark-mode .conversation-name,
+body.dark-mode .conversation-name,
+.dark-mode .conversation-name {
+  color: #f8fafc !important;
+}
+
+html.dark-mode .conversation-name.selected,
+body.dark-mode .conversation-name.selected,
+.dark-mode .conversation-name.selected {
+  color: #818cf8 !important;
+}
+
+html.dark-mode .no-conversations,
+body.dark-mode .no-conversations,
+.dark-mode .no-conversations,
+html.dark-mode .loading,
+body.dark-mode .loading,
+.dark-mode .loading {
+  color: #94a3b8 !important;
+}
+
+html.dark-mode .chat-main-header,
+body.dark-mode .chat-main-header,
+.dark-mode .chat-main-header {
+  background: rgba(15, 23, 42, 0.7) !important;
+  border-bottom-color: rgba(148, 163, 184, 0.18) !important;
+}
+
+html.dark-mode .chat-main-header .back-btn,
+body.dark-mode .chat-main-header .back-btn,
+.dark-mode .chat-main-header .back-btn {
+  background: rgba(79, 70, 229, 0.15) !important;
+  color: #818cf8 !important;
+}
+
+html.dark-mode .chat-main-header .back-btn:hover,
+body.dark-mode .chat-main-header .back-btn:hover,
+.dark-mode .chat-main-header .back-btn:hover {
+  background: rgba(79, 70, 229, 0.25) !important;
+}
+
+html.dark-mode .conversation-status,
+body.dark-mode .conversation-status,
+.dark-mode .conversation-status {
+  color: #94a3b8 !important;
+}
+
+html.dark-mode .chat-messages-panel,
+body.dark-mode .chat-messages-panel,
+.dark-mode .chat-messages-panel {
+  background: rgba(0, 0, 0, 0.2) !important;
+}
+
+html.dark-mode .message.received .message-bubble,
+body.dark-mode .message.received .message-bubble,
+.dark-mode .message.received .message-bubble {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #f8fafc !important;
+  border-left-color: rgba(148, 163, 184, 0.2) !important;
+}
+
+html.dark-mode .message.received.unread .message-bubble,
+body.dark-mode .message.received.unread .message-bubble,
+.dark-mode .message.received.unread .message-bubble {
+  background: rgba(79, 70, 229, 0.15) !important;
+  border-left-color: #818cf8 !important;
+}
+
+html.dark-mode .chat-input-area,
+body.dark-mode .chat-input-area,
+.dark-mode .chat-input-area {
+  background: rgba(15, 23, 42, 0.7) !important;
+  border-top-color: rgba(148, 163, 184, 0.18) !important;
+}
+
+html.dark-mode .chat-input,
+body.dark-mode .chat-input,
+.dark-mode .chat-input {
+  background: rgba(15, 23, 42, 0.88) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  color: #f8fafc !important;
+}
+
+html.dark-mode .chat-input:focus,
+body.dark-mode .chat-input:focus,
+.dark-mode .chat-input:focus {
+  border-color: rgba(79, 70, 229, 0.5) !important;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15) !important;
+}

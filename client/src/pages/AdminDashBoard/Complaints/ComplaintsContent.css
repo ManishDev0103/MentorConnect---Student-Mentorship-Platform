@@ -22,6 +22,32 @@
   box-shadow: 0 16px 50px rgba(15, 23, 42, 0.16);
 }
 
+html.dark-mode .card-box,
+body.dark-mode .card-box,
+.dark-mode .card-box {
+  background: rgba(15, 23, 42, 0.96) !important;
+  color: #f8fafc !important;
+  border: 1px solid rgba(148, 163, 184, 0.18) !important;
+}
+
+html.dark-mode .complaint-table th,
+body.dark-mode .complaint-table th,
+.dark-mode .complaint-table th,
+html.dark-mode .complaint-table td,
+body.dark-mode .complaint-table td,
+.dark-mode .complaint-table td {
+  color: #f8fafc !important;
+  border-color: rgba(148, 163, 184, 0.18) !important;
+}
+
+html.dark-mode .modal-content,
+body.dark-mode .modal-content,
+.dark-mode .modal-content {
+  background: rgba(15, 23, 42, 0.98) !important;
+  color: #f8fafc !important;
+  border-color: rgba(148, 163, 184, 0.18) !important;
+}
+
 .modal-header,
 .modal-footer {
   padding: 18px 24px;
