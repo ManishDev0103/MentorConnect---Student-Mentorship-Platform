@@ -4517,11 +4517,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\CDAC PROJECT\\MentorConnect---Student-Mentorship-Platform\\PaymentService\\PaymentService.csproj",
+      "projectUniqueName": "C:\\Users\\Shraddha Shinde\\Downloads\\FinalProject\\MentorConnect---Student-Mentorship-Platform\\PaymentService\\PaymentService.csproj",
       "projectName": "PaymentService",
-      "projectPath": "C:\\CDAC PROJECT\\MentorConnect---Student-Mentorship-Platform\\PaymentService\\PaymentService.csproj",
+      "projectPath": "C:\\Users\\Shraddha Shinde\\Downloads\\FinalProject\\MentorConnect---Student-Mentorship-Platform\\PaymentService\\PaymentService.csproj",
       "packagesPath": "C:\\Users\\Shraddha Shinde\\.nuget\\packages\\",
-      "outputPath": "C:\\CDAC PROJECT\\MentorConnect---Student-Mentorship-Platform\\PaymentService\\obj\\",
+      "outputPath": "C:\\Users\\Shraddha Shinde\\Downloads\\FinalProject\\MentorConnect---Student-Mentorship-Platform\\PaymentService\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

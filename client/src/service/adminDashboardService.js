@@ -1,7 +1,7 @@
 // src/service/adminDashboardService.js
 import api from "../API/api";
 
-const ADMIN_DASHBOARD_API = "/api/admin/dashboard";
+const ADMIN_DASHBOARD_API = "/admin/dashboard";
 
 const normalizeMentorId = (mentorId) => {
   if (mentorId === null || mentorId === undefined || mentorId === "" || mentorId === "null" || mentorId === "undefined") {
