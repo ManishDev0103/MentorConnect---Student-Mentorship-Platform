@@ -21,6 +21,9 @@
 }
 
 .dark-mode-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 4px 10px;
   border: 1px solid currentColor !important;
   border-radius: 999px;
@@ -29,12 +32,15 @@
   font-size: 0.75rem;
   font-weight: 700;
   line-height: 1.2;
+  cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease, transform 160ms ease;
 }
 
 .dark-mode-toggle:hover,
 .dark-mode-toggle:focus-visible {
   color: #ffffff !important;
   background: #9a3412 !important;
+  transform: translateY(-1px);
 }
 
 html.dark-mode .dark-mode-notice,

@@ -1117,6 +1117,41 @@ body.dark-mode .mcq-practice-page,
   }
 }
 
+/* Theme controls must keep their own contrast instead of inheriting generic dark-mode button rules. */
+html.dark-mode .dark-mode-toggle,
+body.dark-mode .dark-mode-toggle,
+.dark-mode .dark-mode-toggle,
+html.dark-mode #darkModeToggle,
+body.dark-mode #darkModeToggle,
+.dark-mode #darkModeToggle {
+  background: transparent !important;
+  border-color: currentColor !important;
+  color: #fed7aa !important;
+}
+
+html.dark-mode .dark-mode-toggle:hover,
+body.dark-mode .dark-mode-toggle:hover,
+.dark-mode .dark-mode-toggle:hover,
+html.dark-mode .dark-mode-toggle:focus-visible,
+body.dark-mode .dark-mode-toggle:focus-visible,
+.dark-mode .dark-mode-toggle:focus-visible {
+  background: #9a3412 !important;
+  color: #ffffff !important;
+}
+
+html.dark-mode #darkModeToggle,
+body.dark-mode #darkModeToggle,
+.dark-mode #darkModeToggle {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+html.dark-mode #darkModeToggle:checked,
+body.dark-mode #darkModeToggle:checked,
+.dark-mode #darkModeToggle:checked {
+  background-color: #60a5fa !important;
+  border-color: #60a5fa !important;
+}
+
 /* Global page wrapper theming */
 .app-shell,
 .home-root,

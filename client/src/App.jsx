@@ -33,6 +33,7 @@ function App() {
           aria-pressed={isDarkMode}
           aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
         >
+          <span aria-hidden="true">{isDarkMode ? "☀" : "☾"}</span>
           {isDarkMode ? "Light mode" : "Dark mode"}
         </button>
       </div>
