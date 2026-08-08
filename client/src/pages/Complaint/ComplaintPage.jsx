@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { complaintService } from "../../service/complaintService";
 import { showError, showSuccess } from "../../utils/toast";
@@ -8,14 +8,58 @@ const ComplaintPage = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [targetUserId, setTargetUserId] = useState("");
+  const [mentorSearch, setMentorSearch] = useState("");
+  const [mentors, setMentors] = useState([]);
+  const [mentorsLoading, setMentorsLoading] = useState(false);
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
+  const formatSubmittedDate = (createdAt) => {
+    if (!createdAt) return "-";
+
+    const date = new Date(createdAt);
+    return Number.isNaN(date.getTime()) ? "-" : date.toLocaleDateString();
+  };
+
+  const visibleMentors = useMemo(() => {
+    const searchTerm = mentorSearch.trim().toLowerCase();
+    if (!searchTerm) return mentors;
+
+    return mentors
+      .filter((mentor) =>
+        [mentor.name, mentor.specialization, mentor.expertise, mentor.userId]
+          .filter(Boolean)
+          .some((value) => String(value).toLowerCase().includes(searchTerm)),
+      );
+  }, [mentorSearch, mentors]);
+
   useEffect(() => {
     loadComplaints();
+    loadMentors();
   }, []);
+
+  const loadMentors = async () => {
+    try {
+      setMentorsLoading(true);
+      const response = await complaintService.getMentorsForTarget();
+      setMentors(
+        (response || []).filter(
+          (mentor) => String(mentor.verificationStatus || "VERIFIED").toUpperCase() === "VERIFIED",
+        ),
+      );
+    } catch (error) {
+      console.error("Unable to load mentors for complaint", error);
+    } finally {
+      setMentorsLoading(false);
+    }
+  };
+
+  const selectMentor = (mentor) => {
+    setTargetUserId(String(mentor.userId));
+    setMentorSearch(mentor.name ? `${mentor.name} (ID: ${mentor.userId})` : String(mentor.userId));
+  };
 
   const loadComplaints = async () => {
     try {
@@ -48,6 +92,7 @@ const ComplaintPage = () => {
       setTitle("");
       setDescription("");
       setTargetUserId("");
+      setMentorSearch("");
       loadComplaints();
     } catch (error) {
       console.error("Error submitting complaint", error);
@@ -64,9 +109,22 @@ const ComplaintPage = () => {
           <h2 className="page-title">Support & Complaints</h2>
           <p className="page-subtitle">Submit a ticket or review your existing complaints.</p>
         </div>
-        <button className="btn btn-outline-secondary" onClick={() => navigate(-1)}>
-          Back
-        </button>
+        <div className="complaint-page-actions">
+          <button
+            type="button"
+            className="btn btn-outline-primary"
+            onClick={() => navigate("/")}
+          >
+            Home
+          </button>
+          <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={() => navigate(-1)}
+          >
+            Back
+          </button>
+        </div>
       </div>
 
       <div className="complaint-grid">
@@ -97,15 +155,65 @@ const ComplaintPage = () => {
                 required
               />
             </div>
+            <div className="form-group mentor-target-picker">
+              <label htmlFor="mentorSearch">Related mentor (optional)</label>
+              <input
+                id="mentorSearch"
+                type="search"
+                className="form-control"
+                value={mentorSearch}
+                onChange={(e) => {
+                  setMentorSearch(e.target.value);
+                  setTargetUserId("");
+                }}
+                placeholder={mentorsLoading ? "Loading mentors..." : "Search mentor by name, subject, or ID"}
+                autoComplete="off"
+              />
+              {mentorSearch.trim() && !targetUserId && visibleMentors.length > 0 && (
+                <div className="mentor-suggestions" role="listbox">
+                  {visibleMentors.map((mentor) => (
+                    <button
+                      type="button"
+                      className="mentor-suggestion"
+                      key={mentor.userId}
+                      onClick={() => selectMentor(mentor)}
+                    >
+                      <strong>{mentor.name || "Mentor"}</strong>
+                      <span>
+                        {mentor.specialization || mentor.expertise || "General"} | ID {mentor.userId}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+              {mentorSearch.trim() && !targetUserId && !mentorsLoading && visibleMentors.length === 0 && (
+                <div className="mentor-search-empty">No matching mentor found. You can enter an ID below.</div>
+              )}
+              {targetUserId && (
+                <button
+                  type="button"
+                  className="clear-mentor-button"
+                  onClick={() => {
+                    setTargetUserId("");
+                    setMentorSearch("");
+                  }}
+                >
+                  Clear selected mentor
+                </button>
+              )}
+            </div>
             <div className="form-group">
-              <label htmlFor="targetUserId">Related Mentor / Student ID (optional)</label>
+              <label htmlFor="targetUserId">Or enter mentor / student ID (optional)</label>
               <input
                 id="targetUserId"
                 type="number"
                 className="form-control"
                 value={targetUserId}
-                onChange={(e) => setTargetUserId(e.target.value)}
-                placeholder="Enter user id if applicable"
+                onChange={(e) => {
+                  setTargetUserId(e.target.value);
+                  setMentorSearch(e.target.value);
+                }}
+                placeholder="Enter user ID if applicable"
               />
             </div>
             <div className="d-flex justify-content-end gap-2">
@@ -155,7 +263,7 @@ const ComplaintPage = () => {
                         </span>
                       </td>
                       <td>{complaint.response || "Awaiting review"}</td>
-                      <td>{new Date(complaint.createdAt).toLocaleDateString()}</td>
+                      <td>{formatSubmittedDate(complaint.createdAt)}</td>
                     </tr>
                   ))}
                 </tbody>

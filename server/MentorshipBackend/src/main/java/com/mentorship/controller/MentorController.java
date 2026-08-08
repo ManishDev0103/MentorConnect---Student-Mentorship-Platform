@@ -21,7 +21,7 @@ import com.mentorship.service.MentorService;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("/mentors")
+@RequestMapping({"/mentors", "/api/mentors"})
 @AllArgsConstructor
 public class MentorController {
 

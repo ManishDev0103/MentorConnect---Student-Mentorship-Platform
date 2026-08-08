@@ -1,6 +1,6 @@
 import api from "../API/api";
 
-const COMPLAINT_API = "/api/complaints";
+const COMPLAINT_API = "/complaints";
 
 export const complaintService = {
   createComplaint: async (data) => {
@@ -19,6 +19,16 @@ export const complaintService = {
       return response.data;
     } catch (error) {
       console.error("Error fetching my complaints:", error);
+      throw error;
+    }
+  },
+
+  getMentorsForTarget: async () => {
+    try {
+      const response = await api.get("/mentors/public");
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching mentors for complaint:", error);
       throw error;
     }
   },
