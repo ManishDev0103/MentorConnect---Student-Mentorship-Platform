@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import Login from "./pages/Login/Login";
 import AdminLogin from "./pages/AdminLogin/AdminLogin";
@@ -21,10 +21,16 @@ import { useDarkMode } from "./context/DarkModeContext";
 
 function App() {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const location = useLocation();
 
   return (
     <div className="app-shell">
       <div className="dark-mode-notice" role="status">
+        {location.pathname !== "/" && (
+          <Link to="/" className="global-home-button">
+            Home
+          </Link>
+        )}
         <span>Dark Mode is under development</span>
         <button
           type="button"

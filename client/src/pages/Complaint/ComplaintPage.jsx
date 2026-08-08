@@ -112,13 +112,6 @@ const ComplaintPage = () => {
         <div className="complaint-page-actions">
           <button
             type="button"
-            className="btn btn-outline-primary"
-            onClick={() => navigate("/")}
-          >
-            Home
-          </button>
-          <button
-            type="button"
             className="btn btn-outline-secondary"
             onClick={() => navigate(-1)}
           >
