@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
         logException(e);
         return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
-                .body("File is too large. Please upload a smaller video.");
+                .body("PDF is too large. Please upload a file smaller than 20 MB.");
     }
 
     @ExceptionHandler(Exception.class)

@@ -12,13 +12,7 @@ export const getStudentId = () => {
     // Try to decode JWT if studentId not stored
     try {
       const decoded = parseJwt(token);
-      if (decoded?.userId && !decoded?.studentId) {
-        console.warn(
-          "Decoded JWT contains userId but not studentId. This may cause student API request issues.",
-          decoded,
-        );
-      }
-      return decoded?.studentId || decoded?.userId || null;
+      return decoded?.studentId || null;
     } catch (error) {
       console.error("Error decoding token:", error);
       return null;
@@ -26,6 +20,34 @@ export const getStudentId = () => {
   }
 
   return studentId ? parseInt(studentId) : null;
+};
+
+// Resolve and cache the database student ID when the JWT only contains userId.
+export const resolveStudentId = async () => {
+  const storedStudentId = getStudentId();
+  if (storedStudentId) return storedStudentId;
+
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+
+  try {
+    const decoded = parseJwt(token);
+    const userId = decoded?.userId;
+    if (!userId) return null;
+
+    const response = await axios.get(`${API_URL}/student/user/${userId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const studentId = response.data?.studentId;
+    if (studentId) {
+      localStorage.setItem("studentId", String(studentId));
+      return Number(studentId);
+    }
+  } catch (error) {
+    console.error("Unable to resolve student ID:", error);
+  }
+
+  return null;
 };
 
 // Get mentor ID from localStorage (from JWT token)
@@ -45,6 +67,30 @@ export const getMentorId = () => {
   }
 
   return mentorId ? parseInt(mentorId) : null;
+};
+
+// Resolve and cache the database mentor ID when the JWT only contains userId.
+export const resolveMentorId = async () => {
+  const storedMentorId = localStorage.getItem("mentorId");
+  if (storedMentorId) return Number(storedMentorId);
+
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+
+  try {
+    const response = await axios.get(`${API_URL}/mentors/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const mentorId = response.data?.mentorId;
+    if (mentorId) {
+      localStorage.setItem("mentorId", String(mentorId));
+      return Number(mentorId);
+    }
+  } catch (error) {
+    console.error("Unable to resolve mentor ID:", error);
+  }
+
+  return null;
 };
 
 // Parse JWT token

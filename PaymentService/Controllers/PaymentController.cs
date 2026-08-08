@@ -59,6 +59,15 @@ namespace PaymentService.Controllers
 
             Console.WriteLine("RAZORPAY RESPONSE: " + json);
 
+            if (!response.IsSuccessStatusCode)
+            {
+                return StatusCode((int)response.StatusCode, new
+                {
+                    message = "Unable to create Razorpay order.",
+                    details = json
+                });
+            }
+
             var order = JObject.Parse(json);
             string orderId = order["id"]?.ToString();
 
@@ -66,7 +75,7 @@ namespace PaymentService.Controllers
             {
                 orderId = orderId,
                 razorpayKey = key,
-                amount = request.Amount
+                amount = amountInPaise
             });
         }
 
@@ -93,7 +102,16 @@ namespace PaymentService.Controllers
                 var sessionJson = JsonConvert.SerializeObject(sessionPayment);
                 var sessionContent = new StringContent(sessionJson, Encoding.UTF8, "application/json");
 
-                await client.PostAsync("http://localhost:8080/api/student/payment/session-notify", sessionContent);
+                var notificationResponse = await client.PostAsync("http://localhost:8080/api/student/payment/session-notify", sessionContent);
+                if (!notificationResponse.IsSuccessStatusCode)
+                {
+                    var notificationError = await notificationResponse.Content.ReadAsStringAsync();
+                    return StatusCode((int)notificationResponse.StatusCode, new
+                    {
+                        message = "Payment was received, but session confirmation failed.",
+                        details = notificationError
+                    });
+                }
 
                 return Ok(new
                 {

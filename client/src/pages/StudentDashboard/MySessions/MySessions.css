@@ -172,3 +172,19 @@
   font-size: 0.98em;
   font-weight: 500;
 }
+
+.session-pay-btn {
+  margin-left: 10px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 6px;
+  color: #ffffff;
+  background: #2563eb;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.session-pay-btn:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}

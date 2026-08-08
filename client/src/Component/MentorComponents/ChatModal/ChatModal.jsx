@@ -15,11 +15,10 @@ import {
   disconnectChatSocket,
 } from "../../../utils/stompClient";
 
-const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedded = false }) => {
+const ChatModal = ({ isOpen, onClose, mentorId, initialStudentId, embedded = false }) => {
   const [conversations, setConversations] = useState([]);
   const [filteredConversations, setFilteredConversations] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [allStudents, setAllStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -49,7 +48,9 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
   // Auto-select student when opened from a student card
   useEffect(() => {
     if (isOpen && initialStudentId && conversations.length > 0) {
-      const student = conversations.find((c) => c.studentId === initialStudentId);
+      const student = conversations.find(
+        (c) => Number(c.studentId) === Number(initialStudentId),
+      );
       if (student) {
         setSelectedStudent(student);
       }
@@ -174,8 +175,6 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
 
       // Get all students
       const students = studentsResponse.success ? studentsResponse.data : [];
-      setAllStudents(students);
-
       // Get existing conversations
       const existingConversations = conversationsResponse.data.success
         ? conversationsResponse.data.data
@@ -317,15 +316,31 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
     }
 
     try {
-      if (file.type !== 'application/pdf') {
+      const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+      if (!isPdf) {
         alert('Please select a PDF file only.');
         event.target.value = '';
         return;
       }
+      if (file.size > 20 * 1024 * 1024) {
+        alert('PDF must be smaller than 20 MB.');
+        event.target.value = '';
+        return;
+      }
+
+      const uploadFile = file.type === 'application/pdf'
+        ? file
+        : new File([file], file.name, { type: 'application/pdf' });
 
       const sessionsResponse = await getStudentSessions(selectedStudent.studentId);
       const sessions = sessionsResponse?.data || [];
-      const matchingSession = sessions.find((session) => Number(session.mentorId) === Number(mentorId));
+      const matchingSession = sessions.find(
+        (session) =>
+          Number(session.mentorId) === Number(mentorId) &&
+          !['CANCELLED', 'CANCELLED_BY_STUDENT', 'CANCELLED_BY_MENTOR'].includes(
+            String(session.status).toUpperCase(),
+          ),
+      );
 
       if (!matchingSession?.sessionId) {
         alert('No active matching session is available for this student.');
@@ -339,7 +354,7 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
         file.name,
         `PDF shared from chat for ${selectedStudent.studentName}`,
         'PDF',
-        file,
+        uploadFile,
       );
 
       const uploadedNote = uploadResponse?.data?.data || uploadResponse?.data || {};
@@ -354,7 +369,7 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
         senderType: 'MENTOR',
       };
 
-      sendChatMessage(messageData);
+      await sendChatMessage(messageData);
 
       const optimisticMessage = {
         messageId: Date.now(),
@@ -371,7 +386,10 @@ const ChatModal = ({ isOpen, onClose, userId, mentorId, initialStudentId, embedd
       loadConversations();
     } catch (error) {
       console.error('Failed to share PDF:', error);
-      alert('Failed to share PDF to the student.');
+      const serverMessage = typeof error.response?.data === 'string'
+        ? error.response.data
+        : error.response?.data?.message || error.message;
+      alert(serverMessage || 'Failed to share PDF to the student.');
     } finally {
       event.target.value = '';
     }

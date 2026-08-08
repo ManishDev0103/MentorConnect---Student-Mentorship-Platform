@@ -12,11 +12,11 @@ import EarningsChart from "../../../Component/MentorComponents/EarningsChart/Ear
 import ChatModal from "../../../Component/MentorComponents/ChatModal/ChatModal";
 import {
   getDashboardStats,
-  getTodaySessions,
+  getAllMentorSessions,
   getMyStudents,
 } from "../../../service/mentorService";
-import { handleApiError } from "../../../utils/toast";
-import { getMentorId } from "../../../service/authService";
+import { resolveMentorId } from "../../../service/authService";
+import { generateMeetingLink } from "../../../utils/meetingLink";
 
 function DashboardHome() {
   const [date, setDate] = useState(new Date());
@@ -34,24 +34,33 @@ function DashboardHome() {
   const [students, setStudents] = useState([]);
 
   // Get mentor ID from localStorage (set during login)
-  const mentorId = getMentorId();
-
-  console.log("DashboardHome - Using mentorId:", mentorId);
+  const [mentorId, setMentorId] = useState(null);
 
   useEffect(() => {
-    console.log("Current Mentor ID:", mentorId);
-    fetchDashboardData();
+    const initializeDashboard = async () => {
+      const resolvedMentorId = await resolveMentorId();
+      setMentorId(resolvedMentorId);
+      if (resolvedMentorId) {
+        fetchDashboardData(resolvedMentorId);
+      } else {
+        setLoading(false);
+      }
+    };
+
+    initializeDashboard();
   }, []);
 
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = async (resolvedMentorId = mentorId) => {
+    if (!resolvedMentorId) return;
+
     try {
       setLoading(true);
 
       // Fetch all data in parallel
       const [statsData, todaySessionsData, studentsData] = await Promise.all([
-        getDashboardStats(mentorId),
-        getTodaySessions(mentorId),
-        getMyStudents(mentorId),
+        getDashboardStats(resolvedMentorId),
+        getAllMentorSessions(resolvedMentorId),
+        getMyStudents(resolvedMentorId),
       ]);
 
       if (statsData.success) {
@@ -65,7 +74,19 @@ function DashboardHome() {
       }
 
       if (todaySessionsData.success) {
-        setSessions(todaySessionsData.data || []);
+        setSessions(
+          (todaySessionsData.data || [])
+            .filter((session) => ![
+              "CANCELLED",
+              "CANCELLED_BY_STUDENT",
+              "CANCELLED_BY_MENTOR",
+            ].includes(session.status))
+            .sort((first, second) => {
+              const firstDate = `${first.sessionDate}T${first.startTime}`;
+              const secondDate = `${second.sessionDate}T${second.startTime}`;
+              return new Date(firstDate) - new Date(secondDate);
+            }),
+        );
       }
 
       if (studentsData.success) {
@@ -251,7 +272,7 @@ function DashboardHome() {
               </div>
 
               <div className="section-card mt-4">
-                <h5 className="section-title">Today's Sessions</h5>
+                <h5 className="section-title">Booked Sessions</h5>
                 {sessions.length === 0 ? (
                   <p className="text-muted">No sessions scheduled for today</p>
                 ) : (
@@ -261,6 +282,11 @@ function DashboardHome() {
                       time={session.startTime}
                       student={session.studentName}
                       topic={session.topic}
+                      meetingUrl={generateMeetingLink(
+                        session.mentorId,
+                        session.sessionDate,
+                        session.startTime,
+                      )}
                     />
                   ))
                 )}

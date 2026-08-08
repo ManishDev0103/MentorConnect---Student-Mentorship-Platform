@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Login.css";
 import { useNavigate, Link } from "react-router-dom";
 import { loginUser, decodeToken } from "../../API/authService";
+import { resolveStudentId } from "../../service/authService";
 import { useAuth } from "../../API/AuthContext";
 import ForgotPasswordModal from "../../Component/Profile/ForgotPasswordModal";
 
@@ -70,9 +71,13 @@ const Login = () => {
       localStorage.removeItem("studentId");
       localStorage.removeItem("mentorId");
 
+      const resolvedStudentId = payload?.studentId ? null : await resolveStudentId();
+
       // Store studentId/mentorId if present in token
       if (payload?.studentId) {
         localStorage.setItem("studentId", payload.studentId);
+      } else if (resolvedStudentId) {
+        localStorage.setItem("studentId", String(resolvedStudentId));
       }
       if (payload?.mentorId) {
         localStorage.setItem("mentorId", payload.mentorId);

@@ -108,7 +108,9 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
       onClose();
     } catch (err) {
       const errorMsg =
+        (typeof err.response?.data === "string" ? err.response.data : null) ||
         err.response?.data?.message ||
+        err.message ||
         "Failed to change password. Please try again.";
       toast.error(errorMsg);
       console.error("Change password error:", err);

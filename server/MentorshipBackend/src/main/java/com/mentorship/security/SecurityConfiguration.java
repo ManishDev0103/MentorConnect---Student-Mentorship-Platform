@@ -49,6 +49,7 @@ public class SecurityConfiguration {
 			.requestMatchers(HttpMethod.GET, "/users/image/**").permitAll()
 			.requestMatchers(HttpMethod.GET, "/mentors/public", "/mentors/public/**", "/api/mentors/public", "/api/mentors/public/**").permitAll()
 				.requestMatchers("/api/student/payment/session-notify", "/api/student/subscription/notify").permitAll()
+				.requestMatchers("/api/mentor/notes", "/api/mentor/notes/**").authenticated()
 				.requestMatchers("/api/mentor/**").hasRole("MENTOR")
 				.requestMatchers("/api/student/**").hasRole("STUDENT")
 			.requestMatchers("/api/messages/**").permitAll()  // Allow all message/chat endpoints

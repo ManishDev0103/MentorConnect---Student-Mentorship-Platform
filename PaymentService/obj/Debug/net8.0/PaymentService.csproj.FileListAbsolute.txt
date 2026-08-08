@@ -708,3 +708,11 @@ C:\CDAC PROJECT\MentorConnect5826\MentorConnect\PaymentService\obj\Debug\net8.0\
 C:\CDAC PROJECT\MentorConnect5826\MentorConnect\PaymentService\obj\Debug\net8.0\PaymentService.pdb
 C:\CDAC PROJECT\MentorConnect5826\MentorConnect\PaymentService\obj\Debug\net8.0\PaymentService.genruntimeconfig.cache
 C:\CDAC PROJECT\MentorConnect5826\MentorConnect\PaymentService\obj\Debug\net8.0\ref\PaymentService.dll
+C:\Users\kadam\AppData\Local\Temp\MentorConnectPaymentBuild\appsettings.Development.json
+C:\Users\kadam\AppData\Local\Temp\MentorConnectPaymentBuild\appsettings.json
+C:\Users\kadam\AppData\Local\Temp\MentorConnectPaymentBuild\PaymentService.staticwebassets.endpoints.json
+C:\Users\kadam\AppData\Local\Temp\MentorConnectPaymentBuild\PaymentService.exe
+C:\Users\kadam\AppData\Local\Temp\MentorConnectPaymentBuild\PaymentService.deps.json
+C:\Users\kadam\AppData\Local\Temp\MentorConnectPaymentBuild\PaymentService.runtimeconfig.json
+C:\Users\kadam\AppData\Local\Temp\MentorConnectPaymentBuild\PaymentService.dll
+C:\Users\kadam\AppData\Local\Temp\MentorConnectPaymentBuild\PaymentService.pdb

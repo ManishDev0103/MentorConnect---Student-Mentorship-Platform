@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../Modal.css"; // Using a standard modal CSS
 import { bookSession, deleteSession, getVerifiedMentors, getMentorDetails } from "../../service/studentservice";
-import { getStudentId } from "../../service/authService";
+import { resolveStudentId } from "../../service/authService";
 import { createOrder, verifyPayment } from "../../service/paymentService";
 import { getAvailabilityForDate } from "../../service/mentorservice";
 import { useDarkMode } from "../../context/DarkModeContext";
@@ -54,7 +54,7 @@ const ScheduleSessionModal = ({
   const fetchMentors = async () => {
     try {
       setMentorLoading(true);
-      const studentId = getStudentId();
+      const studentId = await resolveStudentId();
 
       if (preselectedMentorId && preselectedMentorId !== "null") {
         // If specific mentor selected (e.g. from public listing), fetch just that one
@@ -215,11 +215,13 @@ const ScheduleSessionModal = ({
       return;
     }
 
+    let pendingSessionId = null;
+
     try {
       setLoading(true);
       setError("");
 
-      const studentId = getStudentId();
+      const studentId = await resolveStudentId();
       if (!studentId) {
         setError("Student ID not found. Please log in again.");
         return;
@@ -236,6 +238,25 @@ const ScheduleSessionModal = ({
       );
       const sessionFee = selectedMentor ? (selectedMentor.finalPrice ?? selectedMentor.ratePerSession) : 0;
 
+      // Re-check immediately before booking because another student may have taken the slot.
+      const latestAvailability = await getAvailabilityForDate(
+        formData.mentorId,
+        formData.sessionDate,
+      );
+      const latestSlots = latestAvailability?.data?.timeSlots || [];
+      const selectedSlot = latestSlots.find((slot) =>
+        String(slot.timeSlot).startsWith(formData.startTime),
+      );
+      if (!selectedSlot || !selectedSlot.available || selectedSlot.booked || selectedSlot.blocked) {
+        const refreshedSlots = latestSlots
+          .filter((slot) => slot.available && !slot.booked && !slot.blocked)
+          .map((slot) => slot.timeSlot);
+        setAvailableSlots(refreshedSlots);
+        setFormData((prev) => ({ ...prev, startTime: "", endTime: "" }));
+        setError("That time slot is no longer available. Please choose another slot.");
+        return;
+      }
+
       const sessionData = {
         mentorId: parseInt(formData.mentorId),
         sessionDate: formData.sessionDate,
@@ -250,6 +271,7 @@ const ScheduleSessionModal = ({
       // 1. Create Session (Status: PAYMENT_PENDING)
       const bookingResponse = await bookSession(studentId, sessionData);
       const newSessionId = bookingResponse.data.sessionId;
+      pendingSessionId = newSessionId;
 
       if (!newSessionId) {
         throw new Error("Failed to generate session ID");
@@ -322,8 +344,16 @@ const ScheduleSessionModal = ({
       rzp.open();
     } catch (err) {
       console.error("Error scheduling session:", err);
+      if (pendingSessionId) {
+        try {
+          await deleteSession(pendingSessionId);
+        } catch (cleanupError) {
+          console.warn("Unable to release pending session:", cleanupError);
+        }
+      }
       setError(
         err.response?.data?.message ||
+        (typeof err.response?.data === "string" ? err.response.data : "") ||
         "Failed to schedule session. Please try again.",
       );
     } finally {

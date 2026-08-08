@@ -40,7 +40,8 @@ const ResetPasswordPage = () => {
       setTokenValid(true);
     } catch (err) {
       const message =
-        err.response?.data ||
+        (typeof err.response?.data === "string" ? err.response.data : null) ||
+        err.response?.data?.message ||
         err.message ||
         "Invalid or expired reset link.";
       setError(message);
@@ -98,6 +99,7 @@ const ResetPasswordPage = () => {
       }, 3000);
     } catch (err) {
       const errorMsg =
+        (typeof err.response?.data === "string" ? err.response.data : null) ||
         err.response?.data?.message ||
         err.message ||
         "Failed to reset password";

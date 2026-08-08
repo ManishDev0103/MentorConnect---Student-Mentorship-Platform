@@ -12,7 +12,7 @@ import StudyTimer from "../StudyTimer/StudyTimer"; // Import StudyTimer
 import BrowseMentors from "../BrowseMentors/BrowseMentors";
 import StudentChatModal from "../../../Component/StudentComponents/ChatModal/StudentChatModal";
 import { getStudentDashboard } from "../../../service/studentservice";
-import { getStudentId, clearStudentAuth } from "../../../service/authService";
+import { resolveStudentId, clearStudentAuth } from "../../../service/authService";
 import { useDarkMode } from "../../../context/DarkModeContext";
 
 const sidebarItems = [
@@ -46,30 +46,34 @@ const StudentDashboard = () => {
   };
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const mentorIdFromUrl = params.get("mentorId");
-    const tabFromUrl = params.get("tab");
+    const initializeDashboard = async () => {
+      const params = new URLSearchParams(location.search);
+      const mentorIdFromUrl = params.get("mentorId");
+      const tabFromUrl = params.get("tab");
 
-    if (mentorIdFromUrl) {
-      setInitialMentorId(Number(mentorIdFromUrl));
-      setActiveTab(tabFromUrl || "My Mentor");
-    } else if (tabFromUrl) {
-      setActiveTab(tabFromUrl);
-    }
+      if (mentorIdFromUrl) {
+        setInitialMentorId(Number(mentorIdFromUrl));
+        setActiveTab(tabFromUrl || "My Mentor");
+      } else if (tabFromUrl) {
+        setActiveTab(tabFromUrl);
+      }
 
-    let studentIdFromStorage = getStudentId();
+      const studentIdFromStorage = await resolveStudentId();
 
-    if (!studentIdFromStorage) {
-      setLoading(false);
-      setError("Student ID not found. Redirecting to login...");
-      setTimeout(() => {
-        navigate("/login");
-      }, 1500);
-      return;
-    }
+      if (!studentIdFromStorage) {
+        setLoading(false);
+        setError("Student ID not found. Redirecting to login...");
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
+        return;
+      }
 
-    setStudentId(studentIdFromStorage);
-    fetchDashboard(studentIdFromStorage);
+      setStudentId(studentIdFromStorage);
+      fetchDashboard(studentIdFromStorage);
+    };
+
+    initializeDashboard();
   }, [navigate]);
 
   useEffect(() => {

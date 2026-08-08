@@ -1,6 +1,6 @@
 import "./SessionItem.css";
 
-export default function SessionItem({ time, student, topic }) {
+export default function SessionItem({ time, student, topic, meetingUrl }) {
   return (
     <div className="session-item">
       <div className="session-time-wrapper">
@@ -12,6 +12,16 @@ export default function SessionItem({ time, student, topic }) {
       </div>
       <div className="session-student">{student}</div>
       <div className="session-topic">{topic}</div>
+      {meetingUrl && (
+        <a
+          className="session-meeting-link"
+          href={meetingUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Join Lecture
+        </a>
+      )}
     </div>
   );
 }

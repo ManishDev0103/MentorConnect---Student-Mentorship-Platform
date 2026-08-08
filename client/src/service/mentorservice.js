@@ -11,6 +11,11 @@ export const getTodaySessions = async (mentorId) => {
   return response.data;
 };
 
+export const getAllMentorSessions = async (mentorId) => {
+  const response = await api.get(`/mentor/sessions/${mentorId}`);
+  return response.data;
+};
+
 export const getUpcomingSessions = async (mentorId) => {
   const response = await api.get(`/mentor/sessions/${mentorId}/upcoming`);
   return response.data;
@@ -205,22 +210,22 @@ export const updateSessionProgress = async (sessionId) => {
 
 // Chat APIs
 export const sendMessage = async (messageData) => {
-  const response = await api.post('/api/messages/send', messageData);
+  const response = await api.post('/messages/send', messageData);
   return response;
 };
 
 export const getConversation = async (mentorId, studentId) => {
-  const response = await api.get(`/api/messages/mentor/${mentorId}/student/${studentId}`);
+  const response = await api.get(`/messages/mentor/${mentorId}/student/${studentId}`);
   return response;
 };
 
 export const markMessagesAsRead = async (mentorId, studentId) => {
-  const response = await api.put(`/api/messages/mentor/${mentorId}/student/${studentId}/mark-read`);
+  const response = await api.put(`/messages/mentor/${mentorId}/student/${studentId}/mark-read`);
   return response;
 };
 
 export const getMentorConversations = async (mentorId) => {
-  const response = await api.get(`/api/messages/mentor/${mentorId}/conversations`);
+  const response = await api.get(`/messages/mentor/${mentorId}/conversations`);
   return response;
 };
 
@@ -233,23 +238,19 @@ export const uploadSessionNote = async (mentorId, sessionId, title, description,
   if (subject) formData.append('subject', subject);
   formData.append('file', file);
 
-  return api.post('/api/mentor/notes', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+  return api.post('/mentor/notes', formData);
 };
 
 export const getSessionNotes = async (sessionId) => {
-  return api.get(`/api/sessions/${sessionId}/notes`);
+  return api.get(`/sessions/${sessionId}/notes`);
 };
 
 export const getStudentSessionNotes = async (studentId, sessionId) => {
-  return api.get(`/api/student/${studentId}/sessions/${sessionId}/notes`);
+  return api.get(`/student/${studentId}/sessions/${sessionId}/notes`);
 };
 
 export const getUnreadCount = async (mentorId, studentId) => {
-  const response = await api.get(`/api/messages/unread-count/${mentorId}/${studentId}`);
+  const response = await api.get(`/messages/unread-count/${mentorId}/${studentId}`);
   return response;
 };
 

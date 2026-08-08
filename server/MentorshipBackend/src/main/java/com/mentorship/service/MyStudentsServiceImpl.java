@@ -44,7 +44,32 @@ public class MyStudentsServiceImpl implements MyStudentsService {
 
     @Override
     public List<StudentCardDTO> getAllStudents(Long mentorId) {
+        Mentor mentor = mentorRepository.findById(mentorId)
+            .orElseThrow(() -> new RuntimeException("Mentor not found with id: " + mentorId));
         List<MentorStudent> mentorStudents = mentorStudentRepository.findByMentor_MentorId(mentorId);
+
+        // Repair older bookings that created a session but no mentor-student link.
+        List<Long> linkedStudentIds = mentorStudents.stream()
+            .map(ms -> ms.getStudent().getStudentId())
+            .toList();
+        actualSessionRepository.findByMentor_MentorId(mentorId).stream()
+            .filter(session -> session.getStatus() != SessionStatus.CANCELLED
+                && session.getStatus() != SessionStatus.CANCELLED_BY_STUDENT
+                && session.getStatus() != SessionStatus.CANCELLED_BY_MENTOR)
+            .map(Session::getStudent)
+            .filter(student -> !linkedStudentIds.contains(student.getStudentId()))
+            .distinct()
+            .forEach(student -> {
+                MentorStudent link = new MentorStudent();
+                link.setMentor(mentor);
+                link.setStudent(student);
+                link.setEnrollmentDate(LocalDate.now());
+                link.setStatus(MentorStudentStatus.ACTIVE);
+                link.setTotalSessions(0);
+                link.setProgressPercentage(0);
+                mentorStudents.add(mentorStudentRepository.save(link));
+            });
+
         return mentorStudents.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());

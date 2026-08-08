@@ -32,6 +32,21 @@
   font-size: 14px;
 }
 
+.session-meeting-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.session-meeting-link:hover,
+.session-meeting-link:focus-visible {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
 /* Dark Mode Support */
 html.dark-mode .session-item,
 body.dark-mode .session-item,

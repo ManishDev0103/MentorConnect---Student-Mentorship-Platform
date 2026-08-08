@@ -16,6 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mentorship.dtos.ApiResponseDTO;
 import com.mentorship.dtos.StudyNoteDTO;
+import com.mentorship.custom_exceptions.ApiException;
+import com.mentorship.repository.MentorRepository;
+import com.mentorship.security.SecurityUtils;
 import com.mentorship.service.StudyNoteService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class StudyNoteController {
 
     private final StudyNoteService studyNoteService;
+    private final MentorRepository mentorRepository;
 
     @PostMapping("/mentor/notes")
     public ResponseEntity<ApiResponseDTO<StudyNoteDTO>> createNote(@RequestParam Long mentorId,
@@ -35,7 +39,12 @@ public class StudyNoteController {
             @RequestParam(required = false) String description,
             @RequestParam(required = false) String subject,
             @RequestParam("file") MultipartFile file) {
-        return ResponseEntity.ok(ApiResponseDTO.success("Note uploaded", studyNoteService.createNote(mentorId, sessionId, title, description, subject, file)));
+        Long loggedInUserId = SecurityUtils.getLoggedInUserId();
+        Long loggedInMentorId = mentorRepository.findByUserId(loggedInUserId)
+                .map(mentor -> mentor.getMentorId())
+                .orElseThrow(() -> new ApiException("Only mentors can upload PDFs"));
+        return ResponseEntity.ok(ApiResponseDTO.success("Note uploaded", studyNoteService.createNote(
+                loggedInMentorId, sessionId, title, description, subject, file)));
     }
 
     @PutMapping("/mentor/notes/{id}")

@@ -44,7 +44,11 @@ const ForgotPasswordModal = ({ isOpen, onClose }) => {
         onClose();
       }, 3000);
     } catch (err) {
-      const errorMsg = err.response?.data?.message || "Failed to process forgot password request";
+      const errorMsg =
+        (typeof err.response?.data === "string" ? err.response.data : null) ||
+        err.response?.data?.message ||
+        err.message ||
+        "Failed to process forgot password request";
       toast.error(errorMsg);
     } finally {
       setLoading(false);

@@ -4,8 +4,10 @@ import {
   getStudentSessions,
   cancelSession,
 } from "../../../service/studentservice";
-import { getStudentId } from "../../../service/authService";
+import { resolveStudentId } from "../../../service/authService";
+import { createOrder, verifyPayment } from "../../../service/paymentService";
 import ScheduleSessionModal from "../../../Component/ScheduleSessionModal/ScheduleSessionModal";
+import { generateMeetingLink } from "../../../utils/meetingLink";
 
 const MySessions = () => {
   const [upcomingSessions, setUpcomingSessions] = useState([]);
@@ -13,6 +15,7 @@ const MySessions = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [payingSessionId, setPayingSessionId] = useState(null);
 
   useEffect(() => {
     fetchSessions();
@@ -21,7 +24,7 @@ const MySessions = () => {
   const fetchSessions = async () => {
     try {
       setLoading(true);
-      const studentId = getStudentId();
+      const studentId = await resolveStudentId();
 
       if (!studentId) {
         setError("Student ID not found. Please log in again.");
@@ -37,10 +40,11 @@ const MySessions = () => {
       const upcoming = [];
       const past = [];
 
+      const normalizeStatus = (status) => String(status || "").toUpperCase();
       const isCancelledStatus = (status) =>
-        status === "CANCELLED" ||
-        status === "CANCELLED_BY_STUDENT" ||
-        status === "CANCELLED_BY_MENTOR";
+        ["CANCELLED", "CANCELLED_BY_STUDENT", "CANCELLED_BY_MENTOR"].includes(
+          normalizeStatus(status),
+        );
 
       const normalizeStatusLabel = (status) => {
         if (isCancelledStatus(status)) return "CANCELLED";
@@ -54,25 +58,6 @@ const MySessions = () => {
           `${session.sessionDate}T${session.startTime}`,
         );
         const sessionDate = new Date(session.sessionDate);
-
-        // Deterministic Zoom Link Generation (Frontend Only)
-        // Consistently generates the same link for the same session details
-        const generateZoomLink = () => {
-          // Create a seed string from unique session details
-          const seed = `${session.mentorId}-${session.sessionDate}-${session.startTime}`;
-          let hash = 0;
-          for (let i = 0; i < seed.length; i++) {
-            hash = seed.charCodeAt(i) + ((hash << 5) - hash);
-          }
-          // Ensure 10-digit positive ID
-          const meetingId = Math.abs(hash)
-            .toString()
-            .slice(0, 10)
-            .padEnd(10, "0");
-          // Add a pseudo-random password based on the hash
-          const pwd = Math.abs(hash).toString(36).slice(0, 6);
-          return `https://zoom.us/j/${meetingId}?pwd=${pwd}`;
-        };
 
         const sessionObj = {
           sessionId: session.sessionId,
@@ -90,15 +75,25 @@ const MySessions = () => {
           originalStatus: session.status,
           fee: session.sessionFee,
           description: session.description,
-          meetingUrl: generateZoomLink(), // Always generate on fly
+          meetingUrl: generateMeetingLink(
+            session.mentorId,
+            session.sessionDate,
+            session.startTime,
+          ),
         };
 
         // Categorize sessions
-        if (isCancelledStatus(session.status)) {
+        const sessionStatus = normalizeStatus(session.status);
+
+        if (isCancelledStatus(sessionStatus)) {
           // Cancelled sessions go to past sessions
           past.push(sessionObj);
-        } else if (sessionDateTime > now && session.status !== "COMPLETED") {
-          // Future sessions (including later today) that are not completed go to upcoming
+        } else if (
+          sessionStatus === "PAYMENT_PENDING" ||
+          sessionStatus === "SCHEDULED" ||
+          (sessionDateTime > now && sessionStatus !== "COMPLETED")
+        ) {
+          // Keep active bookings visible even when their scheduled time has passed.
           upcoming.push(sessionObj);
         } else {
           // Completed or past sessions go to past
@@ -139,7 +134,7 @@ const MySessions = () => {
         return `${hours}h ${minutes}m`;
       }
       return `${minutes}m`;
-    } catch (error) {
+    } catch {
       return "N/A";
     }
   };
@@ -164,6 +159,81 @@ const MySessions = () => {
       setLoading(false);
     }
   };
+
+  const handleRetryPayment = async (session) => {
+    if (!window.Razorpay) {
+      setError("Payment SDK not loaded. Please refresh the page and try again.");
+      return;
+    }
+
+    try {
+      setPayingSessionId(session.sessionId);
+      setError(null);
+      const studentId = await resolveStudentId();
+      if (!studentId) throw new Error("Student ID not found. Please log in again.");
+
+      const orderResponse = await createOrder(
+        studentId,
+        1,
+        session.fee,
+        session.sessionId,
+      );
+      const order = orderResponse.data;
+      if (!order?.orderId || !order?.razorpayKey) {
+        throw new Error("Payment order was not created.");
+      }
+
+      const razorpay = new window.Razorpay({
+        key: order.razorpayKey,
+        amount: order.amount,
+        currency: "INR",
+        name: "Mentorship Session",
+        description: `Session with ${session.mentor}`,
+        order_id: order.orderId,
+        handler: async (paymentResponse) => {
+          try {
+            await verifyPayment({
+              studentId,
+              planId: 1,
+              amount: session.fee,
+              razorpayOrderId: order.orderId,
+              razorpayPaymentId: paymentResponse.razorpay_payment_id,
+              sessionId: session.sessionId,
+            });
+            alert("Payment successful. Your session is now scheduled.");
+            await fetchSessions();
+          } catch (verificationError) {
+            setError(
+              verificationError.response?.data?.message ||
+                "Payment verification failed. Please contact support.",
+            );
+          } finally {
+            setPayingSessionId(null);
+          }
+        },
+        modal: {
+          ondismiss: () => setPayingSessionId(null),
+        },
+        theme: { color: "#2563eb" },
+      });
+      razorpay.open();
+    } catch (paymentError) {
+      setPayingSessionId(null);
+      setError(paymentError.response?.data?.message || paymentError.message || "Unable to start payment.");
+    }
+  };
+
+  const renderPaymentAction = (session) => (
+    session.originalStatus === "PAYMENT_PENDING" && (
+      <button
+        className="session-pay-btn"
+        onClick={() => handleRetryPayment(session)}
+        disabled={payingSessionId === session.sessionId}
+      >
+        {payingSessionId === session.sessionId ? "Opening..." : "Pay Now"}
+      </button>
+    )
+  );
 
   if (loading) {
     return (
@@ -207,7 +277,7 @@ const MySessions = () => {
       <div className="sessions-main-content">
         <div className="sessions-card">
           <div className="sessions-header">
-            <span>Upcoming Sessions ({upcomingSessions.length})</span>
+            <span>Booked Sessions ({upcomingSessions.length})</span>
             <button
               className="schedule-btn"
               onClick={() => setIsModalOpen(true)}
@@ -220,7 +290,7 @@ const MySessions = () => {
           </div>
           {upcomingSessions.length === 0 ? (
             <div className="no-sessions">
-              <p>No upcoming sessions scheduled</p>
+              <p>No booked sessions yet</p>
               <p className="text-muted">
                 Book a session with a mentor to get started
               </p>
@@ -253,6 +323,7 @@ const MySessions = () => {
                     >
                       {session.status}
                     </span>
+                    {renderPaymentAction(session)}
                     <button
                       className="session-cancel-btn"
                       onClick={() => handleCancelSession(session.sessionId)}
@@ -347,6 +418,7 @@ const MySessions = () => {
                     {session.status}
                   </span>
                   <span className="session-fee">₹{session.fee}</span>
+                  {renderPaymentAction(session)}
                 </div>
               </div>
             ))

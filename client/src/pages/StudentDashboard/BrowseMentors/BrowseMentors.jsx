@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./BrowseMentors.css";
 import { getVerifiedMentors } from "../../../service/studentservice";
-import { getStudentId } from "../../../service/authService";
+import { resolveStudentId } from "../../../service/authService";
 import ScheduleSessionModal from "../../../Component/ScheduleSessionModal/ScheduleSessionModal";
 import { useNavigate } from "react-router-dom";
 import { useDarkMode } from "../../../context/DarkModeContext";
@@ -49,7 +49,7 @@ const BrowseMentors = ({ onBack, onNavigateToSubscriptions }) => {
   const fetchMentors = async () => {
     try {
       setLoading(true);
-      const studentId = getStudentId();
+      const studentId = await resolveStudentId();
       console.log("DEBUG: Fetching mentors for Student ID:", studentId, "domain:", selectedDomain);
 
       if (!studentId) {
